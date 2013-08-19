@@ -21,7 +21,7 @@ include_directories(
     ${ENET_INCLUDE_DIRS}
 )
 
-aux_source_directory(src/ sources)
+file(GLOB_RECURSE sources src/*.cpp)
 
 add_executable(${PROJECT_NAME}
 	${sources}
