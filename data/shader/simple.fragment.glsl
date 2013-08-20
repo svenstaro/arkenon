@@ -1,7 +1,9 @@
-uniform sampler2D qt_Texture0;
-varying vec4 qt_TexCoord0;
+#version 130
+precision highp float; // Video card drivers require this line to function properly
 
-void main(void)
+out vec4 fragColor;
+
+void main()
 {
-    gl_FragColor = texture2D(qt_Texture0, qt_TexCoord0.st);
+    fragColor = vec4(1.0, 1.0, 1.0, 1.0); //Set colour of each fragment to WHITE
 }

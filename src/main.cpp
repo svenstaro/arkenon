@@ -3,6 +3,7 @@
 #include "window/GameWindow.hpp"
 #include "render/Shader.hpp"
 #include "render/ShaderProgram.hpp"
+#include "render/VertexBuffer.hpp"
 
 int main()
 {
@@ -16,8 +17,17 @@ int main()
     simple.attach(simple_fragment);
     simple.link();
 
+    VertexBuffer vb;
+    vb.addVertex(0, 1, 0);
+    vb.addVertex(-1, -1, 0);
+    vb.addVertex(1, -1, 0);
+    vb.commit();
+
     while(window.isOpen()) {
         window.update();
+        window.clear();
+        simple.use();
+        vb.draw();
         window.display();
     }
 

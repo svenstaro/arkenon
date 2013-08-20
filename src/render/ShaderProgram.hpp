@@ -11,6 +11,7 @@ public:
     ShaderProgram();
     void attach(const Shader& shader);
     void link();
+    void use();
 
     GLuint getHandle() const;
     std::string getLog() const;

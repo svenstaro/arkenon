@@ -20,6 +20,11 @@ void ShaderProgram::link()
     std::cout << "Linking Program: " << getLog() << std::endl;
 }
 
+void ShaderProgram::use()
+{
+    glUseProgram(mHandle);
+}
+
 GLuint ShaderProgram::getHandle() const
 {
     return mHandle;

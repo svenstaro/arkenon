@@ -15,6 +15,7 @@ public:
 
     void update();
     void display();
+    void clear();
     void close();
 
     bool isOpen();
