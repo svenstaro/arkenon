@@ -1,6 +1,10 @@
-# Spaceship Bridge Simulator
+# Arkenon
 
-Name still to decide.
+A spaceship bridge simulation party game.
+
+## Building
+
+Don't ask yet. Try around yourself. We will get to updating all this documentation later.
 
 ## Software stack
 
