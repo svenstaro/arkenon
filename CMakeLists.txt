@@ -7,6 +7,7 @@ find_package(Bullet)
 find_package(glfw)
 find_package(OpenGL)
 find_package(ENet)
+find_package(GLEW)
 
 add_definitions(-Wall -Wextra -Wshadow -g -pedantic -fPIC -std=c++11)
 set(CMAKE_BUILD_TYPE "Debug")
@@ -19,6 +20,7 @@ include_directories(
     ${GLFW_INCLUDE_DIR}
     ${OPENGL_INCLUDE_DIR}
     ${ENET_INCLUDE_DIRS}
+    ${GLEW_INCLUDE_DIRS}
 )
 
 file(GLOB_RECURSE sources src/*.cpp)
@@ -32,4 +34,5 @@ target_link_libraries(${PROJECT_NAME}
     ${GLFW_LIBRARY}
     ${OPENGL_LIBRARIES}
     ${ENET_LIBRARIES}
+    ${GLEW_LIBRARIES}
 )

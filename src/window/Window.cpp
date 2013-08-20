@@ -1,5 +1,6 @@
 #include "window/Window.hpp"
 
+#include <iostream>
 #include <algorithm>
 
 std::vector<Window*> Window::instances;
@@ -9,6 +10,13 @@ Window::Window(const std::string& title)
     glfwInit();
     mWindow = glfwCreateWindow(640, 480, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(mWindow);
+    std::cout << "Render context created" << std::endl;
+
+    if (glewInit() == GLEW_OK) {
+        std::cout << "Glew initialized" << std::endl;
+    } else {
+        std::cout << "Glew error" << std::endl;
+    }
 
     glfwSetKeyCallback(mWindow, window_glfw_key);
     glfwSetCharCallback(mWindow, window_glfw_character);
@@ -22,6 +30,7 @@ Window::Window(const std::string& title)
 
 Window::~Window()
 {
+    close();
     std::remove(instances.begin(), instances.end(), this);
     glfwTerminate();
 }
@@ -51,6 +60,7 @@ void Window::display()
 void Window::close()
 {
     if(!mWindow) return;
+    std::cout << "Closing window" << std::endl;
     glfwDestroyWindow(mWindow);
     mWindow = nullptr;
 }
