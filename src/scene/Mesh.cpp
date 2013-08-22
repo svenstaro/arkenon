@@ -17,7 +17,7 @@ void Mesh::load(const aiMesh* mesh)
 
         for(unsigned int j = 0; j < face.mNumIndices; j++)
         {
-            //uv = mesh->mTextureCoords[0][face.mIndices[j]];
+            uv = mesh->mTextureCoords[0][face.mIndices[j]];
             normal = mesh->mNormals[face.mIndices[j]];
             position = mesh->mVertices[face.mIndices[j]];
             vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1.f, 1.f, 1.f, 1.f, normal.x, normal.y, normal.z));
@@ -53,13 +53,18 @@ void Mesh::commit()
     mVertexBuffer.commit();
 }
 
+void Mesh::setDiffuseTexture(Texture* texture)
+{
+    mDiffuseTexture = texture;
+}
+
 void Mesh::render(Camera* camera, ShaderProgram* shader)
 {
     shader->use();
 
     glm::mat4 MVP = camera->getViewProjectionMatrix() * getTransformationMatrix();
     shader->send("MVP", MVP);
-
+    shader->send("diffuse_texture", mDiffuseTexture, 0);
     mVertexBuffer.draw();
 }
 

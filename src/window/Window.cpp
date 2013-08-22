@@ -1,4 +1,5 @@
 #include "window/Window.hpp"
+#include "utils.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -37,10 +38,12 @@ void Window::activate()
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
     glClearDepth(1.0);
+    GL_CHECK();
 
     // Enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GL_CHECK();
 }
 
 Window::~Window()

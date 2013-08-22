@@ -32,5 +32,7 @@ bool glCheck(const char* file, int line) {
         }
         error = glGetError();
     }
+    int* a = nullptr;
+    *a = 1;
     return false;
 }

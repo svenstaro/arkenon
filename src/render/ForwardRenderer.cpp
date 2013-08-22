@@ -17,14 +17,15 @@ ForwardRenderer::ForwardRenderer()
 
 void ForwardRenderer::render()
 {
-    //mShaderColor.send("ambient_light", glm::vec4(0.5, 0.8, 0.5, 1.f));
-    mShaderLighting.send("light_color", glm::vec4(0.5, 1.f, 0.5, 1.f));
-    mShaderLighting.send("light_position", glm::vec3(-2, 2, -2));
-    mShaderLighting.send("light_size", 10.f);
+    mShaderColor.use();
+    mShaderColor.send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    //mShaderLighting.send("light_color", glm::vec4(0.5, 1.f, 0.5, 1.f));
+    //mShaderLighting.send("light_position", glm::vec3(-2, 2, -2));
+    //mShaderLighting.send("light_size", 10.f);
 
     // color pass
     for(auto iter = mMeshes.begin(); iter != mMeshes.end(); iter++) {
-        (*iter)->render(mCamera, &mShaderLighting);
+        (*iter)->render(mCamera, &mShaderColor);
     }
 
     // render the light on top

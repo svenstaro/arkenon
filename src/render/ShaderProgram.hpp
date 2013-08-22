@@ -2,6 +2,7 @@
 #define _RENDER_SHADERPROGRAM_HPP
 
 #include "render/Shader.hpp"
+#include "render/Texture.hpp"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -16,10 +17,13 @@ public:
     void use();
 
     GLuint getUniformId(const std::string& uniform);
+
+    void send(const std::string& uniform, int integer);
     void send(const std::string& uniform, float scalar);
     void send(const std::string& uniform, glm::vec3 vector);
     void send(const std::string& uniform, glm::vec4 vector);
     void send(const std::string& uniform, glm::mat4 matrix);
+    void send(const std::string& uniform, Texture* texture, int location = 0);
 
     GLuint getHandle() const;
     std::string getLog() const;

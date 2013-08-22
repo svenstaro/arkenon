@@ -4,6 +4,7 @@
 #include "render/VertexBuffer.hpp"
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
+#include "render/Texture.hpp"
 
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
@@ -23,6 +24,8 @@ public:
     void addFace(std::vector<Vertex> vertices);
     void commit();
 
+    void setDiffuseTexture(Texture* texture);
+
     void render(Camera* camera, ShaderProgram* shader);
 
     static Mesh createCube();
@@ -30,6 +33,7 @@ public:
 
 private:
     VertexBuffer mVertexBuffer;
+    Texture* mDiffuseTexture;
 
 };
 

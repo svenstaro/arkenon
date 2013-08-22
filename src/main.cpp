@@ -30,14 +30,21 @@ int main()
 
     Node root("root");
     Mesh* mesh = (Mesh*) root.addChild(new Mesh("mesh"));
+    mesh->rotation = glm::quat(glm::vec3(-M_PI / 2, 0, 0));
 
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile("data/models/test.dae", aiProcessPreset_TargetRealtime_Fast);
+    const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
     mesh->load(scene->mMeshes[0]);
     mesh->commit();
 
+    Texture texture;
+    texture.load("data/textures/fighter.png");
+    texture.setSmooth(false);
+    mesh->setDiffuseTexture(&texture);
+
     Camera* camera = (Camera*) root.addChild(new Camera("camera", 60, window.getAspectRatio(), 0.1f, 100.f));
-    camera->position = glm::vec3(0, 0, 3); // camera looks at -z
+    camera->position = glm::vec3(0, 3, 6); // camera looks at -z
+    camera->rotation = glm::quat(glm::vec3(-0.5, 0, 0));
 
     double time = 0;
     while(window.isOpen()) {
