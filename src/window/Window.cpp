@@ -16,10 +16,7 @@ Window::Window(const std::string& title)
         std::cout << "GLEW Error on initialization" << std::endl;
     }
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glDepthMask(GL_TRUE);
-    glClearDepth(1.0);
+    activate();
 
     glfwSetKeyCallback(mWindow, window_glfw_key);
     glfwSetCharCallback(mWindow, window_glfw_character);
@@ -29,6 +26,21 @@ Window::Window(const std::string& title)
     glfwSetScrollCallback(mWindow, window_glfw_scroll);
 
     instances.push_back(this);
+}
+
+void Window::activate()
+{
+    glfwMakeContextCurrent(mWindow);
+
+    // Enable depth buffer
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
+    glClearDepth(1.0);
+
+    // Enable blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 Window::~Window()

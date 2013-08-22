@@ -15,6 +15,7 @@ public:
     Window(const std::string& title);
     virtual ~Window() = 0;
 
+    void activate();
     void update();
     void display();
     void clear();

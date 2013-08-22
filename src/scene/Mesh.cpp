@@ -22,7 +22,7 @@ void Mesh::load(const aiMesh* mesh)
             //uv = mesh->mTextureCoords[0][face.mIndices[j]];
             normal = mesh->mNormals[face.mIndices[j]];
             position = mesh->mVertices[face.mIndices[j]];
-            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1, 1, 1, 1, normal.x, normal.y, normal.z));
+            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1, 1, 1, 0.8f, normal.x, normal.y, normal.z));
         }
 
         addFace(vertices);

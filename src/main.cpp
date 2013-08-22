@@ -33,10 +33,6 @@ int main()
     simple.link();
 
     Node root("root");
-    Node* child1 = root.addChild(new Node("child1"));
-    Node* child2 = root.addChild(new Node("child2"));
-    Node* child21 = child2->addChild(new Node("child21"));
-    Node* child22 = child2->addChild(new Node("child22"));
 
     Mesh* mesh = (Mesh*) root.addChild(new Mesh("mesh", &simple));
 
@@ -57,23 +53,19 @@ int main()
 
     Camera* camera = (Camera*) root.addChild(new Camera("camera", 60, window.getAspectRatio(), 0.1f, 100.f));
     camera->position = glm::vec3(0, 0, 3); // camera looks at -z
-    //camera->rotation = glm::quat(glm::vec3(-0.1 * M_PI, 0, 0));
-
-    glm::mat4 Projection = glm::perspective(45.0f, window.getAspectRatio(), 0.1f, 100.0f);
-    glm::mat4 View       = glm::lookAt(glm::vec3(0,3,3), glm::vec3(0,0,0), yAxis);
 
     double time = 0;
     while(window.isOpen()) {
         window.update();
 
-        window.setBackgroundColor(glm::vec4(sin(time)*0.5+0.5, sin(time+2*M_PI/3)*0.5+0.5, sin(time-2*M_PI/3)*0.5+0.5, 1.f));
-        window.clear();
-
         time = time + window.getFrameDuration();
         mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration() * 0.3, 0)) * mesh->rotation;
 
-        ((Mesh*) root.getChild("mesh"))->render((Camera*) root.getChild("camera"));
+        window.activate();
+        window.setBackgroundColor(glm::vec4(sin(time)*0.5+0.5, sin(time+2*M_PI/3)*0.5+0.5, sin(time-2*M_PI/3)*0.5+0.5, 1.f));
+        window.clear();
 
+        mesh->render(camera);
         window.display();
     }
 
