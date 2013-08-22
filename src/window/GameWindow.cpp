@@ -15,3 +15,11 @@ void GameWindow::onCharacterTyped(unsigned int unicode)
 {
     std::cout << "Character typed: " << unicode << std::endl;
 }
+
+void GameWindow::onKeyPressed(int key, int scancode, int mods, bool repeated)
+{
+    if(key == GLFW_KEY_ESCAPE)
+    {
+        close();
+    }
+}

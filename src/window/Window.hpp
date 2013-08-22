@@ -21,6 +21,7 @@ public:
     bool isOpen();
     double getFrameDuration();
     float getFPS();
+    float getAspectRatio();
 
     void setTitle(const std::string& title);
     void setSize(int width, int height);
@@ -37,8 +38,8 @@ public:
 
 private:
     GLFWwindow* mWindow;
-    double mFrameDuration;
-    double mPreviousFrameTime;
+    double mFrameDuration = 0;
+    double mPreviousFrameTime = 0;
 
 public:
     static std::vector<Window*> instances;

@@ -18,6 +18,11 @@ Window::Window(const std::string& title)
         std::cout << "Glew error" << std::endl;
     }
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
+    glClearDepth(1.0);
+
     glfwSetKeyCallback(mWindow, window_glfw_key);
     glfwSetCharCallback(mWindow, window_glfw_character);
     glfwSetMouseButtonCallback(mWindow, window_glfw_mouse_button);
@@ -60,7 +65,7 @@ void Window::display()
 void Window::clear()
 {
     glClearColor(0.2, 0.2, 0.2, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Window::close()
@@ -84,6 +89,13 @@ double Window::getFrameDuration()
 float Window::getFPS()
 {
     return 1.0 / mFrameDuration;
+}
+
+float Window::getAspectRatio()
+{
+    int width, height;
+    glfwGetWindowSize(mWindow, &width, &height);
+    return width / height;
 }
 
 void Window::setTitle(const std::string& title)

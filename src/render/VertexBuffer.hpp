@@ -4,10 +4,12 @@
 #include <GL/glew.h>
 #include <vector>
 
+#include "render/Vertex.hpp"
+
 class VertexBuffer {
 public:
     VertexBuffer();
-    void addVertex(float x, float y, float z);
+    void addVertex(const Vertex& vertex);
     void commit();
     void bind();
     void draw();
@@ -15,7 +17,7 @@ public:
     GLuint getHandle() const;
 
 private:
-    std::vector<float> mBuffer;
+    std::vector<Vertex> mBuffer;
     GLuint mHandle;
 
 };

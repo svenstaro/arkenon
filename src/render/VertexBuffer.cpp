@@ -5,23 +5,25 @@ VertexBuffer::VertexBuffer()
     glGenBuffers(1, &mHandle);
 }
 
-void VertexBuffer::addVertex(float x, float y, float z)
+void VertexBuffer::addVertex(const Vertex& vertex)
 {
-    mBuffer.push_back(x);
-    mBuffer.push_back(y);
-    mBuffer.push_back(z);
+    mBuffer.push_back(vertex);
 }
 
 void VertexBuffer::commit()
 {
     bind();
 
-    /* Upload vertex data to the video device */
-    glBufferData(GL_ARRAY_BUFFER, mBuffer.size() * 3 * sizeof(float), &mBuffer[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, mBuffer.size() * sizeof(Vertex), &mBuffer[0], GL_STATIC_DRAW);
 
-    /* Specify that our coordinate data is going into attribute index 0(shaderAttribute), and contains three floats per vertex */
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(9 * sizeof(float)));
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
 }
 
 void VertexBuffer::bind()
@@ -32,5 +34,5 @@ void VertexBuffer::bind()
 void VertexBuffer::draw()
 {
     bind();
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, mBuffer.size());
 }

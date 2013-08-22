@@ -9,6 +9,7 @@ public:
 
     void onMouseButtonReleased(int button, int mods);
     void onCharacterTyped(unsigned int unicode);
+    void onKeyPressed(int key, int scancode, int mods, bool repeated);
 };
 
 #endif
