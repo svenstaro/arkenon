@@ -12,6 +12,13 @@
 
 class Window {
 public:
+    enum CursorMode {
+        Normal,
+        Hidden,
+        Captured
+    };
+
+public:
     Window(const std::string& title);
     virtual ~Window() = 0;
 
@@ -29,6 +36,7 @@ public:
     void setTitle(const std::string& title);
     void setSize(int width, int height);
     void setBackgroundColor(glm::vec4 background_color);
+    void setCursorMode(CursorMode mode);
 
     virtual void onMouseButtonPressed(int button, int mods);
     virtual void onMouseButtonReleased(int button, int mods);
@@ -39,6 +47,8 @@ public:
     virtual void onKeyPressed(int key, int scancode, int mods, bool repeated);
     virtual void onKeyReleased(int key, int scancode, int mods);
     virtual void onCharacterTyped(unsigned int unicode);
+
+    glm::vec2 getMousePosition() const;
 
 private:
     GLFWwindow* mWindow;

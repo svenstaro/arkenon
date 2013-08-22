@@ -125,6 +125,14 @@ void Window::setBackgroundColor(glm::vec4 background_color)
     mBackgroundColor = background_color;
 }
 
+void Window::setCursorMode(Window::CursorMode mode)
+{
+    int m = GLFW_CURSOR_NORMAL;
+    if(mode == Hidden) m = GLFW_CURSOR_HIDDEN;
+    else if(mode == Captured) m = GLFW_CURSOR_DISABLED;
+    glfwSetInputMode(mWindow, GLFW_CURSOR, m);
+}
+
 void Window::onMouseButtonPressed(int button, int mods) {}
 void Window::onMouseButtonReleased(int button, int mods) {}
 void Window::onMouseMoved(double x, double y) {}
@@ -134,6 +142,13 @@ void Window::onMouseLeave() {}
 void Window::onKeyPressed(int key, int scancode, int mods, bool repeated) {}
 void Window::onKeyReleased(int key, int scancode, int mods) {}
 void Window::onCharacterTyped(unsigned int unicode) {}
+
+glm::vec2 Window::getMousePosition() const
+{
+    double x, y;
+    glfwGetCursorPos(mWindow, &x, &y);
+    return glm::vec2(float(x), float(y));
+}
 
 Window* Window::getInstance(GLFWwindow* glfw_window)
 {

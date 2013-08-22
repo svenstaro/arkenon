@@ -8,7 +8,8 @@ GameWindow::GameWindow()
 
 void GameWindow::onMouseButtonReleased(int button, int mods)
 {
-    std::cout << "Mouse button " << button << " released." << std::endl;
+    glm::vec2 m = getMousePosition();
+    std::cout << "Mouse button " << button << " released at " << m.x << "|" << m.y << std::endl;
 }
 
 void GameWindow::onCharacterTyped(unsigned int unicode)
