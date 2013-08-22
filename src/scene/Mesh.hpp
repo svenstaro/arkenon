@@ -14,7 +14,7 @@
 
 class Mesh : public Node {
 public:
-    Mesh(const std::string& name, ShaderProgram* shader_program);
+    Mesh(const std::string& name);
 
     void load(const aiMesh* mesh);
 
@@ -23,14 +23,13 @@ public:
     void addFace(std::vector<Vertex> vertices);
     void commit();
 
-    void render(Camera* camera);
+    void render(Camera* camera, ShaderProgram* shader);
 
     static Mesh createCube();
     static Mesh createSphere(int rings, int segments);
 
 private:
     VertexBuffer mVertexBuffer;
-    ShaderProgram* mShaderProgram;
 
 };
 

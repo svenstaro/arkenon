@@ -49,6 +49,11 @@ void ShaderProgram::send(const std::string& uniform, float scalar)
     glUniform1fv(getUniformId(uniform), 1, &scalar);
 }
 
+void ShaderProgram::send(const std::string& uniform, glm::vec3 vector)
+{
+    glUniform3fv(getUniformId(uniform), 1, &vector[0]);
+}
+
 void ShaderProgram::send(const std::string& uniform, glm::vec4 vector)
 {
     glUniform4fv(getUniformId(uniform), 1, &vector[0]);

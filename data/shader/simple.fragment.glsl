@@ -7,7 +7,9 @@ in vec3 out_Normal;
 
 out vec4 fragColor;
 
+uniform vec4 ambient_light;
+
 void main()
 {
-    fragColor = vec4(out_Color.rgb * (out_Normal.x * -out_Normal.z), out_Color.a);
+    fragColor = out_Color * ambient_light;
 }

@@ -1,10 +1,8 @@
 #include "Mesh.hpp"
 
-Mesh::Mesh(const std::string& name, ShaderProgram* shader_program)
+Mesh::Mesh(const std::string& name)
     : Node(name)
-{
-    mShaderProgram = shader_program;
-}
+{}
 
 void Mesh::load(const aiMesh* mesh)
 {
@@ -22,7 +20,7 @@ void Mesh::load(const aiMesh* mesh)
             //uv = mesh->mTextureCoords[0][face.mIndices[j]];
             normal = mesh->mNormals[face.mIndices[j]];
             position = mesh->mVertices[face.mIndices[j]];
-            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1, 1, 1, 0.8f, normal.x, normal.y, normal.z));
+            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1.f, 1.f, 1.f, 1.f, normal.x, normal.y, normal.z));
         }
 
         addFace(vertices);
@@ -55,12 +53,12 @@ void Mesh::commit()
     mVertexBuffer.commit();
 }
 
-void Mesh::render(Camera* camera)
+void Mesh::render(Camera* camera, ShaderProgram* shader)
 {
-    mShaderProgram->use();
+    shader->use();
 
     glm::mat4 MVP = camera->getViewProjectionMatrix() * getTransformationMatrix();
-    mShaderProgram->send("MVP", MVP);
+    shader->send("MVP", MVP);
 
     mVertexBuffer.draw();
 }

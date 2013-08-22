@@ -49,6 +49,7 @@ public:
     virtual void onCharacterTyped(unsigned int unicode);
 
     glm::vec2 getMousePosition() const;
+    void setMousePosition(const glm::vec2& mouse_position);
 
 private:
     GLFWwindow* mWindow;

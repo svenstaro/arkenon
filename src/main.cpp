@@ -12,6 +12,7 @@
 #include "render/Shader.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/VertexBuffer.hpp"
+#include "render/ForwardRenderer.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/Camera.hpp"
 
@@ -25,31 +26,15 @@ int main()
     GameWindow window;
     //window.setSize(1024, 600);
 
-    Shader simple_vertex(Shader::Vertex, "data/shader/simple.vertex.glsl");
-    Shader simple_fragment(Shader::Fragment, "data/shader/simple.fragment.glsl");
-    ShaderProgram simple;
-    simple.attach(simple_vertex);
-    simple.attach(simple_fragment);
-    simple.link();
+    ForwardRenderer renderer;
 
     Node root("root");
-
-    Mesh* mesh = (Mesh*) root.addChild(new Mesh("mesh", &simple));
+    Mesh* mesh = (Mesh*) root.addChild(new Mesh("mesh"));
 
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile("data/models/test.dae", aiProcessPreset_TargetRealtime_Fast);
     mesh->load(scene->mMeshes[0]);
-
-//    mesh->addTriangle(Vertex(0.f, 1.f, 0.f, 0, 0, 1, 0, 0, 1),
-//                     Vertex(-1.f, -1.f, 0.f, 0, 0, 1, 0, 0, 1),
-//                     Vertex(1.f, -1.f, 0.f, 0, 0, 1, 0, 0, 1));
-//    mesh->addTriangle(Vertex(0.f, -1.f, 0.f, 0, 0, 0, 0, 1, 1),
-//                     Vertex(0.f, 1.f, -1.f, 0, 0, 0, 0, 1, 1),
-//                     Vertex(0.f, 1.f, 1.f, 0, 0, 0, 1, 0, 1));
     mesh->commit();
-
-    glm::vec3 xAxis(1, 0, 0);
-    glm::vec3 yAxis(0, 1, 0);
 
     Camera* camera = (Camera*) root.addChild(new Camera("camera", 60, window.getAspectRatio(), 0.1f, 100.f));
     camera->position = glm::vec3(0, 0, 3); // camera looks at -z
@@ -61,11 +46,15 @@ int main()
         time = time + window.getFrameDuration();
         mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration() * 0.3, 0)) * mesh->rotation;
 
-        window.activate();
-        window.setBackgroundColor(glm::vec4(sin(time)*0.5+0.5, sin(time+2*M_PI/3)*0.5+0.5, sin(time-2*M_PI/3)*0.5+0.5, 1.f));
+        window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
         window.clear();
 
-        mesh->render(camera);
+        renderer.prepare();
+        renderer.registerMesh(mesh);
+        renderer.setCamera(camera);
+        renderer.render();
+        renderer.cleanup();
+
         window.display();
     }
 

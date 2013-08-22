@@ -150,6 +150,11 @@ glm::vec2 Window::getMousePosition() const
     return glm::vec2(float(x), float(y));
 }
 
+void Window::setMousePosition(const glm::vec2& mouse_position)
+{
+    glfwSetCursorPos(mWindow, mouse_position.x, mouse_position.y);
+}
+
 Window* Window::getInstance(GLFWwindow* glfw_window)
 {
     for(auto i = instances.begin(); i != instances.end(); ++i)

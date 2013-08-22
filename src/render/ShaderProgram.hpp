@@ -17,6 +17,7 @@ public:
 
     GLuint getUniformId(const std::string& uniform);
     void send(const std::string& uniform, float scalar);
+    void send(const std::string& uniform, glm::vec3 vector);
     void send(const std::string& uniform, glm::vec4 vector);
     void send(const std::string& uniform, glm::mat4 matrix);
 
