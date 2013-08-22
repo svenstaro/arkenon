@@ -8,6 +8,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+
 class Window {
 public:
     Window(const std::string& title);
@@ -25,6 +27,7 @@ public:
 
     void setTitle(const std::string& title);
     void setSize(int width, int height);
+    void setBackgroundColor(glm::vec4 background_color);
 
     virtual void onMouseButtonPressed(int button, int mods);
     virtual void onMouseButtonReleased(int button, int mods);
@@ -40,6 +43,7 @@ private:
     GLFWwindow* mWindow;
     double mFrameDuration = 0;
     double mPreviousFrameTime = 0;
+    glm::vec4 mBackgroundColor;
 
 public:
     static std::vector<Window*> instances;

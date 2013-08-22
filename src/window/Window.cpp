@@ -6,6 +6,7 @@
 std::vector<Window*> Window::instances;
 
 Window::Window(const std::string& title)
+    : mBackgroundColor(0.f, 0.f, 0.f, 1.f)
 {
     glfwInit();
     mWindow = glfwCreateWindow(640, 480, title.c_str(), NULL, NULL);
@@ -64,7 +65,7 @@ void Window::display()
 
 void Window::clear()
 {
-    glClearColor(0.2, 0.2, 0.2, 1.0);
+    glClearColor(mBackgroundColor.r, mBackgroundColor.g, mBackgroundColor.b, mBackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -108,6 +109,11 @@ void Window::setSize(int width, int height)
 {
     if(!mWindow) return;
     glfwSetWindowSize(mWindow, width, height);
+}
+
+void Window::setBackgroundColor(glm::vec4 background_color)
+{
+    mBackgroundColor = background_color;
 }
 
 void Window::onMouseButtonPressed(int button, int mods) {}

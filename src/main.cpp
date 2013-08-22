@@ -55,6 +55,8 @@ int main()
     double time = 0;
     while(window.isOpen()) {
         window.update();
+
+        window.setBackgroundColor(glm::vec4(sin(time)*0.5+0.5, sin(time+2*M_PI/3)*0.5+0.5, sin(time-2*M_PI/3)*0.5+0.5, 1.f));
         window.clear();
 
         time = time + window.getFrameDuration();
