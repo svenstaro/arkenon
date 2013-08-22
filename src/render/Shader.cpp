@@ -34,13 +34,15 @@ void Shader::load(const std::string &file)
 
 void Shader::compile()
 {
-    std::cout << mCode << std::endl;
     const char* source = mCode.c_str();
     glShaderSource(mHandle, 1, &source, NULL);
     glCompileShader(mHandle);
 
     // Check Shader
-    std::cout << "Compiled shader: " << getLog() << std::endl;
+    const std::string& log = getLog();
+    if(log.length() > 0) {
+        std::cerr << "Shader Compilation Error: " << std::endl << log << std::endl;
+    }
 }
 
 std::string Shader::getLog() const
@@ -48,6 +50,7 @@ std::string Shader::getLog() const
     GLint result = GL_FALSE;
     int log_length;
     glGetShaderiv(mHandle, GL_COMPILE_STATUS, &result);
+    if(result == GL_TRUE) return "";
     glGetShaderiv(mHandle, GL_INFO_LOG_LENGTH, &log_length);
     std::vector<char> error_message(log_length);
     glGetShaderInfoLog(mHandle, log_length, NULL, &error_message[0]);

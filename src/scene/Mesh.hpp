@@ -10,12 +10,17 @@
 
 #include <memory>
 
+#include <assimp/mesh.h>
+
 class Mesh : public Node {
 public:
     Mesh(const std::string& name, ShaderProgram* shader_program);
 
+    void load(const aiMesh* mesh);
+
     void addTriangle(Vertex a, Vertex b, Vertex c);
     void addQuad(Vertex a, Vertex b, Vertex c, Vertex d);
+    void addFace(std::vector<Vertex> vertices);
     void commit();
 
     void render(Camera* camera);

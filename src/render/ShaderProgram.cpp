@@ -17,7 +17,11 @@ void ShaderProgram::attach(const Shader &shader)
 void ShaderProgram::link()
 {
     glLinkProgram(mHandle);
-    std::cout << "Linking Program: " << getLog() << std::endl;
+
+    const std::string& log = getLog();
+    if(log.length() > 0) {
+        std::cerr << "Shader Program Linking Error: " << std::endl << log << std::endl;
+    }
 }
 
 void ShaderProgram::use()
@@ -66,6 +70,7 @@ std::string ShaderProgram::getLog() const
     int log_length;
 
     glGetProgramiv(mHandle, GL_LINK_STATUS, &result);
+    if(result == GL_TRUE) return "";
     glGetProgramiv(mHandle, GL_INFO_LOG_LENGTH, &log_length);
     std::vector<char> error_message(std::max(log_length, int(1)));
     glGetProgramInfoLog(mHandle, log_length, NULL, &error_message[0]);

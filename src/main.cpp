@@ -15,6 +15,11 @@
 #include "scene/Mesh.hpp"
 #include "scene/Camera.hpp"
 
+// TESTING INCLUDES
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 int main()
 {
     GameWindow window;
@@ -34,12 +39,17 @@ int main()
     Node* child22 = child2->addChild(new Node("child22"));
 
     Mesh* mesh = (Mesh*) root.addChild(new Mesh("mesh", &simple));
-    mesh->addTriangle(Vertex(0.f, 1.f, 0.f, 0, 0, 1, 0, 0, 1),
-                     Vertex(-1.f, -1.f, 0.f, 0, 0, 1, 0, 0, 1),
-                     Vertex(1.f, -1.f, 0.f, 0, 0, 1, 0, 0, 1));
-    mesh->addTriangle(Vertex(0.f, -1.f, 0.f, 0, 0, 0, 0, 1, 1),
-                     Vertex(0.f, 1.f, -1.f, 0, 0, 0, 0, 1, 1),
-                     Vertex(0.f, 1.f, 1.f, 0, 0, 0, 1, 0, 1));
+
+    Assimp::Importer importer;
+    const aiScene *scene = importer.ReadFile("data/models/test.dae", aiProcessPreset_TargetRealtime_Fast);
+    mesh->load(scene->mMeshes[0]);
+
+//    mesh->addTriangle(Vertex(0.f, 1.f, 0.f, 0, 0, 1, 0, 0, 1),
+//                     Vertex(-1.f, -1.f, 0.f, 0, 0, 1, 0, 0, 1),
+//                     Vertex(1.f, -1.f, 0.f, 0, 0, 1, 0, 0, 1));
+//    mesh->addTriangle(Vertex(0.f, -1.f, 0.f, 0, 0, 0, 0, 1, 1),
+//                     Vertex(0.f, 1.f, -1.f, 0, 0, 0, 0, 1, 1),
+//                     Vertex(0.f, 1.f, 1.f, 0, 0, 0, 1, 0, 1));
     mesh->commit();
 
     glm::vec3 xAxis(1, 0, 0);
@@ -60,7 +70,7 @@ int main()
         window.clear();
 
         time = time + window.getFrameDuration();
-        mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration(), 0)) * mesh->rotation;
+        mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration() * 0.3, 0)) * mesh->rotation;
 
         ((Mesh*) root.getChild("mesh"))->render((Camera*) root.getChild("camera"));
 

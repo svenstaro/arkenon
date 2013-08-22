@@ -6,7 +6,7 @@
 class Vertex
 {
 public:
-    Vertex(float x, float y, float z,
+    Vertex(float x = 0.f, float y = 0.f, float z = 0.f,
            float u = 0.f, float v = 0.f,
            float r = 0.f, float g = 0.f, float b = 0.f, float a = 1.f,
            float nx = 0.f, float ny = 0.f, float nz = 0.f);

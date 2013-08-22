@@ -9,5 +9,5 @@ out vec4 fragColor;
 
 void main()
 {
-    fragColor = out_Color; //vec4(1.0, 1.0, 1.0, 1.0); //Set colour of each fragment to WHITE
+    fragColor = out_Color * (out_Normal.x * -out_Normal.z);
 }

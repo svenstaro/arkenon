@@ -11,12 +11,9 @@ Window::Window(const std::string& title)
     glfwInit();
     mWindow = glfwCreateWindow(640, 480, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(mWindow);
-    std::cout << "Render context created" << std::endl;
 
-    if (glewInit() == GLEW_OK) {
-        std::cout << "Glew initialized" << std::endl;
-    } else {
-        std::cout << "Glew error" << std::endl;
+    if (glewInit() != GLEW_OK) {
+        std::cout << "GLEW Error on initialization" << std::endl;
     }
 
     glEnable(GL_DEPTH_TEST);
