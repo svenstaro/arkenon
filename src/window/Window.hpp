@@ -10,7 +10,9 @@
 
 #include <glm/glm.hpp>
 
-class Window {
+#include "render/RenderTarget.hpp"
+
+class Window : public RenderTarget {
 public:
     enum CursorMode {
         Normal,
@@ -19,14 +21,16 @@ public:
     };
 
 public:
-    Window(const std::string& title);
+    Window(const std::string& title, const glm::vec2& size);
     virtual ~Window() = 0;
 
-    void activate();
+    void makeCurrentContext();
     void update();
     void display();
     void clear();
     void close();
+
+    void setActive();
 
     bool isOpen();
     double getFrameDuration();
@@ -34,7 +38,7 @@ public:
     float getAspectRatio();
 
     void setTitle(const std::string& title);
-    void setSize(int width, int height);
+    void setSize(glm::vec2 size);
     void setBackgroundColor(glm::vec4 background_color);
     void setCursorMode(CursorMode mode);
 

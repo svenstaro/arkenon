@@ -3,7 +3,7 @@
 #include <iostream>
 
 GameWindow::GameWindow()
-    : Window("Bridge Party")
+    : Window("Arkenon", glm::vec2(800, 600))
 {}
 
 void GameWindow::onMouseButtonReleased(int button, int mods)

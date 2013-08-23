@@ -6,18 +6,19 @@
 
 std::vector<Window*> Window::instances;
 
-Window::Window(const std::string& title)
-    : mBackgroundColor(0.f, 0.f, 0.f, 1.f)
+Window::Window(const std::string& title, const glm::vec2& size)
+    : RenderTarget(size),
+      mBackgroundColor(0.f, 0.f, 0.f, 1.f)
 {
     glfwInit();
-    mWindow = glfwCreateWindow(640, 480, title.c_str(), NULL, NULL);
+    mWindow = glfwCreateWindow(mSize.x, mSize.y, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(mWindow);
 
     if (glewInit() != GLEW_OK) {
         std::cout << "GLEW Error on initialization" << std::endl;
     }
 
-    activate();
+    makeCurrentContext();
 
     glfwSetKeyCallback(mWindow, window_glfw_key);
     glfwSetCharCallback(mWindow, window_glfw_character);
@@ -29,7 +30,7 @@ Window::Window(const std::string& title)
     instances.push_back(this);
 }
 
-void Window::activate()
+void Window::makeCurrentContext()
 {
     glfwMakeContextCurrent(mWindow);
 
@@ -89,6 +90,12 @@ void Window::close()
     mWindow = nullptr;
 }
 
+void Window::setActive()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, getSize().x, getSize().y);
+}
+
 bool Window::isOpen()
 {
     return mWindow && !glfwWindowShouldClose(mWindow);
@@ -106,9 +113,7 @@ float Window::getFPS()
 
 float Window::getAspectRatio()
 {
-    int width, height;
-    glfwGetWindowSize(mWindow, &width, &height);
-    return width / height;
+    return mSize.x / mSize.y;
 }
 
 void Window::setTitle(const std::string& title)
@@ -117,10 +122,11 @@ void Window::setTitle(const std::string& title)
     glfwSetWindowTitle(mWindow, title.c_str());
 }
 
-void Window::setSize(int width, int height)
+void Window::setSize(glm::vec2 size)
 {
     if(!mWindow) return;
-    glfwSetWindowSize(mWindow, width, height);
+    glfwSetWindowSize(mWindow, (int)size.x, (int)size.y);
+    mSize = size;
 }
 
 void Window::setBackgroundColor(glm::vec4 background_color)

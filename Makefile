@@ -5,7 +5,7 @@ bake:
 	cd build; cmake ..; make -j3
 
 run:
-	bin/bridgeparty
+	bin/arkenon
 
 clean:
 	rm -r build

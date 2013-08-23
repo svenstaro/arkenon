@@ -26,16 +26,25 @@ void Texture::load(const std::string& filename)
     int bpp = image.getBitsPerPixel();
     int type = image.getImageType();
 
+    mSize = glm::vec2(image.getWidth(), image.getHeight());
+
 
     bind();
     if(type == FIT_BITMAP && bpp == 24)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_BGR, GL_UNSIGNED_BYTE, (void*)image.accessPixels());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mSize.x, mSize.y, 0, GL_BGR, GL_UNSIGNED_BYTE, (void*)image.accessPixels());
     else if(type == FIT_BITMAP && bpp == 32)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)image.accessPixels());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mSize.x, mSize.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)image.accessPixels());
     else
         std::cerr << "Invalid internal image format or bpp." << std::endl;;
 
     GL_CHECK();
+}
+
+void Texture::create(const glm::vec2& size)
+{
+    bind();
+    mSize = size;
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 }
 
 void Texture::setSmooth(bool smooth)
@@ -49,4 +58,9 @@ void Texture::setSmooth(bool smooth)
 GLuint Texture::getHandle() const
 {
     return mHandle;
+}
+
+const glm::vec2&Texture::getSize() const
+{
+    return mSize;
 }

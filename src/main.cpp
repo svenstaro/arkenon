@@ -13,6 +13,7 @@
 #include "render/ShaderProgram.hpp"
 #include "render/VertexBuffer.hpp"
 #include "render/ForwardRenderer.hpp"
+#include "render/Framebuffer.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/Camera.hpp"
 
@@ -45,6 +46,9 @@ int main()
     Camera* camera = (Camera*) root.addChild(new Camera("camera", 60, window.getAspectRatio(), 0.1f, 100.f));
     camera->position = glm::vec3(0, 3, 6); // camera looks at -z
     camera->rotation = glm::quat(glm::vec3(-0.5, 0, 0));
+
+    //Framebuffer fb(window.getSize());
+    //window.setActive();
 
     double time = 0;
     while(window.isOpen()) {
