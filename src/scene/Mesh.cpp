@@ -67,13 +67,3 @@ void Mesh::render(Camera* camera, ShaderProgram* shader)
     shader->send("diffuse_texture", mDiffuseTexture, 0);
     mVertexBuffer.draw();
 }
-
-Mesh Mesh::createCube()
-{
-
-}
-
-Mesh Mesh::createSphere(int rings, int segments)
-{
-
-}

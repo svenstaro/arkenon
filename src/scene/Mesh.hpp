@@ -28,9 +28,6 @@ public:
 
     void render(Camera* camera, ShaderProgram* shader);
 
-    static Mesh createCube();
-    static Mesh createSphere(int rings, int segments);
-
 private:
     VertexBuffer mVertexBuffer;
     Texture* mDiffuseTexture;

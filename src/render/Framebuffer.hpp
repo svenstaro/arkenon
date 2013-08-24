@@ -10,10 +10,18 @@
 class Framebuffer : public RenderTarget {
 public:
     Framebuffer(glm::vec2 size);
+
+    /**
+     * Binds this Framebuffer for OpenGL operations.
+     */
     void bind();
 
     void setActive();
 
+    /**
+     * Returns the texture that contains the rendered result.
+     * @return The Framebuffer texture.
+     */
     Texture* getTexture();
 
 private:

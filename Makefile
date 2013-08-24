@@ -7,5 +7,8 @@ bake:
 run:
 	bin/arkenon
 
+docs:
+	doxygen
+
 clean:
 	rm -r build
