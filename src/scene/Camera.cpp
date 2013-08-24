@@ -9,17 +9,17 @@ Camera::Camera(const std::string& name, Type type, const glm::vec2& viewport_siz
       mFarClip(far_clip)
 {}
 
-glm::mat4 Camera::getViewProjectionMatrix()
+glm::mat4 Camera::getViewProjectionMatrix() const
 {
     return getProjectionMatrix() * getViewMatrix();
 }
 
-glm::mat4 Camera::getViewMatrix()
+glm::mat4 Camera::getViewMatrix() const
 {
     return glm::inverse(getAbsoluteTransformationMatrix());
 }
 
-glm::mat4 Camera::getProjectionMatrix()
+glm::mat4 Camera::getProjectionMatrix() const
 {
     if(mType == Orthographic)
     {

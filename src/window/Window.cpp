@@ -96,22 +96,22 @@ void Window::setActive()
     glViewport(0, 0, getSize().x, getSize().y);
 }
 
-bool Window::isOpen()
+bool Window::isOpen() const
 {
     return mWindow && !glfwWindowShouldClose(mWindow);
 }
 
-double Window::getFrameDuration()
+double Window::getFrameDuration() const
 {
     return mFrameDuration;
 }
 
-float Window::getFPS()
+float Window::getFPS() const
 {
     return 1.0 / mFrameDuration;
 }
 
-float Window::getAspectRatio()
+float Window::getAspectRatio() const
 {
     return mSize.x / mSize.y;
 }

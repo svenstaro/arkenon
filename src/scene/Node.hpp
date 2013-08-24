@@ -15,12 +15,12 @@ public:
     Node* addChild(Node* node);
     Node* getChild(const std::string& name);
 
-    const std::string& getName();
+    const std::string& getName() const;
 
-    glm::vec3 getAbsolutePosition();
-    glm::quat getAbsoluteRotation();
-    glm::mat4 getTransformationMatrix();
-    glm::mat4 getAbsoluteTransformationMatrix();
+    glm::vec3 getAbsolutePosition() const;
+    glm::quat getAbsoluteRotation() const;
+    glm::mat4 getTransformationMatrix() const;
+    glm::mat4 getAbsoluteTransformationMatrix() const;
 
     void setAbsolutePosition(const glm::vec3& absolute_position);
     void setAbsoluteRotation(const glm::quat& absolute_rotation);

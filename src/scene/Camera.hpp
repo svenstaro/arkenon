@@ -31,9 +31,9 @@ public:
            float near_clip = 0.1f,
            float far_clip = 100.f);
 
-    glm::mat4 getViewProjectionMatrix();
-    glm::mat4 getViewMatrix();
-    glm::mat4 getProjectionMatrix();
+    glm::mat4 getViewProjectionMatrix() const;
+    glm::mat4 getViewMatrix() const;
+    glm::mat4 getProjectionMatrix() const;
 
     void setType(Type type);
     void setViewportSize(const glm::vec2& viewport_size);

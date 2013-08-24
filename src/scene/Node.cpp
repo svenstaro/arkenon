@@ -19,12 +19,12 @@ Node* Node::getChild(const std::string& name)
     return mChildren[name].get();
 }
 
-const std::string& Node::getName()
+const std::string& Node::getName() const
 {
     return mName;
 }
 
-glm::vec3 Node::getAbsolutePosition()
+glm::vec3 Node::getAbsolutePosition() const
 {
     if(mParent)
         return mParent->position + position;
@@ -32,7 +32,7 @@ glm::vec3 Node::getAbsolutePosition()
         return position;
 }
 
-glm::quat Node::getAbsoluteRotation()
+glm::quat Node::getAbsoluteRotation() const
 {
     if(mParent)
         return rotation * mParent->rotation;
@@ -40,13 +40,13 @@ glm::quat Node::getAbsoluteRotation()
         return rotation;
 }
 
-glm::mat4 Node::getTransformationMatrix()
+glm::mat4 Node::getTransformationMatrix() const
 {
     // TODO: scale
     return glm::translate(position) * glm::mat4_cast(rotation);
 }
 
-glm::mat4 Node::getAbsoluteTransformationMatrix()
+glm::mat4 Node::getAbsoluteTransformationMatrix() const
 {
     if(mParent)
         return getTransformationMatrix() * mParent->getAbsoluteTransformationMatrix();

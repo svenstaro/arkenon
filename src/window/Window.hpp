@@ -53,10 +53,10 @@ public:
 
     void setActive();
 
-    bool isOpen();
-    double getFrameDuration();
-    float getFPS();
-    float getAspectRatio();
+    bool isOpen() const;
+    double getFrameDuration() const;
+    float getFPS() const;
+    float getAspectRatio() const;
 
     void setTitle(const std::string& title);
     void setSize(glm::vec2 size);
