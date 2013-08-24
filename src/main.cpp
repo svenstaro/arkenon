@@ -43,7 +43,8 @@ int main()
     texture.setSmooth(false);
     mesh->setDiffuseTexture(&texture);
 
-    Camera* camera = (Camera*) root.addChild(new Camera("camera", 60, window.getAspectRatio(), 0.1f, 100.f));
+    Camera* camera = (Camera*) root.addChild(new Camera("camera", Camera::Orthographic, window.getSize(), 0.01f));
+    //camera->position = glm::vec3(0, 0, 6); // camera looks at -z
     camera->position = glm::vec3(0, 3, 6); // camera looks at -z
     camera->rotation = glm::quat(glm::vec3(-0.5, 0, 0));
 
