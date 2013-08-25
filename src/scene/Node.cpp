@@ -1,22 +1,23 @@
 #include "Node.hpp"
 
 Node::Node(const std::string& name)
+    : position(0.f, 0.f, 0.f),
+      scale(1.f, 1.f, 1.f)
 {
     mName = name;
 }
 
-Node* Node::addChild(Node* node)
+std::shared_ptr<Node> Node::addChild(std::shared_ptr<Node> node)
 {
-    const std::string& name = node->getName();
-    mChildren[name] = std::unique_ptr<Node>(std::move(node));
-    Node* n = mChildren[name].get();
-    n->mParent = this;
-    return n;
+    mChildren[node->getName()] = node;
+    addInputForwarding(node.get());
+    node->mParent = this;
+    return node;
 }
 
-Node* Node::getChild(const std::string& name)
+std::shared_ptr<Node> Node::getChild(const std::string& name)
 {
-    return mChildren[name].get();
+    return mChildren[name];
 }
 
 const std::string& Node::getName() const
@@ -40,10 +41,17 @@ glm::quat Node::getAbsoluteRotation() const
         return rotation;
 }
 
+glm::vec3 Node::getAbsoluteScale() const
+{
+    if(mParent)
+        return scale * mParent->scale;
+    else
+        return scale;
+}
+
 glm::mat4 Node::getTransformationMatrix() const
 {
-    // TODO: scale
-    return glm::translate(position) * glm::mat4_cast(rotation);
+    return glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
 }
 
 glm::mat4 Node::getAbsoluteTransformationMatrix() const

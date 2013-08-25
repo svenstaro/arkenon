@@ -34,17 +34,6 @@ void Window::makeCurrentContext()
 {
     glfwMakeContextCurrent(mWindow);
 
-    // Enable depth buffer
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glDepthMask(GL_TRUE);
-    glClearDepth(1.0);
-    GL_CHECK();
-
-    // Enable blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    GL_CHECK();
 }
 
 Window::~Window()
@@ -142,18 +131,9 @@ void Window::setCursorMode(Window::CursorMode mode)
     glfwSetInputMode(mWindow, GLFW_CURSOR, m);
 }
 
-void Window::onMouseButtonPressed(int button, int mods) {}
-void Window::onMouseButtonReleased(int button, int mods) {}
-void Window::onMouseMoved(double x, double y) {}
-void Window::onMouseScrolled(double dx, double dy) {}
-void Window::onMouseEnter() {}
-void Window::onMouseLeave() {}
-void Window::onKeyPressed(int key, int scancode, int mods, bool repeated) {}
-void Window::onKeyReleased(int key, int scancode, int mods) {}
-void Window::onCharacterTyped(unsigned int unicode) {}
-
 glm::vec2 Window::getMousePosition() const
 {
+    if(!mWindow) return glm::vec2(0, 0);
     double x, y;
     glfwGetCursorPos(mWindow, &x, &y);
     return glm::vec2(float(x), float(y));
@@ -181,9 +161,9 @@ void window_glfw_mouse_button(GLFWwindow* glfw_window, int button, int action, i
     if(window)
     {
         if(action == GLFW_PRESS) {
-            window->onMouseButtonPressed(button, mods);
+            window->mouseButtonPressed(button, mods);
         } else if(action == GLFW_RELEASE) {
-            window->onMouseButtonReleased(button, mods);
+            window->mouseButtonReleased(button, mods);
         }
     }
 }
@@ -193,7 +173,7 @@ void window_glfw_mouse_move(GLFWwindow* glfw_window, double x, double y)
     Window* window = Window::getInstance(glfw_window);
     if(window)
     {
-        window->onMouseMoved(x, y);
+        window->mouseMoved(x, y);
     }
 }
 
@@ -203,9 +183,9 @@ void window_glfw_mouse_enter(GLFWwindow* glfw_window, int entered)
     if(window)
     {
         if(entered == GL_TRUE) {
-            window->onMouseEnter();
+            window->mouseEnter();
         } else {
-            window->onMouseLeave();
+            window->mouseLeave();
         }
     }
 }
@@ -215,7 +195,7 @@ void window_glfw_scroll(GLFWwindow* glfw_window, double dx, double dy)
     Window* window = Window::getInstance(glfw_window);
     if(window)
     {
-        window->onMouseScrolled(dx, dy);
+        window->mouseScrolled(dx, dy);
     }
 }
 
@@ -225,9 +205,9 @@ void window_glfw_key(GLFWwindow* glfw_window, int key, int scancode, int action,
     if(window)
     {
         if(action == GLFW_RELEASE) {
-            window->onKeyReleased(key, scancode, mods);
+            window->keyReleased(key, scancode, mods);
         } else {
-            window->onKeyPressed(key, scancode, mods, action == GLFW_REPEAT);
+            window->keyPressed(key, scancode, mods, action == GLFW_REPEAT);
         }
     }
 }
@@ -237,6 +217,6 @@ void window_glfw_character(GLFWwindow* glfw_window, unsigned int unicode)
     Window* window = Window::getInstance(glfw_window);
     if(window)
     {
-        window->onCharacterTyped(unicode);
+        window->characterTyped(unicode);
     }
 }

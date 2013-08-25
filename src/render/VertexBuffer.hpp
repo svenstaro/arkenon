@@ -14,10 +14,25 @@ public:
     VertexBuffer();
 
     /**
+     * Clears the vertices from the buffer.
+     */
+    void clear();
+
+    /**
      * Adds a vertex to the buffer.
      * @param vertex The vertex.
      */
     void addVertex(const Vertex& vertex);
+
+    /**
+     * Adds a triangle to the buffer.
+     */
+    void addTriangle(Vertex a, Vertex b, Vertex c);
+
+    /**
+     * Adds a quad to the buffer.
+     */
+    void addQuad(Vertex a, Vertex b, Vertex c, Vertex d);
 
     /**
      * Sends all vertices to the graphics card memory.

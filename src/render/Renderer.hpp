@@ -1,7 +1,7 @@
 #ifndef _RENDER_RENDERER_HPP
 #define _RENDER_RENDERER_HPP
 
-#include "scene/Mesh.hpp"
+#include "render/Renderable.hpp"
 #include "scene/Camera.hpp"
 
 #include <vector>
@@ -9,14 +9,14 @@
 class Renderer {
 public:
     virtual void prepare();
-    void registerMesh(Mesh* mesh);
-    void setCamera(Camera* camera);
+    void registerRenderable(std::shared_ptr<Renderable> renderable);
+    void setCamera(std::shared_ptr<Camera> camera);
     virtual void render() = 0;
     virtual void cleanup();
 
 protected:
-    std::vector<Mesh*> mMeshes;
-    Camera* mCamera;
+    std::vector<std::shared_ptr<Renderable>> mRenderables;
+    std::shared_ptr<Camera> mCamera;
 
 };
 

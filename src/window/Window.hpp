@@ -11,8 +11,9 @@
 #include <glm/glm.hpp>
 
 #include "render/RenderTarget.hpp"
+#include "window/InputReceiver.hpp"
 
-class Window : public RenderTarget {
+class Window : public RenderTarget, public InputReceiver {
 public:
     enum CursorMode {
         Normal,     ///< Normal mouse behaviour
@@ -62,16 +63,6 @@ public:
     void setSize(glm::vec2 size);
     void setBackgroundColor(glm::vec4 background_color);
     void setCursorMode(CursorMode mode);
-
-    virtual void onMouseButtonPressed(int button, int mods);
-    virtual void onMouseButtonReleased(int button, int mods);
-    virtual void onMouseMoved(double x, double y);
-    virtual void onMouseScrolled(double dx, double dy);
-    virtual void onMouseEnter();
-    virtual void onMouseLeave();
-    virtual void onKeyPressed(int key, int scancode, int mods, bool repeated);
-    virtual void onKeyReleased(int key, int scancode, int mods);
-    virtual void onCharacterTyped(unsigned int unicode);
 
     glm::vec2 getMousePosition() const;
     void setMousePosition(const glm::vec2& mouse_position);

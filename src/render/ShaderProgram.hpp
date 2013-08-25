@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <map>
+#include <memory>
 
 class ShaderProgram {
 public:
@@ -82,7 +83,7 @@ public:
      * @param texture The texture.
      * @param location The texture slot number.
      */
-    void send(const std::string& uniform, Texture* texture, int location = 0);
+    void send(const std::string& uniform, std::shared_ptr<Texture> texture, int location = 0);
 
     /**
      * Returns the OpenGL handle of this shader program for direct access.

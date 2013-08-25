@@ -8,7 +8,9 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-class Node {
+#include "window/InputReceiver.hpp"
+
+class Node : public InputReceiver {
 public:
     /**
      * Initializes a node.
@@ -21,14 +23,14 @@ public:
      * @param node The new child.
      * @return A new valid pointer to the child.
      */
-    Node* addChild(Node* node);
+    std::shared_ptr<Node> addChild(std::shared_ptr<Node> node);
 
     /**
      * Returns a child node by its name.
      * @param name The child node name.
      * @return The child node, or nullptr if none found.
      */
-    Node* getChild(const std::string& name);
+    std::shared_ptr<Node> getChild(const std::string& name);
 
     /**
      * Returns the name of this node.
@@ -47,6 +49,12 @@ public:
      * @return The world space rotation.
      */
     glm::quat getAbsoluteRotation() const;
+
+    /**
+     * Returns the absolute scale of this node.
+     * @return The world space scale.
+     */
+    glm::vec3 getAbsoluteScale() const;
 
     /**
      * Calculates the local transformation matrix.
@@ -73,12 +81,13 @@ public:
     void setAbsoluteRotation(const glm::quat& absolute_rotation);
 
 private:
-    std::map<std::string, std::unique_ptr<Node>> mChildren;
+    std::map<std::string, std::shared_ptr<Node>> mChildren;
     Node* mParent = nullptr;
     std::string mName;
 
 public:
     glm::vec3 position;
+    glm::vec3 scale;
     glm::quat rotation;
 };
 

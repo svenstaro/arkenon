@@ -1,24 +1,19 @@
 #include "Renderer.hpp"
 
 void Renderer::prepare()
+{}
+
+void Renderer::registerRenderable(std::shared_ptr<Renderable> renderable)
 {
-    // nothing to do
+    mRenderables.push_back(renderable);
 }
 
-
-void Renderer::registerMesh(Mesh* mesh)
-{
-    mMeshes.push_back(mesh);
-}
-
-
-void Renderer::setCamera(Camera* camera)
+void Renderer::setCamera(std::shared_ptr<Camera> camera)
 {
     mCamera = camera;
 }
 
-
 void Renderer::cleanup()
 {
-    mMeshes.clear();
+    mRenderables.clear();
 }

@@ -27,17 +27,19 @@ void Mesh::load(const aiMesh* mesh)
     }
 }
 
+void Mesh::clear()
+{
+    mVertexBuffer.clear();
+}
+
 void Mesh::addTriangle(Vertex a, Vertex b, Vertex c)
 {
-    mVertexBuffer.addVertex(a);
-    mVertexBuffer.addVertex(b);
-    mVertexBuffer.addVertex(c);
+    mVertexBuffer.addTriangle(a, b, c);
 }
 
 void Mesh::addQuad(Vertex a, Vertex b, Vertex c, Vertex d)
 {
-    addTriangle(a, b, c);
-    addTriangle(a, c, d);
+    mVertexBuffer.addQuad(a, b, c, d);
 }
 
 void Mesh::addFace(std::vector<Vertex> vertices)
@@ -53,17 +55,17 @@ void Mesh::commit()
     mVertexBuffer.commit();
 }
 
-void Mesh::setDiffuseTexture(Texture* texture)
+void Mesh::setDiffuseTexture(std::shared_ptr<Texture> texture)
 {
     mDiffuseTexture = texture;
 }
 
-void Mesh::render(Camera* camera, ShaderProgram* shader)
+void Mesh::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
 {
-    shader->use();
+    shader_program->use();
 
-    glm::mat4 MVP = camera->getViewProjectionMatrix() * getTransformationMatrix();
-    shader->send("MVP", MVP);
-    shader->send("diffuse_texture", mDiffuseTexture, 0);
+    glm::mat4 MVP = camera->getViewProjectionMatrix() * getAbsoluteTransformationMatrix();
+    shader_program->send("MVP", MVP);
+    shader_program->send("diffuse_texture", mDiffuseTexture, 0);
     mVertexBuffer.draw();
 }

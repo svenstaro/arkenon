@@ -1,32 +1,44 @@
 #include "ForwardRenderer.hpp"
 
+#include "utils.hpp"
+
 ForwardRenderer::ForwardRenderer()
 {
+    mColorPassShader = std::make_shared<ShaderProgram>();
     Shader simple_vertex(Shader::Vertex, "data/shader/simple.vertex.glsl");
     Shader simple_fragment(Shader::Fragment, "data/shader/simple.fragment.glsl");
-    mShaderColor.attach(simple_vertex);
-    mShaderColor.attach(simple_fragment);
-    mShaderColor.link();
+    mColorPassShader->attach(simple_vertex);
+    mColorPassShader->attach(simple_fragment);
+    mColorPassShader->link();
 
+    mLightPassShader = std::make_shared<ShaderProgram>();
     Shader light_vertex(Shader::Vertex, "data/shader/light.vertex.glsl");
     Shader light_fragment(Shader::Fragment, "data/shader/light.fragment.glsl");
-    mShaderLighting.attach(light_vertex);
-    mShaderLighting.attach(light_fragment);
-    mShaderLighting.link();
+    mLightPassShader->attach(light_vertex);
+    mLightPassShader->attach(light_fragment);
+    mLightPassShader->link();
 }
 
 void ForwardRenderer::render()
 {
-    mShaderColor.use();
-    mShaderColor.send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
-    //mShaderLighting.send("light_color", glm::vec4(0.5, 1.f, 0.5, 1.f));
-    //mShaderLighting.send("light_position", glm::vec3(-2, 2, -2));
-    //mShaderLighting.send("light_size", 10.f);
+    // Enable depth buffer
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
+    glClearDepth(1.0);
+    GL_CHECK();
 
-    // color pass
-    for(auto iter = mMeshes.begin(); iter != mMeshes.end(); iter++) {
-        (*iter)->render(mCamera, &mShaderColor);
+    // Enable blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GL_CHECK();
+
+    // diffuse pass
+    mColorPassShader->use();
+    mColorPassShader->send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
+        (*iter)->render(mCamera, mColorPassShader);
     }
 
-    // render the light on top
+    // TODO; render the light on top
 }

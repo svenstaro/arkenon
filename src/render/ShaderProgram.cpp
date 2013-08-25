@@ -80,7 +80,7 @@ void ShaderProgram::send(const std::string& uniform, glm::mat4 matrix)
     GL_CHECK();
 }
 
-void ShaderProgram::send(const std::string& uniform, Texture* texture, int location)
+void ShaderProgram::send(const std::string& uniform, std::shared_ptr<Texture> texture, int location)
 {
     send(uniform, location); //(int)texture->getHandle());
 

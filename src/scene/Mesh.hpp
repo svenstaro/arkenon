@@ -5,6 +5,7 @@
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/Texture.hpp"
+#include "render/Renderable.hpp"
 
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
@@ -13,24 +14,25 @@
 
 #include <assimp/mesh.h>
 
-class Mesh : public Node {
+class Mesh : public Node, public Renderable {
 public:
     Mesh(const std::string& name);
 
     void load(const aiMesh* mesh);
 
+    void clear();
     void addTriangle(Vertex a, Vertex b, Vertex c);
     void addQuad(Vertex a, Vertex b, Vertex c, Vertex d);
     void addFace(std::vector<Vertex> vertices);
     void commit();
 
-    void setDiffuseTexture(Texture* texture);
+    void setDiffuseTexture(std::shared_ptr<Texture> texture);
 
-    void render(Camera* camera, ShaderProgram* shader);
+    void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
 
 private:
     VertexBuffer mVertexBuffer;
-    Texture* mDiffuseTexture;
+    std::shared_ptr<Texture> mDiffuseTexture;
 
 };
 

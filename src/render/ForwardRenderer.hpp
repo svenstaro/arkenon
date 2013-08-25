@@ -2,7 +2,7 @@
 #define _RENDER_FORWARDRENDERER_HPP
 
 #include "render/Renderer.hpp"
-
+#include "render/ShaderProgram.hpp"
 
 class ForwardRenderer : public Renderer {
 public:
@@ -10,8 +10,8 @@ public:
     virtual void render();
 
 private:
-    ShaderProgram mShaderColor;
-    ShaderProgram mShaderLighting;
+    std::shared_ptr<ShaderProgram> mColorPassShader;
+    std::shared_ptr<ShaderProgram> mLightPassShader;
 
 };
 
