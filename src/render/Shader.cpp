@@ -1,5 +1,5 @@
 #include "Shader.hpp"
-#include "utils.hpp"
+#include "util/check.hpp"
 
 #include <iostream>
 #include <fstream>

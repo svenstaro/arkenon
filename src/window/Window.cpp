@@ -1,5 +1,5 @@
 #include "window/Window.hpp"
-#include "utils.hpp"
+#include "util/check.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -7,11 +7,10 @@
 std::vector<Window*> Window::instances;
 
 Window::Window(const std::string& title, const glm::vec2& size)
-    : RenderTarget(size),
-      mBackgroundColor(0.f, 0.f, 0.f, 1.f)
+    : mBackgroundColor(0.f, 0.f, 0.f, 1.f)
 {
     glfwInit();
-    mWindow = glfwCreateWindow(mSize.x, mSize.y, title.c_str(), NULL, NULL);
+    mWindow = glfwCreateWindow(size.x, size.y, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(mWindow);
 
     if (glewInit() != GLEW_OK) {
@@ -85,6 +84,20 @@ void Window::setActive()
     glViewport(0, 0, getSize().x, getSize().y);
 }
 
+void Window::setSize(const glm::vec2& size)
+{
+    if(!mWindow) return;
+    glfwSetWindowSize(mWindow, (int)size.x, (int)size.y);
+}
+
+glm::vec2 Window::getSize() const
+{
+    if(!mWindow) return glm::vec2(1, 1); // so we do not get division by 0 when calculating aspect ratio
+    int x, y;
+    glfwGetWindowSize(mWindow, &x, &y);
+    return glm::vec2(x, y);
+}
+
 bool Window::isOpen() const
 {
     return mWindow && !glfwWindowShouldClose(mWindow);
@@ -102,20 +115,13 @@ float Window::getFPS() const
 
 float Window::getAspectRatio() const
 {
-    return mSize.x / mSize.y;
+    return getSize().x / getSize().y;
 }
 
 void Window::setTitle(const std::string& title)
 {
     if(!mWindow) return;
     glfwSetWindowTitle(mWindow, title.c_str());
-}
-
-void Window::setSize(glm::vec2 size)
-{
-    if(!mWindow) return;
-    glfwSetWindowSize(mWindow, (int)size.x, (int)size.y);
-    mSize = size;
 }
 
 void Window::setBackgroundColor(glm::vec4 background_color)

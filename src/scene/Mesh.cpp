@@ -44,7 +44,7 @@ void Mesh::addQuad(Vertex a, Vertex b, Vertex c, Vertex d)
 
 void Mesh::addFace(std::vector<Vertex> vertices)
 {
-    for(int i = 2; i <= vertices.size() - 1; ++i)
+    for(unsigned int i = 2; i <= vertices.size() - 1; ++i)
     {
         addTriangle(vertices[0], vertices[i-1], vertices[i]);
     }
@@ -62,8 +62,6 @@ void Mesh::setDiffuseTexture(std::shared_ptr<Texture> texture)
 
 void Mesh::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
 {
-    shader_program->use();
-
     glm::mat4 MVP = camera->getViewProjectionMatrix() * getAbsoluteTransformationMatrix();
     shader_program->send("MVP", MVP);
     shader_program->send("diffuse_texture", mDiffuseTexture, 0);

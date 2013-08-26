@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "render/Font.hpp"
+
 GameWindow::GameWindow()
     : Window("Arkenon", glm::vec2(800, 600))
 {}

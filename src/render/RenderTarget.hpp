@@ -9,7 +9,7 @@ public:
      * Initializes a RenderTarget.
      * @param size The size, in pixels, for this target.
      */
-    RenderTarget(glm::vec2 size);
+    RenderTarget(glm::vec2 size = glm::vec2(0, 0));
 
     virtual ~RenderTarget() = 0;
 
@@ -23,9 +23,15 @@ public:
      * Returs the size of the RenderTarget.
      * @return The size in pixels.
      */
-    const glm::vec2& getSize() const;
+    virtual glm::vec2 getSize() const;
 
-protected:
+    /**
+     * Changes the size of the RenderTarget.
+     * @param size The new size, in pixels.
+     */
+    virtual void setSize(const glm::vec2& size);
+
+private:
     glm::vec2 mSize;
 
 };

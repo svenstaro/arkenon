@@ -1,6 +1,6 @@
 #include "FlatRenderer.hpp"
 
-#include "utils.hpp"
+#include "util/check.hpp"
 
 FlatRenderer::FlatRenderer()
 {

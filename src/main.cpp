@@ -15,6 +15,8 @@
 #include "render/ForwardRenderer.hpp"
 #include "render/FlatRenderer.hpp"
 #include "render/Framebuffer.hpp"
+#include "render/Font.hpp"
+#include "gui/Label.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/Camera.hpp"
 #include "gui/Frame.hpp"
@@ -27,6 +29,8 @@
 
 int main()
 {
+    Font::defaultFont = std::make_shared<Font>("data/fonts/OpenSans-Regular.ttf");
+
     GameWindow window;
     //window.setSize(1024, 600);
 
@@ -69,18 +73,28 @@ int main()
     button->setSubrect(Button::Hover,  Rect(32/256.f, 0, 32/256.f, 32/256.f));
     button->setSubrect(Button::Focus,  Rect(32/256.f, 0, 32/256.f, 32/256.f));
     button->setSubrect(Button::Active, Rect(64/256.f, 0, 32/256.f, 32/256.f));
-    button->setSize(glm::vec2(200, 100));
+    button->setSize(glm::vec2(200, 30));
     button->position = glm::vec3(20, -20, 0);
+    button->setText("Hello World, click me!");
+    button->setColor(glm::vec4(0, 0, 0, 1));
+    button->setFontSize(12);
 
     std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Orthographic, window.getSize(), 1.f));
-    guiCamera->position = glm::vec3(window.getSize().x * 0.5f, -window.getSize().y * 0.5f, 2.f);
 
-    double time = 0;
+    double time = 0, time2 = 0;
     while(window.isOpen()) {
         window.update();
+        window.setActive();
 
-        time = time + window.getFrameDuration();
-        mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration() * 0.3, 0)) * mesh->rotation;
+        camera->setViewportSize(window.getSize());
+        guiCamera->setViewportSize(window.getSize());
+        guiCamera->position = glm::vec3(window.getSize().x * 0.5f, -window.getSize().y * 0.5f, 2.f);
+
+        float speed = sin(time2 * 0.4) * 0.5 + 0.5;
+        time2 += window.getFrameDuration();
+        time += window.getFrameDuration() * speed;
+        mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration() * speed, 0)) * mesh->rotation;
+        mesh->position = glm::vec3(-cos(time), 0, sin(time)) * 3.f;
 
         window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
         window.clear();

@@ -1,5 +1,5 @@
 #include "ShaderProgram.hpp"
-#include "utils.hpp"
+#include "util/check.hpp"
 
 #include <iostream>
 #include <vector>

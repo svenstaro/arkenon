@@ -10,6 +10,7 @@ find_package(ENet)
 find_package(GLEW)
 find_package(assimp)
 find_package(FreeImagePlus)
+find_package(Freetype)
 
 add_definitions(-Wall -Wextra -Wshadow -g -pedantic -fPIC -std=c++11)
 set(CMAKE_BUILD_TYPE "Debug")
@@ -25,6 +26,7 @@ include_directories(
     ${GLEW_INCLUDE_DIRS}
     ${ASSIMP_INCLUDE_DIRS}
     ${FREEIMAGEPLUS_INCLUDE_PATH}
+    ${FREETYPE_INCLUDE_DIRS}
 )
 
 file(GLOB_RECURSE sources src/*.cpp)
@@ -41,4 +43,5 @@ target_link_libraries(${PROJECT_NAME}
     ${GLEW_LIBRARIES}
     ${ASSIMP_LIBRARIES}
     ${FREEIMAGEPLUS_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
 )

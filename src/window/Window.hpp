@@ -52,7 +52,10 @@ public:
      */
     void close();
 
+    // from RenderTarget
     void setActive();
+    void setSize(const glm::vec2 &size);
+    glm::vec2 getSize() const;
 
     bool isOpen() const;
     double getFrameDuration() const;
@@ -60,7 +63,6 @@ public:
     float getAspectRatio() const;
 
     void setTitle(const std::string& title);
-    void setSize(glm::vec2 size);
     void setBackgroundColor(glm::vec4 background_color);
     void setCursorMode(CursorMode mode);
 

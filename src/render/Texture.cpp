@@ -1,9 +1,7 @@
 #include "Texture.hpp"
-#include "utils.hpp"
+#include "util/check.hpp"
 
 #include <iostream>
-
-#include <utils.hpp>
 
 Texture::Texture()
 {
@@ -18,16 +16,12 @@ void Texture::bind()
     GL_CHECK();
 }
 
-void Texture::load(const std::string& filename)
+void Texture::load(const fipImage& image)
 {
-    fipImage image;
-    image.load(filename.c_str(), 0);
-
     int bpp = image.getBitsPerPixel();
     int type = image.getImageType();
 
     mSize = glm::vec2(image.getWidth(), image.getHeight());
-
 
     bind();
     if(type == FIT_BITMAP && bpp == 24)
@@ -38,6 +32,13 @@ void Texture::load(const std::string& filename)
         std::cerr << "Invalid internal image format or bpp." << std::endl;;
 
     GL_CHECK();
+}
+
+void Texture::load(const std::string& filename)
+{
+    fipImage image;
+    image.load(filename.c_str(), 0);
+    load(image);
 }
 
 void Texture::create(const glm::vec2& size)

@@ -8,13 +8,13 @@ Framebuffer::Framebuffer(glm::vec2 size)
     setActive();
 
     // create Texture
-    mTexture.create(mSize);
+    mTexture.create(getSize());
     mTexture.setSmooth(false);
 
     // create depth buffer
     glGenRenderbuffers(1, &mDepthbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mDepthbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, mSize.x, mSize.y);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, getSize().x, getSize().y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthbuffer);
 
     // Set "renderedTexture" as our colour attachement #0
@@ -28,7 +28,7 @@ Framebuffer::Framebuffer(glm::vec2 size)
 void Framebuffer::setActive()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, mHandle);
-    glViewport(0, 0, mSize.x, mSize.y);
+    glViewport(0, 0, getSize().x, getSize().y);
 }
 
 Texture* Framebuffer::getTexture()

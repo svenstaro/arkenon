@@ -19,6 +19,12 @@ public:
     void bind();
 
     /**
+     * Loads a texture from a bitmap.
+     * @param filename The bitmap.
+     */
+    void load(const fipImage& image);
+
+    /**
      * Loads a texture from an image file.
      * @param filename The path to the image file.
      */

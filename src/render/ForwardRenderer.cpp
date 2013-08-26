@@ -1,6 +1,6 @@
 #include "ForwardRenderer.hpp"
 
-#include "utils.hpp"
+#include "util/check.hpp"
 
 ForwardRenderer::ForwardRenderer()
 {
