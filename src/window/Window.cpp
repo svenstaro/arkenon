@@ -1,8 +1,9 @@
 #include "window/Window.hpp"
-#include "util/check.hpp"
 
 #include <iostream>
 #include <algorithm>
+
+#include "util/check.hpp"
 
 std::vector<Window*> Window::instances;
 
@@ -167,9 +168,19 @@ void window_glfw_mouse_button(GLFWwindow* glfw_window, int button, int action, i
     if(window)
     {
         if(action == GLFW_PRESS) {
-            window->mouseButtonPressed(button, mods);
+            MousePressEvent e;
+            e.window = window;
+            e.button = button;
+            e.mods = mods;
+            e.position = window->getMousePosition();
+            window->handleEvent(&e);
         } else if(action == GLFW_RELEASE) {
-            window->mouseButtonReleased(button, mods);
+            MouseReleaseEvent e;
+            e.window = window;
+            e.button = button;
+            e.mods = mods;
+            e.position = window->getMousePosition();
+            window->handleEvent(&e);
         }
     }
 }
@@ -179,7 +190,10 @@ void window_glfw_mouse_move(GLFWwindow* glfw_window, double x, double y)
     Window* window = Window::getInstance(glfw_window);
     if(window)
     {
-        window->mouseMoved(x, y);
+        MouseMoveEvent e;
+        e.window = window;
+        e.position = glm::vec2(x, y);
+        window->handleEvent(&e);
     }
 }
 
@@ -189,9 +203,15 @@ void window_glfw_mouse_enter(GLFWwindow* glfw_window, int entered)
     if(window)
     {
         if(entered == GL_TRUE) {
-            window->mouseEnter();
+            MouseEnterEvent e;
+            e.window = window;
+            e.position = window->getMousePosition();
+            window->handleEvent(&e);
         } else {
-            window->mouseLeave();
+            MouseLeaveEvent e;
+            e.window = window;
+            e.position = window->getMousePosition();
+            window->handleEvent(&e);
         }
     }
 }
@@ -201,7 +221,11 @@ void window_glfw_scroll(GLFWwindow* glfw_window, double dx, double dy)
     Window* window = Window::getInstance(glfw_window);
     if(window)
     {
-        window->mouseScrolled(dx, dy);
+        MouseScrollEvent e;
+        e.window = window;
+        e.position = window->getMousePosition();
+        e.delta = glm::vec2(dx, dy);
+        window->handleEvent(&e);
     }
 }
 
@@ -211,9 +235,20 @@ void window_glfw_key(GLFWwindow* glfw_window, int key, int scancode, int action,
     if(window)
     {
         if(action == GLFW_RELEASE) {
-            window->keyReleased(key, scancode, mods);
+            KeyReleaseEvent e;
+            e.window = window;
+            e.key = key;
+            e.scancode = scancode;
+            e.mods = mods;
+            window->handleEvent(&e);
         } else {
-            window->keyPressed(key, scancode, mods, action == GLFW_REPEAT);
+            KeyPressEvent e;
+            e.window = window;
+            e.key = key;
+            e.scancode = scancode;
+            e.mods = mods;
+            e.repeated = (action == GLFW_REPEAT);
+            window->handleEvent(&e);
         }
     }
 }
@@ -223,6 +258,9 @@ void window_glfw_character(GLFWwindow* glfw_window, unsigned int unicode)
     Window* window = Window::getInstance(glfw_window);
     if(window)
     {
-        window->characterTyped(unicode);
+        CharacterEvent e;
+        e.window = window;
+        e.unicode = unicode;
+        window->handleEvent(&e);
     }
 }

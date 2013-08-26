@@ -7,9 +7,7 @@ class GameWindow : public Window {
 public:
     GameWindow();
 
-    void onMouseButtonReleased(int button, int mods);
-    void onCharacterTyped(unsigned int unicode);
-    void onKeyPressed(int key, int scancode, int mods, bool repeated);
+    void onEvent(const Event *event);
 };
 
 #endif

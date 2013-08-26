@@ -33,6 +33,7 @@ public:
 
     void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
 
+    void onEvent(const Event* event);
     void onMouseMoved(double x, double y);
     void onMouseButtonPressed(int button, int mods);
     void onMouseButtonReleased(int button, int mods);

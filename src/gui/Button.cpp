@@ -53,27 +53,34 @@ void Button::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgra
     mText->render(camera, shader_program);
 }
 
-void Button::onMouseMoved(double x, double y)
+void Button::onEvent(const Event* event)
 {
-    if(mState == Active) return;
-    mState = isHover(glm::vec2(x, y)) ? Hover : Normal;
-}
-
-void Button::onMouseButtonPressed(int button, int mods)
-{
-    if(mState == Hover)
-        mState = Active;
-}
-
-void Button::onMouseButtonReleased(int button, int mods)
-{
-    mState = Normal;
+    switch(event->type) {
+        case Event::MouseMove:
+            if(mState == Active) break;
+            mState = isHover(((MouseMoveEvent*)event)->position) ? Hover : Normal;
+            break;
+        case Event::MousePress:
+            if(isHover(((MousePressEvent*)event)->position))
+                mState = Active;
+            break;
+        case Event::MouseRelease:
+            if(mState == Active && isHover(((MouseReleaseEvent*)event)->position))
+            {
+                std::cout << "click" << std::endl;
+                mState = Hover;
+            }
+            else
+            {
+                mState = Normal;
+            }
+            break;
+    }
 }
 
 bool Button::isHover(const glm::vec2& pos)
 {
     //TODO: camera projection
     glm::vec4 lm = glm::inverse(getAbsoluteTransformationMatrix()) * glm::vec4(pos.x, pos.y, 0.f, 1.f);
-    std::cout << "Hover? " << pos.x << "|" << pos.y << "   >>   " << lm.x << "|" << lm.y << std::endl;
     return lm.x >= 0 && lm.y >= 0 && lm.x <= mSize.x && lm.y <= mSize.y;
 }
