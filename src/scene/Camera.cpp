@@ -21,18 +21,20 @@ glm::mat4 Camera::getViewMatrix() const
 
 glm::mat4 Camera::getProjectionMatrix() const
 {
-    if(mType == Orthographic)
-    {
-        glm::vec2 s = mViewportSize / 2.f * mFieldOfView; // field of view = zoom factor
-        return glm::ortho(-s.x, s.x, -s.y, s.y, mNearClip, mFarClip);
-    }
-    else if(mType == Perspective)
+    if(mType == Perspective)
     {
         return glm::perspective(mFieldOfView, mViewportSize.x / mViewportSize.y, mNearClip, mFarClip);
     }
     else
     {
-        return glm::mat4(1.f); // should not happen
+        glm::vec2 s = mViewportSize / 2.f * mFieldOfView; // field of view = zoom factor
+
+        if(mType == Orthographic)
+            return glm::ortho(-s.x, s.x, -s.y, s.y, mNearClip, mFarClip);
+        else if(mType == Screen)
+            return glm::ortho(-s.x, s.x, s.y, -s.y, mNearClip, mFarClip);
+        else
+            return glm::mat4(1.f);
     }
 }
 
@@ -48,16 +50,16 @@ void Camera::setViewportSize(const glm::vec2& viewport_size)
 
 void Camera::setFieldOfView(float field_of_view)
 {
-    if(mType == Orthographic)
-        std::cout << "Warning: setting field of view on orthographic camera '" << getName() << "' has no effect." << std::endl;
+    if(mType != Perspective)
+        std::cout << "Warning: setting field of view on non-perspective camera '" << getName() << "' has no effect." << std::endl;
 
     mFieldOfView = field_of_view;
 }
 
 void Camera::setClipping(float near_clip, float far_clip)
 {
-    if(mType == Orthographic)
-        std::cout << "Warning: setting clipping on orthographic camera '" << getName() << "' has no effect." << std::endl;
+    if(mType != Perspective)
+        std::cout << "Warning: setting clipping on non-perspective camera '" << getName() << "' has no effect." << std::endl;
 
     mNearClip = near_clip;
     mFarClip = far_clip;

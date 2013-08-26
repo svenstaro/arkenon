@@ -11,7 +11,8 @@ class Camera : public Node {
 public:
     enum Type {
         Perspective,
-        Orthographic
+        Orthographic,
+        Screen
     };
 
 public:

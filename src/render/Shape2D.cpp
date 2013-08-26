@@ -32,10 +32,10 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, float sp
 
         mVertexBuffer.clear();
         mVertexBuffer.addQuad(
-            Vertex(vs.x, -vs.y, 0, ts.x, -ts.y),
-            Vertex(ve.x, -vs.y, 0, te.x, -ts.y),
-            Vertex(ve.x, -ve.y, 0, te.x, -te.y),
-            Vertex(vs.x, -ve.y, 0, ts.x, -te.y)
+            Vertex(vs.x, vs.y, 0, ts.x, -ts.y),
+            Vertex(ve.x, vs.y, 0, te.x, -ts.y),
+            Vertex(ve.x, ve.y, 0, te.x, -te.y),
+            Vertex(vs.x, ve.y, 0, ts.x, -te.y)
         );
         mVertexBuffer.commit();
     }
@@ -61,74 +61,74 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, float sp
 
         // Center
         mVertexBuffer.addQuad(
-            Vertex(vsi.x, -vsi.y, 0, tsi.x, -tsi.y),
-            Vertex(vei.x, -vsi.y, 0, tei.x, -tsi.y),
-            Vertex(vei.x, -vei.y, 0, tei.x, -tei.y),
-            Vertex(vsi.x, -vei.y, 0, tsi.x, -tei.y)
+            Vertex(vsi.x, vsi.y, 0, tsi.x, -tsi.y),
+            Vertex(vei.x, vsi.y, 0, tei.x, -tsi.y),
+            Vertex(vei.x, vei.y, 0, tei.x, -tei.y),
+            Vertex(vsi.x, vei.y, 0, tsi.x, -tei.y)
         );
 
         // Left
         mVertexBuffer.addQuad(
-            Vertex(vso.x, -vsi.y, 0, tso.x, -tsi.y),
-            Vertex(vsi.x, -vsi.y, 0, tsi.x, -tsi.y),
-            Vertex(vsi.x, -vei.y, 0, tsi.x, -tei.y),
-            Vertex(vso.x, -vei.y, 0, tso.x, -tei.y)
+            Vertex(vso.x, vsi.y, 0, tso.x, -tsi.y),
+            Vertex(vsi.x, vsi.y, 0, tsi.x, -tsi.y),
+            Vertex(vsi.x, vei.y, 0, tsi.x, -tei.y),
+            Vertex(vso.x, vei.y, 0, tso.x, -tei.y)
         );
 
         // Right
         mVertexBuffer.addQuad(
-            Vertex(vei.x, -vsi.y, 0, tei.x, -tsi.y),
-            Vertex(veo.x, -vsi.y, 0, teo.x, -tsi.y),
-            Vertex(veo.x, -vei.y, 0, teo.x, -tei.y),
-            Vertex(vei.x, -vei.y, 0, tei.x, -tei.y)
+            Vertex(vei.x, vsi.y, 0, tei.x, -tsi.y),
+            Vertex(veo.x, vsi.y, 0, teo.x, -tsi.y),
+            Vertex(veo.x, vei.y, 0, teo.x, -tei.y),
+            Vertex(vei.x, vei.y, 0, tei.x, -tei.y)
         );
 
         // Top
         mVertexBuffer.addQuad(
-            Vertex(vsi.x, -vso.y, 0, tsi.x, -tso.y),
-            Vertex(vei.x, -vso.y, 0, tei.x, -tso.y),
-            Vertex(vei.x, -vsi.y, 0, tei.x, -tsi.y),
-            Vertex(vsi.x, -vsi.y, 0, tsi.x, -tsi.y)
+            Vertex(vsi.x, vso.y, 0, tsi.x, -tso.y),
+            Vertex(vei.x, vso.y, 0, tei.x, -tso.y),
+            Vertex(vei.x, vsi.y, 0, tei.x, -tsi.y),
+            Vertex(vsi.x, vsi.y, 0, tsi.x, -tsi.y)
         );
 
         // Bottom
         mVertexBuffer.addQuad(
-            Vertex(vsi.x, -vei.y, 0, tsi.x, -tei.y),
-            Vertex(vei.x, -vei.y, 0, tei.x, -tei.y),
-            Vertex(vei.x, -veo.y, 0, tei.x, -teo.y),
-            Vertex(vsi.x, -veo.y, 0, tsi.x, -teo.y)
+            Vertex(vsi.x, vei.y, 0, tsi.x, -tei.y),
+            Vertex(vei.x, vei.y, 0, tei.x, -tei.y),
+            Vertex(vei.x, veo.y, 0, tei.x, -teo.y),
+            Vertex(vsi.x, veo.y, 0, tsi.x, -teo.y)
         );
 
         // Top-Left
         mVertexBuffer.addQuad(
-            Vertex(vso.x, -vso.y, 0, tso.x, -tso.y),
-            Vertex(vsi.x, -vso.y, 0, tsi.x, -tso.y),
-            Vertex(vsi.x, -vsi.y, 0, tsi.x, -tsi.y),
-            Vertex(vso.x, -vsi.y, 0, tso.x, -tsi.y)
+            Vertex(vso.x, vso.y, 0, tso.x, -tso.y),
+            Vertex(vsi.x, vso.y, 0, tsi.x, -tso.y),
+            Vertex(vsi.x, vsi.y, 0, tsi.x, -tsi.y),
+            Vertex(vso.x, vsi.y, 0, tso.x, -tsi.y)
         );
 
         // Top-Right
         mVertexBuffer.addQuad(
-            Vertex(vei.x, -vso.y, 0, tei.x, -tso.y),
-            Vertex(veo.x, -vso.y, 0, teo.x, -tso.y),
-            Vertex(veo.x, -vsi.y, 0, teo.x, -tsi.y),
-            Vertex(vei.x, -vsi.y, 0, tei.x, -tsi.y)
+            Vertex(vei.x, vso.y, 0, tei.x, -tso.y),
+            Vertex(veo.x, vso.y, 0, teo.x, -tso.y),
+            Vertex(veo.x, vsi.y, 0, teo.x, -tsi.y),
+            Vertex(vei.x, vsi.y, 0, tei.x, -tsi.y)
         );
 
         // Bottom-Left
         mVertexBuffer.addQuad(
-            Vertex(vso.x, -vei.y, 0, tso.x, -tei.y),
-            Vertex(vsi.x, -vei.y, 0, tsi.x, -tei.y),
-            Vertex(vsi.x, -veo.y, 0, tsi.x, -teo.y),
-            Vertex(vso.x, -veo.y, 0, tso.x, -teo.y)
+            Vertex(vso.x, vei.y, 0, tso.x, -tei.y),
+            Vertex(vsi.x, vei.y, 0, tsi.x, -tei.y),
+            Vertex(vsi.x, veo.y, 0, tsi.x, -teo.y),
+            Vertex(vso.x, veo.y, 0, tso.x, -teo.y)
         );
 
         // Bottom-Right
         mVertexBuffer.addQuad(
-            Vertex(vei.x, -vei.y, 0, tei.x, -tei.y),
-            Vertex(veo.x, -vei.y, 0, teo.x, -tei.y),
-            Vertex(veo.x, -veo.y, 0, teo.x, -teo.y),
-            Vertex(vei.x, -veo.y, 0, tei.x, -teo.y)
+            Vertex(vei.x, vei.y, 0, tei.x, -tei.y),
+            Vertex(veo.x, vei.y, 0, teo.x, -tei.y),
+            Vertex(veo.x, veo.y, 0, teo.x, -teo.y),
+            Vertex(vei.x, veo.y, 0, tei.x, -teo.y)
         );
         mVertexBuffer.commit();
     }

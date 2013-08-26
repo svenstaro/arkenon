@@ -74,12 +74,12 @@ int main()
     button->setSubrect(Button::Focus,  Rect(32/256.f, 0, 32/256.f, 32/256.f));
     button->setSubrect(Button::Active, Rect(64/256.f, 0, 32/256.f, 32/256.f));
     button->setSize(glm::vec2(200, 30));
-    button->position = glm::vec3(20, -20, 0);
+    button->position = glm::vec3(20, 20, 0);
     button->setText("Hello World, click me!");
     button->setColor(glm::vec4(0, 0, 0, 1));
     button->setFontSize(12);
 
-    std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Orthographic, window.getSize(), 1.f));
+    std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Screen, window.getSize(), 1.f));
 
     double time = 0, time2 = 0;
     while(window.isOpen()) {
@@ -88,7 +88,7 @@ int main()
 
         camera->setViewportSize(window.getSize());
         guiCamera->setViewportSize(window.getSize());
-        guiCamera->position = glm::vec3(window.getSize().x * 0.5f, -window.getSize().y * 0.5f, 2.f);
+        guiCamera->position = glm::vec3(window.getSize().x * 0.5f, window.getSize().y * 0.5f, 2.f);
 
         float speed = sin(time2 * 0.4) * 0.5 + 0.5;
         time2 += window.getFrameDuration();
