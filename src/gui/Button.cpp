@@ -73,7 +73,7 @@ void Button::onEvent(const Event* event)
         case Event::MouseRelease:
             if(mState == Active && isHover(((MouseReleaseEvent*)event)->position))
             {
-                std::cout << "click" << std::endl;
+                //std::cout << "click" << std::endl;
                 mState = Hover;
             }
             else
@@ -89,4 +89,9 @@ bool Button::isHover(const glm::vec2& pos)
     //TODO: camera projection
     glm::vec4 lm = glm::inverse(getAbsoluteTransformationMatrix()) * glm::vec4(pos.x, pos.y, 0.f, 1.f);
     return lm.x >= 0 && lm.y >= 0 && lm.x <= mSize.x && lm.y <= mSize.y;
+}
+
+Button::State Button::getState() const
+{
+    return mState;
 }

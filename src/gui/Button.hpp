@@ -40,6 +40,8 @@ public:
     void onMouseButtonReleased(int button, int mods);
     bool isHover(const glm::vec2& pos);
 
+    State getState() const;
+
 private:
     std::shared_ptr<Shape2D> mShape;
     std::shared_ptr<Text> mText;
