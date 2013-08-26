@@ -55,7 +55,19 @@ void Button::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgra
 
 void Button::onMouseMoved(double x, double y)
 {
+    if(mState == Active) return;
     mState = isHover(glm::vec2(x, y)) ? Hover : Normal;
+}
+
+void Button::onMouseButtonPressed(int button, int mods)
+{
+    if(mState == Hover)
+        mState = Active;
+}
+
+void Button::onMouseButtonReleased(int button, int mods)
+{
+    mState = Normal;
 }
 
 bool Button::isHover(const glm::vec2& pos)
