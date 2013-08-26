@@ -11,7 +11,7 @@
 #include <FreeImagePlus.h>
 
 #include "render/Texture.hpp"
-#include "Rect.hpp"
+#include "util/Rect.hpp"
 
 class FontPage {
 public:

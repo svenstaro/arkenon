@@ -12,7 +12,7 @@
 #include "render/Renderable.hpp"
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
-#include "Rect.hpp"
+#include "util/Rect.hpp"
 
 class Shape2D : public Node, public Renderable {
 public:

@@ -7,7 +7,7 @@
 #include "render/Shape2D.hpp"
 #include "gui/Label.hpp"
 #include "scene/Mesh.hpp"
-#include "Rect.hpp"
+#include "util/Rect.hpp"
 
 class Button : public Label {
 public:
