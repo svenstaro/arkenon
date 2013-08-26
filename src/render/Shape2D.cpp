@@ -4,7 +4,7 @@ Shape2D::Shape2D(const std::string& name)
     : Node(name)
 {}
 
-void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, float split9_factor, const glm::vec2& texture_size)
+void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const glm::vec2& split9_factor, const glm::vec2& texture_size)
 {
     glm::vec2 tex_size = texture_size;
     if(tex_size.x == 0 && tex_size.y == 0)
@@ -20,7 +20,7 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, float sp
         }
     }
 
-    if(split9_factor >= 1.f)
+    if(split9_factor.x >= 1.f && split9_factor.y >= 1.f)
     {
         // Texture: Start/End
         glm::vec2 ts = subrect.position;
@@ -42,7 +42,7 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, float sp
     else
     {
         //glm::vec2 inner_size = subrect.size * split9_factor;
-        glm::vec2 inner_offset = subrect.size * (1.f - split9_factor) * 0.5f;
+        glm::vec2 inner_offset = subrect.size * (glm::vec2(1.f, 1.f) - split9_factor) * 0.5f;
         glm::vec2 pixel_offset = inner_offset * tex_size;
 
         // Texture: Start/End Outer/Inner

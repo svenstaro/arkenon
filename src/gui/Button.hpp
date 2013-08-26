@@ -24,6 +24,7 @@ public:
     // background
     void setTexture(std::shared_ptr<Texture> texture);
     void setSubrect(State state, const Rect& subrect);
+    void setSplit9Factor(const glm::vec2& split9_factor);
 
     // label
     void setFontSize(int font_size);
@@ -45,6 +46,7 @@ private:
     Rect mSubrect;
     State mState;
     std::map<State, Rect> mSubrects;
+    glm::vec2 mSplit9Factor;
 
 };
 

@@ -32,6 +32,8 @@ int main()
     Font::defaultFont = std::make_shared<Font>("data/fonts/OpenSans-Regular.ttf");
 
     GameWindow window;
+    window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
+    window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
     //window.setSize(1024, 600);
 
     ForwardRenderer renderer;
@@ -69,14 +71,15 @@ int main()
     gui->load("data/gui/button.png");
     //gui->setSmooth(true);
     button->setTexture(gui);
-    button->setSubrect(Button::Normal, Rect(0,        0, 32/256.f, 32/256.f));
-    button->setSubrect(Button::Hover,  Rect(32/256.f, 0, 32/256.f, 32/256.f));
-    button->setSubrect(Button::Focus,  Rect(32/256.f, 0, 32/256.f, 32/256.f));
-    button->setSubrect(Button::Active, Rect(64/256.f, 0, 32/256.f, 32/256.f));
-    button->setSize(glm::vec2(200, 30));
+    button->setSplit9Factor(glm::vec2(152/216.f, 8/56.f));
+    button->setSubrect(Button::Normal, Rect(0,        0, 216/256.f, 56/256.f));
+    button->setSubrect(Button::Hover,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
+    button->setSubrect(Button::Focus,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
+    button->setSubrect(Button::Active, Rect(0,112/256.f, 216/256.f, 56/256.f));
+    button->setSize(glm::vec2(216, 56));
     button->position = glm::vec3(20, 20, 0);
     button->setText("Hello World, click me!");
-    button->setColor(glm::vec4(0, 0, 0, 1));
+    button->setColor(glm::vec4(1, 1, 1, 1));
     button->setFontSize(12);
 
     std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Screen, window.getSize(), 1.f));
@@ -96,7 +99,6 @@ int main()
         mesh->rotation = glm::quat(glm::vec3(0, window.getFrameDuration() * speed, 0)) * mesh->rotation;
         mesh->position = glm::vec3(-cos(time), 0, sin(time)) * 3.f;
 
-        window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
         window.clear();
 
         renderer.prepare();

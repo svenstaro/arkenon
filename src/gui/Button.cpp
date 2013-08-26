@@ -3,7 +3,8 @@
 Button::Button(const std::string& text)
     : mShape(new Shape2D("button-shape")),
       mText(new Text("button-shape", text)),
-      mState(Normal)
+      mState(Normal),
+      mSplit9Factor(0.33f, 0.33f)
 {
     addChild(mShape);
     addChild(mText);
@@ -22,6 +23,11 @@ void Button::setTexture(std::shared_ptr<Texture> texture)
 void Button::setSubrect(Button::State state, const Rect& subrect)
 {
     mSubrects[state] = subrect;
+}
+
+void Button::setSplit9Factor(const glm::vec2& split9_factor)
+{
+    mSplit9Factor = split9_factor;
 }
 
 void Button::setFontSize(int font_size)
@@ -48,7 +54,7 @@ void Button::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgra
 {
     mText->position = glm::vec3(mSize.x * 0.5f, mSize.y * 0.5f, 1.f);
 
-    mShape->makeRectangle(mSize, mSubrects[mState], 0.33f);
+    mShape->makeRectangle(mSize, mSubrects[mState], mSplit9Factor);
     mShape->render(camera, shader_program);
     mText->render(camera, shader_program);
 }
