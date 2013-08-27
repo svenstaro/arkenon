@@ -69,6 +69,8 @@ public:
     glm::vec2 getMousePosition() const;
     void setMousePosition(const glm::vec2& mouse_position);
 
+    bool isKeyDown(int key) const;
+
 private:
     GLFWwindow* mWindow;
     double mFrameDuration = 0;

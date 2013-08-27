@@ -57,7 +57,7 @@ glm::mat4 Node::getTransformationMatrix() const
 glm::mat4 Node::getAbsoluteTransformationMatrix() const
 {
     if(mParent)
-        return getTransformationMatrix() * mParent->getAbsoluteTransformationMatrix();
+        return mParent->getAbsoluteTransformationMatrix() * getTransformationMatrix();
     else
         return getTransformationMatrix();
 }
@@ -78,5 +78,10 @@ void Node::setAbsoluteRotation(const glm::quat& absolute_rotation)
         rotation = absolute_rotation * glm::inverse(mParent->rotation);
     else
         rotation = absolute_rotation;
+}
+
+const Node* Node::getParent() const
+{
+    return mParent;
 }
 

@@ -80,6 +80,8 @@ public:
      */
     void setAbsoluteRotation(const glm::quat& absolute_rotation);
 
+    const Node* getParent() const;
+
 private:
     std::map<std::string, std::shared_ptr<Node>> mChildren;
     Node* mParent = nullptr;

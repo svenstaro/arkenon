@@ -151,6 +151,11 @@ void Window::setMousePosition(const glm::vec2& mouse_position)
     glfwSetCursorPos(mWindow, mouse_position.x, mouse_position.y);
 }
 
+bool Window::isKeyDown(int key) const
+{
+    return glfwGetKey(mWindow, key) == GLFW_PRESS;
+}
+
 Window* Window::getInstance(GLFWwindow* glfw_window)
 {
     for(auto i = instances.begin(); i != instances.end(); ++i)

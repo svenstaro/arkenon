@@ -8,6 +8,9 @@ Texture::Texture()
     glGenTextures(1, &mHandle);
     GL_CHECK();
     setSmooth();
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 void Texture::bind()
@@ -30,7 +33,9 @@ void Texture::load(const fipImage& image)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mSize.x, mSize.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)image.accessPixels());
     else
         std::cerr << "Invalid internal image format or bpp." << std::endl;;
+    GL_CHECK();
 
+    glGenerateMipmap(GL_TEXTURE_2D);
     GL_CHECK();
 }
 
@@ -45,14 +50,18 @@ void Texture::create(const glm::vec2& size)
 {
     bind();
     mSize = size;
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    GL_CHECK();
+    glGenerateMipmap(GL_TEXTURE_2D);
+    GL_CHECK();
 }
 
 void Texture::setSmooth(bool smooth)
 {
     bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+    GL_CHECK();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST);
     GL_CHECK();
 }
 

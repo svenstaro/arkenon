@@ -39,26 +39,28 @@ int main()
     ForwardRenderer renderer;
     FlatRenderer guiRenderer;
 
-    Node root("root");
-    std::shared_ptr<Mesh> mesh(new Mesh("mesh"));
-    root.addChild(mesh);
-
-    window.addInputForwarding(&root);
-
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
-    mesh->load(scene->mMeshes[0]);
-    mesh->commit();
 
     std::shared_ptr<Texture> texture(new Texture());
     texture->load("data/textures/fighter.png");
     texture->setSmooth(false);
+
+    Node ship("ship");
+    ship.position.y = 2;
+    window.addInputForwarding(&ship);
+
+    std::shared_ptr<Mesh> mesh(new Mesh("mesh"));
+    mesh->load(scene->mMeshes[0]);
+    mesh->commit();
+    mesh->rotation = glm::quat(glm::vec3(-M_PI/2, 0, 0));
     mesh->setDiffuseTexture(texture);
+    ship.addChild(mesh);
 
     std::shared_ptr<Camera> camera(new Camera("camera", Camera::Perspective, window.getSize(), 60.f));
-    root.addChild(camera);
-    camera->position = glm::vec3(0, 3, 6);
-    camera->rotation = glm::quat(glm::vec3(-0.5, 0, 0));
+    ship.addChild(camera);
+    camera->position = glm::vec3(0, 5, -10);
+    camera->rotation = glm::quat(glm::vec3(-0.25, M_PI, 0));
 
     std::shared_ptr<Texture> gui(new Texture());
     gui->load("data/gui/button.png");
@@ -92,7 +94,19 @@ int main()
     window.addInputForwarding(button_left.get());
     window.addInputForwarding(button_right.get());
 
-    double time = 0, angle = M_PI/2, angleSpeed = 0;
+    std::shared_ptr<Texture> gridTexture = std::make_shared<Texture>();
+    gridTexture->load("data/gfx/grid.png");
+
+    std::shared_ptr<Shape2D> grid = std::make_shared<Shape2D>("grid");
+    grid->setTexture(gridTexture);
+    grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 100, 100));
+    grid->position = glm::vec3(-50, 0, -50);
+    grid->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
+
+    float speed = 0;
+    float rotSpeed = 0;
+    float angle = 0;
+
     while(window.isOpen()) {
         window.update();
         window.setActive();
@@ -101,21 +115,32 @@ int main()
         guiCamera->setViewportSize(window.getSize());
         guiCamera->position = glm::vec3(window.getSize().x * 0.5f, window.getSize().y * 0.5f, 2.f);
 
-        time += window.getFrameDuration();
-        if(button_left->getState() == Button::Active)
-            angleSpeed -= window.getFrameDuration() * 3;
-        else if(button_right->getState() == Button::Active)
-            angleSpeed += window.getFrameDuration() * 3;
-        else
-            angleSpeed *= (1 - window.getFrameDuration());
-        angle += angleSpeed * window.getFrameDuration();
-        mesh->rotation = glm::quat(glm::vec3(-M_PI/2, angle, 0));
-        mesh->position = glm::vec3(-cos(angle), 0, sin(angle)) * 3.f;
+        float dt = window.getFrameDuration();
+
+        if(window.isKeyDown(GLFW_KEY_UP))           speed += dt * 3;
+        else if(window.isKeyDown(GLFW_KEY_DOWN))    speed -= dt * 3;
+        else                                        speed *= (1 - dt);
+
+        if(window.isKeyDown(GLFW_KEY_RIGHT))        rotSpeed -= dt * 0.5 * speed;
+        else if(window.isKeyDown(GLFW_KEY_LEFT))    rotSpeed += dt * 0.5 * speed;
+        else                                        rotSpeed *= (1 - dt);
+
+        if(speed > 10) speed = 10;
+        if(speed < -10) speed = -10;
+
+        if(rotSpeed > 3) rotSpeed = 3;
+        if(rotSpeed < -3) rotSpeed = -3;
+
+        angle += rotSpeed * dt;
+
+        ship.rotation = glm::quat(glm::vec3(0, angle, 0)) * glm::quat(glm::vec3(0, 0, 1 - pow(0.8, -rotSpeed)));
+        ship.position += glm::vec3(sin(angle), 0, cos(angle)) * speed * dt;
 
         window.clear();
 
         renderer.prepare();
         renderer.registerRenderable(mesh);
+        renderer.registerRenderable(grid);
         renderer.setCamera(camera);
         renderer.render();
         renderer.cleanup();

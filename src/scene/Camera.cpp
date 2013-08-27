@@ -16,6 +16,7 @@ glm::mat4 Camera::getViewProjectionMatrix() const
 
 glm::mat4 Camera::getViewMatrix() const
 {
+    //if(getParent()) return glm::inverse(getTransformationMatrix()) * getParent()->getTransformationMatrix();
     return glm::inverse(getAbsoluteTransformationMatrix());
 }
 
