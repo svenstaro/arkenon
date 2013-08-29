@@ -119,8 +119,12 @@ int main()
     std::shared_ptr<Texture> groundTexture = std::make_shared<Texture>();
     groundTexture->load("data/textures/pattern_262/diffuse.tga");
 
+    std::shared_ptr<Texture> groundNormals = std::make_shared<Texture>();
+    groundNormals->load("data/textures/pattern_262/normal.tga");
+
     std::shared_ptr<Shape2D> ground = std::make_shared<Shape2D>("ground");
     ground->setTexture(groundTexture);
+    ground->setNormalTexture(groundNormals);
     ground->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 10, 10));
     ground->position = glm::vec3(-50, 0, -50);
     ground->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));

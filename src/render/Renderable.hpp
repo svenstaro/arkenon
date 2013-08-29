@@ -11,6 +11,7 @@ public:
     virtual ~Renderable() = 0;
 
     virtual std::shared_ptr<Texture> getDiffuseTexture();
+    virtual std::shared_ptr<Texture> getNormalTexture();
     virtual glm::mat4 getModelMatrix() const = 0;
     virtual void draw() = 0;
 };

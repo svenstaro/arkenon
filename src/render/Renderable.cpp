@@ -18,3 +18,9 @@ std::shared_ptr<Texture> Renderable::getDiffuseTexture()
 {
     return nullptr;
 }
+
+std::shared_ptr<Texture> Renderable::getNormalTexture()
+{
+    return nullptr;
+}
+

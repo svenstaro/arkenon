@@ -62,6 +62,7 @@ void DeferredRenderer::_geometryPass()
         mGeometryPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
         mGeometryPassShader->send("M", (*iter)->getModelMatrix());
         mGeometryPassShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
+        mGeometryPassShader->send("normalMap", (*iter)->getNormalTexture());
         (*iter)->draw();
     }
 }

@@ -140,9 +140,19 @@ void Shape2D::setTexture(std::shared_ptr<Texture> texture)
     mTexture = texture;
 }
 
+void Shape2D::setNormalTexture(std::shared_ptr<Texture> texture)
+{
+    mNormalTexture = texture;
+}
+
 std::shared_ptr<Texture> Shape2D::getDiffuseTexture()
 {
     return mTexture;
+}
+
+std::shared_ptr<Texture> Shape2D::getNormalTexture()
+{
+    return mNormalTexture;
 }
 
 void Shape2D::draw()

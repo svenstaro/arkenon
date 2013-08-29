@@ -34,14 +34,18 @@ public:
 
     void setTexture(std::shared_ptr<Texture> texture);
 
+    void setNormalTexture(std::shared_ptr<Texture> texture);
+
     std::shared_ptr<Texture> getDiffuseTexture();
+
+    std::shared_ptr<Texture> getNormalTexture();
 
     void draw();
 
 private:
     VertexBuffer mVertexBuffer;
     std::shared_ptr<Texture> mTexture;
-
+    std::shared_ptr<Texture> mNormalTexture;
 };
 
 #endif

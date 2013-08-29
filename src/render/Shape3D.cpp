@@ -8,7 +8,7 @@ void Shape3D::makeUvSphere(unsigned int rings, unsigned int sectors)
 {
     float const R = 1.0/(float)(rings-1);
     float const S = 1.0/(float)(sectors-1);
-    Vertex vertices[rings*sectors];
+    Vertex vertices[rings * sectors];
 
     for(unsigned int r = 0; r < rings; r++) {
         for(unsigned int s = 0; s < sectors; s++) {
