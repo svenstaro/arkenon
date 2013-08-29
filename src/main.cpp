@@ -67,6 +67,11 @@ int main()
     camera->position = glm::vec3(0, 5, -10);
     camera->rotation = glm::quat(glm::vec3(-0.25, M_PI, 0));
 
+    std::shared_ptr<Light> light(new Light("ship_light"));
+    light->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    light->setRadius(12.0f);
+    ship.addChild(light);
+
     std::shared_ptr<Texture> gui(new Texture());
     gui->load("data/gui/button.png");
 
@@ -156,9 +161,17 @@ int main()
         window.clear();
 
         deferredRenderer.prepare();
+
+        //Objects
         deferredRenderer.registerRenderable(mesh);
         deferredRenderer.registerRenderable(ground);
+
+        //Lights
+        deferredRenderer.registerLight(light);
+
+        //Camera
         deferredRenderer.setCamera(camera);
+
         deferredRenderer.render();
         deferredRenderer.cleanup();
 

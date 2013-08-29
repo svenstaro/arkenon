@@ -1,15 +1,17 @@
 #include "DeferredRenderer.hpp"
 
 #include "util/check.hpp"
-#include "render/Shape3D.hpp"
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
       mGBuffer(size, 3, GL_RGB16F),
       mLightsBuffer(size),
+      mSphere("light-volume-sphere"),
       mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl")),
       mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl"))
-{}
+{
+    mSphere.makeUvSphere(16, 16);
+}
 
 void DeferredRenderer::render()
 {
@@ -82,18 +84,22 @@ void DeferredRenderer::_lightPass()
     mLightPassShader->send("normalMap", mGBuffer.getTexture(2), 2);
 
     mLightPassShader->send("screenSize", mSize);
-    mLightPassShader->send("lightPosition", mPointLight1.position);
-    mLightPassShader->send("lightColor", mPointLight1.color);
-    mLightPassShader->send("lightRadius", mPointLight1.radius);
 
-    Shape3D sphere("light-volume-sphere");
-    sphere.makeUvSphere(16, 16);
-    sphere.position = mPointLight1.position;
-    sphere.scale = glm::vec3(mPointLight1.radius);
-    mLightPassShader->send("MVP", mCamera->getViewProjectionMatrix() * sphere.getModelMatrix());
-    mLightPassShader->send("VP", mCamera->getViewProjectionMatrix());
-    mLightPassShader->send("M", sphere.getModelMatrix());
-    sphere.draw();
+    for(auto iter = mLights.begin(); iter != mLights.end(); iter++) {
+        glm::vec3 position = (*iter)->getAbsolutePosition();
+        float radius = (*iter)->getRadius();
+
+        mLightPassShader->send("lightPosition", position);
+        mLightPassShader->send("lightColor", (*iter)->getColor());
+        mLightPassShader->send("lightRadius", radius);
+
+        mSphere.position = position;
+        mSphere.scale = glm::vec3(radius);
+        mLightPassShader->send("MVP", mCamera->getViewProjectionMatrix() * mSphere.getModelMatrix());
+        mLightPassShader->send("VP", mCamera->getViewProjectionMatrix());
+        mLightPassShader->send("M", mSphere.getModelMatrix());
+        mSphere.draw();
+    }
 }
 
 void DeferredRenderer::_debugOutput(int n, const Rect& subrect)

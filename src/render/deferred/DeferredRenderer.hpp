@@ -7,7 +7,9 @@
 #include "render/ShaderProgram.hpp"
 #include "render/Framebuffer.hpp"
 #include "util/Rect.hpp"
+#include "render/Shape3D.hpp"
 
+/*
 struct PointLight {
     PointLight(const glm::vec3& p = glm::vec3(4, 4, 0), float r = 12.f, const glm::vec4& c = glm::vec4(1, 1, 1, 1))
         : position(p), radius(r), color(c) {}
@@ -16,6 +18,8 @@ struct PointLight {
     float radius;
     glm::vec4 color;
 };
+
+*/
 
 class DeferredRenderer : public Renderer {
 public:
@@ -36,7 +40,9 @@ private:
 
     void _finalPass();
 
-    PointLight mPointLight1;
+    Shape3D mSphere;
+
+    //PointLight mPointLight1;
     glm::vec2 mSize;
 
     Framebuffer mGBuffer;       //< MRT#3: color, position, normal;         GL_RGB16F
