@@ -5,7 +5,7 @@
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
-      mGBuffer(size, 3, GL_RGB),
+      mGBuffer(size, 3, GL_RGB16F),
       mLightsBuffer(size),
       mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl", false)),
       mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl"))

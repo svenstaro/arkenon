@@ -34,7 +34,6 @@ void main()
 
 
 
-
     float distance = distance(position, lightPosition);
     normal = normalize(normal);
     vec3 lightDirection = normalize(position - lightPosition);
@@ -45,13 +44,16 @@ void main()
     // TODO: specularity here
 
     float alpha = distance / lightRadius;
-    float beta = .25;
+    float beta = 0.25;
     float damping_factor = 1.0 - pow(alpha, beta);
     float intensity = (1-alpha) * damping_factor;
 
-    vec3 result = light * color;
+    intensity = 1 / pow(alpha + 1, 2);
+
+    vec3 result = light * color * intensity;
 
     float attenuation = 1;//0.00 + 0.02 * distance + 0.008 * distance * distance;
 
     gl_FragColor = vec4(result / attenuation, 1);
+    //gl_FragColor = vec4(position / 10, 1);
 }
