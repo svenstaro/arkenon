@@ -126,6 +126,8 @@ int main()
         window.update();
         window.bind();
 
+        deferredRenderer.setSize(window.getSize());
+
         camera->setViewportSize(window.getSize());
         guiCamera->setViewportSize(window.getSize());
         guiCamera->position = glm::vec3(window.getSize().x * 0.5f, window.getSize().y * 0.5f, 2.f);

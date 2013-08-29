@@ -22,6 +22,8 @@ public:
     DeferredRenderer(glm::vec2 size);
     virtual void render();
 
+    void setSize(glm::vec2 size);
+
 private:
     void _geometryPass();
     void _lightPass();

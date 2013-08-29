@@ -25,6 +25,15 @@ void DeferredRenderer::render()
     _finalPass();
 }
 
+void DeferredRenderer::setSize(glm::vec2 size)
+{
+    if(mSize.x == size.x && mSize.y == size.y) return;
+
+    mSize = size;
+    mGBuffer = Framebuffer(size, 3, GL_RGB16F);
+    mLightsBuffer = Framebuffer(size);
+}
+
 void DeferredRenderer::_geometryPass()
 {
     // Enable depth test
