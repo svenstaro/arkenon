@@ -99,11 +99,12 @@ int main()
     window.addInputForwarding(button_right.get());
 
     std::shared_ptr<Texture> gridTexture = std::make_shared<Texture>();
-    gridTexture->load("data/gfx/grid.png");
+    //gridTexture->load("data/gfx/grid.png");
+    gridTexture->load("data/textures/pattern_262/diffuse.tga");
 
     std::shared_ptr<Shape2D> grid = std::make_shared<Shape2D>("grid");
-    grid->setTexture(texture);
-    grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 100, 100));
+    grid->setTexture(gridTexture);
+    grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 10, 10));
     grid->position = glm::vec3(-50, 0, -50);
     grid->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
 

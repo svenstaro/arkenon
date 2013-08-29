@@ -32,10 +32,10 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const gl
 
         mVertexBuffer.clear();
         mVertexBuffer.addQuad(
-            Vertex(vs.x, vs.y, 0, ts.x, -ts.y),
-            Vertex(ve.x, vs.y, 0, te.x, -ts.y),
-            Vertex(ve.x, ve.y, 0, te.x, -te.y),
-            Vertex(vs.x, ve.y, 0, ts.x, -te.y)
+            Vertex(vs.x, vs.y, 0, ts.x, -ts.y, 1, 1, 1, 1, 0, 0, -1),
+            Vertex(ve.x, vs.y, 0, te.x, -ts.y, 1, 1, 1, 1, 0, 0, -1),
+            Vertex(ve.x, ve.y, 0, te.x, -te.y, 1, 1, 1, 1, 0, 0, -1),
+            Vertex(vs.x, ve.y, 0, ts.x, -te.y, 1, 1, 1, 1, 0, 0, -1)
         );
         mVertexBuffer.commit();
     }
