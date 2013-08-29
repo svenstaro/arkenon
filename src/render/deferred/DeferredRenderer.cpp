@@ -7,14 +7,9 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
       mGBuffer(size, 3, GL_RGB16F),
       mLightsBuffer(size),
-      mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl", false)),
+      mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl")),
       mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl"))
-{
-    glBindFragDataLocation(mGeometryPassShader->getHandle(), 0, "color");
-    glBindFragDataLocation(mGeometryPassShader->getHandle(), 1, "position");
-    glBindFragDataLocation(mGeometryPassShader->getHandle(), 2, "normal");
-    mGeometryPassShader->link();
-}
+{}
 
 void DeferredRenderer::render()
 {
@@ -25,22 +20,9 @@ void DeferredRenderer::render()
 
     Framebuffer::unbind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //_debugOutput(0, Rect(0, 0.5, 0.5, 0.5));
-    //_debugOutput(1, Rect(0.5, 0.5, 0.5, 0.5));
-    //_debugOutput(2, Rect(0, 0, 0.5, 0.5));
 
     _lightPass();
-//    _finalPass();
-
-    // copy the depth buffer
-    mGBuffer.bindRead();
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-    glBlitFramebuffer(0, 0, mSize.x, mSize.y,
-                      0, 0, mSize.x, mSize.y,
-                      GL_DEPTH_BUFFER_BIT,
-                      GL_NEAREST);
-
+    _finalPass();
 }
 
 void DeferredRenderer::_geometryPass()
@@ -64,9 +46,6 @@ void DeferredRenderer::_geometryPass()
     mGeometryPassShader->send("color", 0);
     mGeometryPassShader->send("position", 1);
     mGeometryPassShader->send("normal", 2);
-
-    mGeometryPassShader->link();
-
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
         mGeometryPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
@@ -121,5 +100,12 @@ void DeferredRenderer::_debugOutput(int n, const Rect& subrect)
 
 void DeferredRenderer::_finalPass()
 {
+    // Copy the depth buffer
+    mGBuffer.bindRead();
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+    glBlitFramebuffer(0, 0, mSize.x, mSize.y,
+                      0, 0, mSize.x, mSize.y,
+                      GL_DEPTH_BUFFER_BIT,
+                      GL_NEAREST);
 }
