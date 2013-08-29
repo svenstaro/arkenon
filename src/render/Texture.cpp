@@ -19,6 +19,12 @@ void Texture::bind()
     GL_CHECK();
 }
 
+void Texture::unbind()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CHECK();
+}
+
 void Texture::load(const fipImage& image)
 {
     int bpp = image.getBitsPerPixel();
@@ -46,14 +52,14 @@ void Texture::load(const std::string& filename)
     load(image);
 }
 
-void Texture::create(const glm::vec2& size)
+void Texture::create(const glm::vec2& size, GLenum type)
 {
     bind();
     mSize = size;
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, type, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     GL_CHECK();
-    glGenerateMipmap(GL_TEXTURE_2D);
-    GL_CHECK();
+    //glGenerateMipmap(GL_TEXTURE_2D);
+    //GL_CHECK();
 }
 
 void Texture::setSmooth(bool smooth)
@@ -61,7 +67,8 @@ void Texture::setSmooth(bool smooth)
     bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
     GL_CHECK();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
     GL_CHECK();
 }
 

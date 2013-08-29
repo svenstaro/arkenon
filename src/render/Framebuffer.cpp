@@ -1,37 +1,76 @@
 #include "Framebuffer.hpp"
 
-Framebuffer::Framebuffer(glm::vec2 size)
-    : RenderTarget(size)
+#include <iostream>
+#include <new>
+
+Framebuffer::Framebuffer(glm::vec2 size, int mrt_count, GLenum texture_mode)
+    : RenderTarget(size),
+      mMrtCount(mrt_count)
 {
     glGenFramebuffers(1, &mHandle);
+    bind();
 
-    setActive();
+    // create the textures
+    for(unsigned int i = 0; i < mrt_count; ++i) {
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+        texture->setSmooth(false);
+        texture->create(getSize(), texture_mode);
+        texture->bind();
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture->getHandle(), 0);
 
-    // create Texture
-    mTexture.create(getSize());
-    mTexture.setSmooth(false);
+        try
+          {
+            mTextures.push_back(texture);
+          }
+          catch (std::bad_alloc& ba)
+          {
+            std::cerr << "bad_alloc caught: " << ba.what() << '\n';
+          }
+    }
 
     // create depth buffer
     glGenRenderbuffers(1, &mDepthbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mDepthbuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, getSize().x, getSize().y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthbuffer);
-
-    // Set "renderedTexture" as our colour attachement #0
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture.getHandle(), 0);
-
-    // Set the list of draw buffers.
-    GLenum drawBuffers[2] = {GL_COLOR_ATTACHMENT0};
-    glDrawBuffers(1, drawBuffers); // "1" is the size of DrawBuffers
 }
 
-void Framebuffer::setActive()
+void Framebuffer::bindDraw(int num, int* buffers)
+{
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mHandle);
+
+    if(buffers == 0) {
+        buffers = new int[num];
+        for(int i = 0; i < num; ++i) buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+    } else {
+        for(int i = 0; i < num; ++i) buffers[i] = GL_COLOR_ATTACHMENT0 + buffers[i];
+    }
+
+    glDrawBuffers(num, (GLenum*)buffers);
+}
+
+void Framebuffer::bindRead(int number)
+{
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, mHandle);
+    glReadBuffer(GL_COLOR_ATTACHMENT0 + number);
+}
+
+void Framebuffer::bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, mHandle);
-    glViewport(0, 0, getSize().x, getSize().y);
 }
 
-Texture* Framebuffer::getTexture()
+void Framebuffer::unbind(int mode)
 {
-    return &mTexture;
+    glBindFramebuffer(mode, 0);
+}
+
+std::shared_ptr<Texture> Framebuffer::getTexture(int target)
+{
+    return mTextures[target];
+}
+
+GLuint Framebuffer::getHandle(int target)
+{
+    return mHandle + sizeof(GLuint) * target;
 }

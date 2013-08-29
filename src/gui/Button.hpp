@@ -32,7 +32,8 @@ public:
     void setFont(std::shared_ptr<Font> font);
     void setColor(const glm::vec4& color);
 
-    void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
+    // broken
+    //void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
 
     void onEvent(const Event* event);
     void onMouseMoved(double x, double y);

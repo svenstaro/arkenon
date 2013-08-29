@@ -11,6 +11,16 @@ ShaderProgram::ShaderProgram()
     GL_CHECK();
 }
 
+ShaderProgram::ShaderProgram(const std::string& vertex_file, const std::string& fragment_file)
+    : ShaderProgram()
+{
+    Shader vertex(Shader::Vertex, vertex_file);
+    Shader fragment(Shader::Fragment, fragment_file);
+    attach(vertex);
+    attach(fragment);
+    link();
+}
+
 void ShaderProgram::attach(const Shader &shader)
 {
     glAttachShader(mHandle, shader.getHandle());
@@ -89,7 +99,10 @@ void ShaderProgram::send(const std::string& uniform, std::shared_ptr<Texture> te
     GL_CHECK();
 
     // bind texture to texture image unit
-    texture->bind();
+    if(texture)
+        texture->bind();
+    else
+        Texture::unbind();
 }
 
 GLuint ShaderProgram::getHandle() const

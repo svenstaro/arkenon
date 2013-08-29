@@ -13,9 +13,12 @@
 #include "render/ShaderProgram.hpp"
 #include "render/VertexBuffer.hpp"
 #include "render/ForwardRenderer.hpp"
+#include "render/deferred/DeferredRenderer.hpp"
 #include "render/FlatRenderer.hpp"
 #include "render/Framebuffer.hpp"
 #include "render/Font.hpp"
+#include "render/Shape3D.hpp"
+#include "render/Shape2D.hpp"
 #include "gui/Label.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/Camera.hpp"
@@ -33,10 +36,10 @@ int main()
 
     GameWindow window;
     window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
-    window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
+    //window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
     //window.setSize(1024, 600);
 
-    ForwardRenderer renderer;
+    DeferredRenderer renderer(window.getSize());
     FlatRenderer guiRenderer;
 
     Assimp::Importer importer;
@@ -103,13 +106,19 @@ int main()
     grid->position = glm::vec3(-50, 0, -50);
     grid->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
 
+    std::shared_ptr<Shape3D> sphere = std::make_shared<Shape3D>("sphere");
+    //grid->setTexture(gridTexture);
+    sphere->makeUvSphere(16, 16);
+    sphere->scale = glm::vec3(3.f);
+    sphere->position = glm::vec3(-5, 0, 0);
+
     float speed = 0;
     float rotSpeed = 0;
     float angle = 0;
 
     while(window.isOpen()) {
         window.update();
-        window.setActive();
+        window.bind();
 
         camera->setViewportSize(window.getSize());
         guiCamera->setViewportSize(window.getSize());
@@ -117,12 +126,12 @@ int main()
 
         float dt = window.getFrameDuration();
 
-        if(window.isKeyDown(GLFW_KEY_UP))           speed += dt * 3;
-        else if(window.isKeyDown(GLFW_KEY_DOWN))    speed -= dt * 3;
+        if(window.isKeyDown(GLFW_KEY_UP))           speed += dt * 6;
+        else if(window.isKeyDown(GLFW_KEY_DOWN))    speed -= dt * 6;
         else                                        speed *= (1 - dt);
 
-        if(window.isKeyDown(GLFW_KEY_RIGHT))        rotSpeed -= dt * 0.5 * speed;
-        else if(window.isKeyDown(GLFW_KEY_LEFT))    rotSpeed += dt * 0.5 * speed;
+        if(window.isKeyDown(GLFW_KEY_RIGHT))        rotSpeed -= dt * 5;
+        else if(window.isKeyDown(GLFW_KEY_LEFT))    rotSpeed += dt * 5;
         else                                        rotSpeed *= (1 - dt);
 
         if(speed > 10) speed = 10;
@@ -141,6 +150,7 @@ int main()
         renderer.prepare();
         renderer.registerRenderable(mesh);
         renderer.registerRenderable(grid);
+        renderer.registerRenderable(sphere);
         renderer.setCamera(camera);
         renderer.render();
         renderer.cleanup();

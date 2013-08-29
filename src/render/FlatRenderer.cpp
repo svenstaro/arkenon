@@ -27,6 +27,8 @@ void FlatRenderer::render()
     mShader->send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
-        (*iter)->render(mCamera, mShader);
+        mShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
+        mShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
+        (*iter)->draw();
     }
 }

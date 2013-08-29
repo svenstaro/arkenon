@@ -9,7 +9,16 @@
 class Renderable {
 public:
     virtual ~Renderable() = 0;
-    virtual void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program) = 0;
+
+    virtual std::shared_ptr<Texture> getDiffuseTexture();
+    virtual glm::mat4 getModelMatrix() const = 0;
+    virtual void draw() = 0;
+};
+
+class RenderableNode : public Node, public Renderable {
+public:
+    RenderableNode(const std::string& name);
+    glm::mat4 getModelMatrix() const;
 };
 
 #endif

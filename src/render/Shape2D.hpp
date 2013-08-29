@@ -14,7 +14,7 @@
 #include "scene/Camera.hpp"
 #include "util/Rect.hpp"
 
-class Shape2D : public Node, public Renderable {
+class Shape2D : public RenderableNode {
 public:
     Shape2D(const std::string& name);
 
@@ -34,7 +34,9 @@ public:
 
     void setTexture(std::shared_ptr<Texture> texture);
 
-    void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
+    std::shared_ptr<Texture> getDiffuseTexture();
+
+    void draw();
 
 private:
     VertexBuffer mVertexBuffer;

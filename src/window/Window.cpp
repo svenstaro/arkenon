@@ -79,7 +79,7 @@ void Window::close()
     mWindow = nullptr;
 }
 
-void Window::setActive()
+void Window::bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, getSize().x, getSize().y);

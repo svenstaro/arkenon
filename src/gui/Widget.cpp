@@ -3,7 +3,7 @@
 #include <iostream>
 
 Widget::Widget()
-    : Node("widget")
+    : RenderableNode("widget")
 {}
 
 Widget::~Widget()

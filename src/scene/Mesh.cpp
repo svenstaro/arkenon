@@ -1,7 +1,7 @@
 #include "Mesh.hpp"
 
 Mesh::Mesh(const std::string& name)
-    : Node(name)
+    : RenderableNode(name)
 {}
 
 void Mesh::load(const aiMesh* mesh)
@@ -60,10 +60,12 @@ void Mesh::setDiffuseTexture(std::shared_ptr<Texture> texture)
     mDiffuseTexture = texture;
 }
 
-void Mesh::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
+std::shared_ptr<Texture> Mesh::getDiffuseTexture()
 {
-    glm::mat4 MVP = camera->getViewProjectionMatrix() * getAbsoluteTransformationMatrix();
-    shader_program->send("MVP", MVP);
-    shader_program->send("diffuse_texture", mDiffuseTexture, 0);
+    return mDiffuseTexture;
+}
+
+void Mesh::draw()
+{
     mVertexBuffer.draw();
 }

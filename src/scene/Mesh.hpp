@@ -14,7 +14,7 @@
 
 #include <assimp/mesh.h>
 
-class Mesh : public Node, public Renderable {
+class Mesh : public RenderableNode {
 public:
     Mesh(const std::string& name);
 
@@ -27,8 +27,9 @@ public:
     void commit();
 
     void setDiffuseTexture(std::shared_ptr<Texture> texture);
+    std::shared_ptr<Texture> getDiffuseTexture();
 
-    void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
+    void draw();
 
 private:
     VertexBuffer mVertexBuffer;

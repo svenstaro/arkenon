@@ -18,6 +18,8 @@ public:
      */
     void bind();
 
+    static void unbind();
+
     /**
      * Loads a texture from a bitmap.
      * @param filename The bitmap.
@@ -34,7 +36,7 @@ public:
      * Creates an empty texture.
      * @param size The size for the empty texture.
      */
-    void create(const glm::vec2& size);
+    void create(const glm::vec2& size, GLenum type = GL_RGB);
 
     /**
      * Sets the filtering of a texture.

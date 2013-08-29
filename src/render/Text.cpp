@@ -3,7 +3,7 @@
 #include "util/Utf8Iterator.hpp"
 
 Text::Text(const std::string& name, const std::string& text, std::shared_ptr<Font> font, int font_size, const glm::vec4& color)
-    : Node(name),
+    : RenderableNode(name),
       mFont(font),
       mText(text),
       mFontSize(font_size),
@@ -44,6 +44,16 @@ void Text::setAlign(Text::Align vertical, Align horizontal)
     recreateBuffer();
 }
 
+std::shared_ptr<Texture> Text::getDiffuseTexture()
+{
+    return mFont->getPage(mFontSize)->getTexture();
+}
+
+void Text::draw()
+{
+    mVertexBuffer.draw();
+}
+
 void Text::recreateBuffer()
 {
     std::shared_ptr<FontPage> page = mFont->getPage(mFontSize);
@@ -80,12 +90,4 @@ void Text::recreateBuffer()
     }
 
     mVertexBuffer.commit();
-}
-
-void Text::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
-{
-    glm::mat4 MVP = camera->getViewProjectionMatrix() * getAbsoluteTransformationMatrix();
-    shader_program->send("MVP", MVP);
-    shader_program->send("diffuse_texture", mFont->getPage(mFontSize)->getTexture(), 0);
-    mVertexBuffer.draw();
 }

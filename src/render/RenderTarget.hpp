@@ -17,7 +17,7 @@ public:
      * Sets this RenderTarget as the currently active one. All following
      * OpenGL rendering operations will be performed on this target.
      */
-    virtual void setActive() = 0;
+    virtual void bind() = 0;
 
     /**
      * Returs the size of the RenderTarget.

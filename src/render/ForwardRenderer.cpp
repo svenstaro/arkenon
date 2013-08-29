@@ -3,21 +3,9 @@
 #include "util/check.hpp"
 
 ForwardRenderer::ForwardRenderer()
-{
-    mColorPassShader = std::make_shared<ShaderProgram>();
-    Shader simple_vertex(Shader::Vertex, "data/shader/simple.vertex.glsl");
-    Shader simple_fragment(Shader::Fragment, "data/shader/simple.fragment.glsl");
-    mColorPassShader->attach(simple_vertex);
-    mColorPassShader->attach(simple_fragment);
-    mColorPassShader->link();
-
-    mLightPassShader = std::make_shared<ShaderProgram>();
-    Shader light_vertex(Shader::Vertex, "data/shader/light.vertex.glsl");
-    Shader light_fragment(Shader::Fragment, "data/shader/light.fragment.glsl");
-    mLightPassShader->attach(light_vertex);
-    mLightPassShader->attach(light_fragment);
-    mLightPassShader->link();
-}
+    : mColorPassShader(std::make_shared<ShaderProgram>("data/shader/simple.vertex.glsl", "data/shader/simple.fragment.glsl")),
+      mLightPassShader(std::make_shared<ShaderProgram>("data/shader/light.vertex.glsl", "data/shader/light.fragment.glsl"))
+{}
 
 void ForwardRenderer::render()
 {
@@ -37,7 +25,9 @@ void ForwardRenderer::render()
     mColorPassShader->use();
     mColorPassShader->send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
-        (*iter)->render(mCamera, mColorPassShader);
+        mColorPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
+        mColorPassShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
+        (*iter)->draw();
     }
 
     // TODO; render the light on top

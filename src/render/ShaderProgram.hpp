@@ -18,6 +18,11 @@ public:
     ShaderProgram();
 
     /**
+     * Initializes a ShaderProgram with the fragment and vertex shader provided.
+     */
+    ShaderProgram(const std::string& vertex_file, const std::string& fragment_file);
+
+    /**
      * Attaches a shader to this program.
      * @param shader A shader.
      */

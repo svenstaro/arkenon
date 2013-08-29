@@ -16,7 +16,8 @@ public:
     void setFont(std::shared_ptr<Font> font);
     void setColor(const glm::vec4& color);
 
-    void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
+    std::shared_ptr<Texture> getDiffuseTexture();
+    void draw();
 
 protected:
     std::shared_ptr<Text> mText;

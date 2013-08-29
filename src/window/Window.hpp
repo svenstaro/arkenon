@@ -53,7 +53,7 @@ public:
     void close();
 
     // from RenderTarget
-    void setActive();
+    void bind();
     void setSize(const glm::vec2 &size);
     glm::vec2 getSize() const;
 

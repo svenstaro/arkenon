@@ -8,7 +8,7 @@
 #include "render/Renderable.hpp"
 #include "scene/Node.hpp"
 
-class Text : public Node, public Renderable {
+class Text : public RenderableNode {
 public:
     enum Align {
         Start,
@@ -29,7 +29,8 @@ public:
     void setColor(const glm::vec4& color);
     void setAlign(Align vertical, Align horizontal);
 
-    void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
+    std::shared_ptr<Texture> getDiffuseTexture();
+    void draw();
 
 private:
     void recreateBuffer();

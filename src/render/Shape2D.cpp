@@ -1,7 +1,7 @@
 #include "Shape2D.hpp"
 
 Shape2D::Shape2D(const std::string& name)
-    : Node(name)
+    : RenderableNode(name)
 {}
 
 void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const glm::vec2& split9_factor, const glm::vec2& texture_size)
@@ -140,10 +140,12 @@ void Shape2D::setTexture(std::shared_ptr<Texture> texture)
     mTexture = texture;
 }
 
-void Shape2D::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
+std::shared_ptr<Texture> Shape2D::getDiffuseTexture()
 {
-    glm::mat4 MVP = camera->getViewProjectionMatrix() * getAbsoluteTransformationMatrix();
-    shader_program->send("MVP", MVP);
-    shader_program->send("diffuse_texture", mTexture, 0);
+    return mTexture;
+}
+
+void Shape2D::draw()
+{
     mVertexBuffer.draw();
 }

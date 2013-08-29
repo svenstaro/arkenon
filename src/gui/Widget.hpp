@@ -9,7 +9,7 @@
 #include "scene/Node.hpp"
 #include "render/Renderable.hpp"
 
-class Widget : public Node, public Renderable {
+class Widget : public RenderableNode {
 public:
     Widget();
     virtual ~Widget() = 0;

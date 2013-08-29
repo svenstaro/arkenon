@@ -50,14 +50,14 @@ void Button::setColor(const glm::vec4& color)
     mText->setColor(color);
 }
 
-void Button::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
-{
-    mText->position = glm::vec3(mSize.x * 0.5f, mSize.y * 0.5f, 1.f);
+//void Button::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
+//{
+//    mText->position = glm::vec3(mSize.x * 0.5f, mSize.y * 0.5f, 1.f);
 
-    mShape->makeRectangle(mSize, mSubrects[mState], mSplit9Factor);
-    mShape->render(camera, shader_program);
-    mText->render(camera, shader_program);
-}
+//    mShape->makeRectangle(mSize, mSubrects[mState], mSplit9Factor);
+//    mShape->render(camera, shader_program);
+//    mText->render(camera, shader_program);
+//}
 
 void Button::onEvent(const Event* event)
 {

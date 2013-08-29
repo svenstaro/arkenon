@@ -26,7 +26,12 @@ void Label::setColor(const glm::vec4& color)
     mText->setColor(color);
 }
 
-void Label::render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program)
+std::shared_ptr<Texture> Label::getDiffuseTexture()
 {
-    mText->render(camera, shader_program);
+    return mText->getDiffuseTexture();
+}
+
+void Label::draw()
+{
+    mText->draw();
 }
