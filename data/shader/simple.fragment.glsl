@@ -13,5 +13,5 @@ uniform vec4 ambient_light;
 void main()
 {
     vec4 diffuse = texture(diffuse_texture, out_TextureCoords);
-    fragColor = vec4(diffuse.rgb, 1.f) * out_Color;
+    fragColor = diffuse * out_Color;
 }

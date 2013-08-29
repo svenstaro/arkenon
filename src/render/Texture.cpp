@@ -4,13 +4,14 @@
 #include <iostream>
 
 Texture::Texture()
+    : mMipmapsGenerated(false),
+      mTextureLoaded(false)
 {
     glGenTextures(1, &mHandle);
     GL_CHECK();
-    setSmooth();
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    setMipmap(false);
+    setSmooth(true);
 }
 
 void Texture::bind()
@@ -41,8 +42,10 @@ void Texture::load(const fipImage& image)
         std::cerr << "Invalid internal image format or bpp." << std::endl;;
     GL_CHECK();
 
-    glGenerateMipmap(GL_TEXTURE_2D);
-    GL_CHECK();
+    mTextureLoaded = true;
+    mMipmapsGenerated = false;
+
+    generateMipmap();
 }
 
 void Texture::load(const std::string& filename)
@@ -58,18 +61,45 @@ void Texture::create(const glm::vec2& size, GLenum type)
     mSize = size;
     glTexImage2D(GL_TEXTURE_2D, 0, type, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     GL_CHECK();
-    //glGenerateMipmap(GL_TEXTURE_2D);
-    //GL_CHECK();
+
+    mTextureLoaded = true;
+    mMipmapsGenerated = false;
+
+    generateMipmap();
+}
+
+void Texture::setMipmap(bool mipmap)
+{
+    mMipmap = mipmap;
+    updateTexParameters();
+    if(mipmap) generateMipmap();
 }
 
 void Texture::setSmooth(bool smooth)
 {
+    mSmooth = smooth;
+    updateTexParameters();
+}
+
+void Texture::updateTexParameters()
+{
     bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mSmooth ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mSmooth ? (mMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR) : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     GL_CHECK();
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+}
+
+void Texture::generateMipmap()
+{
+    // only generate if a texture is loaded, we did not generate them yet, and mipmapping is on
+    if(!mTextureLoaded || mMipmapsGenerated || !mMipmap) return;
+
+    bind();
+    glGenerateMipmap(GL_TEXTURE_2D);
     GL_CHECK();
+    mMipmapsGenerated = true;
 }
 
 GLuint Texture::getHandle() const

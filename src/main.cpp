@@ -40,7 +40,8 @@ int main()
     window.setBackgroundColor(glm::vec4(0, 0, 0, 1));
     //window.setSize(1024, 600);
 
-    DeferredRenderer renderer(window.getSize());
+    DeferredRenderer deferredRenderer(window.getSize());
+    ForwardRenderer forwardRenderer;
     FlatRenderer guiRenderer;
 
     Assimp::Importer importer;
@@ -98,14 +99,23 @@ int main()
     window.addInputForwarding(button_left.get());
     window.addInputForwarding(button_right.get());
 
+    std::shared_ptr<Texture> groundTexture = std::make_shared<Texture>();
+    groundTexture->load("data/textures/pattern_262/diffuse.tga");
+
+    std::shared_ptr<Shape2D> ground = std::make_shared<Shape2D>("ground");
+    ground->setTexture(groundTexture);
+    ground->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 10, 10));
+    ground->position = glm::vec3(-50, 0, -50);
+    ground->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
+
     std::shared_ptr<Texture> gridTexture = std::make_shared<Texture>();
-    //gridTexture->load("data/gfx/grid.png");
-    gridTexture->load("data/textures/pattern_262/diffuse.tga");
+    gridTexture->setMipmap(true);
+    gridTexture->load("data/gfx/grid.png");
 
     std::shared_ptr<Shape2D> grid = std::make_shared<Shape2D>("grid");
     grid->setTexture(gridTexture);
-    grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 10, 10));
-    grid->position = glm::vec3(-50, 0, -50);
+    grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 100, 100));
+    grid->position = glm::vec3(-50, 0.1, -50);
     grid->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
 
     float speed = 0;
@@ -143,12 +153,18 @@ int main()
 
         window.clear();
 
-        renderer.prepare();
-        renderer.registerRenderable(mesh);
-        renderer.registerRenderable(grid);
-        renderer.setCamera(camera);
-        renderer.render();
-        renderer.cleanup();
+        deferredRenderer.prepare();
+        deferredRenderer.registerRenderable(mesh);
+        deferredRenderer.registerRenderable(ground);
+        deferredRenderer.setCamera(camera);
+        deferredRenderer.render();
+        deferredRenderer.cleanup();
+
+        forwardRenderer.prepare();
+        forwardRenderer.registerRenderable(grid);
+        forwardRenderer.setCamera(camera);
+        forwardRenderer.render();
+        forwardRenderer.cleanup();
 
         guiRenderer.prepare();
         guiRenderer.registerRenderable(button_right);

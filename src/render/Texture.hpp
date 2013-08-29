@@ -39,6 +39,12 @@ public:
     void create(const glm::vec2& size, GLenum type = GL_RGB);
 
     /**
+     * Sets the mipmap mode.
+     * @param mipmap Whether to mipmap or not.
+     */
+    void setMipmap(bool mipmap);
+
+    /**
      * Sets the filtering of a texture.
      * @param smooth If true, GL_LINEAR filtering is used, GL_NEAREST otherwise.
      */
@@ -57,9 +63,16 @@ public:
     const glm::vec2& getSize() const;
 
 private:
+    void updateTexParameters();
+    void generateMipmap();
+
     GLuint mHandle;
     glm::vec2 mSize;
+    bool mSmooth;
+    bool mMipmap;
 
+    bool mMipmapsGenerated;
+    bool mTextureLoaded;
 };
 
 #endif
