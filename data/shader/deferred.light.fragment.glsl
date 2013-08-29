@@ -44,16 +44,10 @@ void main()
     // TODO: specularity here
 
     float alpha = distance / lightRadius;
-    float beta = 0.25;
+    float beta = 2;
     float damping_factor = 1.0 - pow(alpha, beta);
-    float intensity = (1-alpha) * damping_factor;
-
-    intensity = 1 / pow(alpha + 1, 2);
+    float intensity = clamp(1-alpha, 0, 1) * damping_factor;
 
     vec3 result = light * color * intensity;
-
-    float attenuation = 1;//0.00 + 0.02 * distance + 0.008 * distance * distance;
-
-    gl_FragColor = vec4(result / attenuation, 1);
-    //gl_FragColor = vec4(position / 10, 1);
+    gl_FragColor = vec4(result, 1);
 }

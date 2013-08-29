@@ -36,8 +36,8 @@ int main()
 
     GameWindow window;
     window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
-    window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
-    //window.setBackgroundColor(glm::vec4(0, 0, 0, 1));
+    //window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
+    window.setBackgroundColor(glm::vec4(0, 0, 0, 1));
     //window.setSize(1024, 600);
 
     DeferredRenderer renderer(window.getSize());
