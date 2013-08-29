@@ -68,13 +68,16 @@ void DeferredRenderer::_geometryPass()
 
 void DeferredRenderer::_lightPass()
 {
-    // Enable depth test
+    // Disable depth test
     glDisable(GL_DEPTH_TEST);
 
-    // Disable blending
+    // Enable blending
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     // Diffuse pass
     mLightPassShader->use();
@@ -102,6 +105,8 @@ void DeferredRenderer::_lightPass()
         mLightPassShader->send("M", mSphere.getModelMatrix());
         mSphere.draw();
     }
+
+    glDisable(GL_CULL_FACE);
 }
 
 void DeferredRenderer::_debugOutput(int n, const Rect& subrect)
