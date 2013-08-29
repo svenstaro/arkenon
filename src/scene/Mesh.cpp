@@ -55,14 +55,14 @@ void Mesh::commit()
     mVertexBuffer.commit();
 }
 
-void Mesh::setDiffuseTexture(std::shared_ptr<Texture> texture)
+void Mesh::setMaterial(std::shared_ptr<Material> mat)
 {
-    mDiffuseTexture = texture;
+    mMaterial = mat;
 }
 
-std::shared_ptr<Texture> Mesh::getDiffuseTexture()
+std::shared_ptr<Material> Mesh::getMaterial()
 {
-    return mDiffuseTexture;
+    return mMaterial;
 }
 
 void Mesh::draw()

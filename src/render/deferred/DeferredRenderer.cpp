@@ -59,10 +59,11 @@ void DeferredRenderer::_geometryPass()
     mGeometryPassShader->send("normal", 2);
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
+        std::shared_ptr<Material> material = (*iter)->getMaterial();
         mGeometryPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
         mGeometryPassShader->send("M", (*iter)->getModelMatrix());
-        mGeometryPassShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
-        mGeometryPassShader->send("normalMap", (*iter)->getNormalTexture());
+        mGeometryPassShader->send("diffuse_texture", material->getDiffuseTexture());
+        mGeometryPassShader->send("normalMap", material->getNormalTexture(), 1);
         (*iter)->draw();
     }
 }

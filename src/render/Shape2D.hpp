@@ -32,20 +32,16 @@ public:
                        const glm::vec2& split9_factor = glm::vec2(1.f, 1.f),
                        const glm::vec2& texture_size = glm::vec2(0, 0));
 
-    void setTexture(std::shared_ptr<Texture> texture);
+    void setMaterial(std::shared_ptr<Material> mat);
 
-    void setNormalTexture(std::shared_ptr<Texture> texture);
+    std::shared_ptr<Material> getMaterial();
 
-    std::shared_ptr<Texture> getDiffuseTexture();
-
-    std::shared_ptr<Texture> getNormalTexture();
 
     void draw();
 
 private:
     VertexBuffer mVertexBuffer;
-    std::shared_ptr<Texture> mTexture;
-    std::shared_ptr<Texture> mNormalTexture;
+    std::shared_ptr<Material> mMaterial;
 };
 
 #endif

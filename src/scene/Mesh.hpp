@@ -26,14 +26,14 @@ public:
     void addFace(std::vector<Vertex> vertices);
     void commit();
 
-    void setDiffuseTexture(std::shared_ptr<Texture> texture);
-    std::shared_ptr<Texture> getDiffuseTexture();
+    void setMaterial(std::shared_ptr<Material> mat);
+    std::shared_ptr<Material> getMaterial();
 
     void draw();
 
 private:
     VertexBuffer mVertexBuffer;
-    std::shared_ptr<Texture> mDiffuseTexture;
+    std::shared_ptr<Material> mMaterial;
 
 };
 

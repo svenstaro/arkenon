@@ -28,7 +28,7 @@ void FlatRenderer::render()
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
         mShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
-        mShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
+        mShader->send("diffuse_texture", (*iter)->getMaterial()->getDiffuseTexture());
         (*iter)->draw();
     }
 }

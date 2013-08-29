@@ -48,9 +48,11 @@ int main()
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
 
-    std::shared_ptr<Texture> texture(new Texture());
-    texture->load("data/textures/fighter.png");
-    texture->setSmooth(false);
+    std::shared_ptr<Material> material(new Material());
+    std::shared_ptr<Texture> texture_diffuse(new Texture());
+    texture_diffuse->load("data/textures/fighter.png");
+    texture_diffuse->setSmooth(false);
+    material->setDiffuseTexture(texture_diffuse);
 
     Node ship("ship");
     ship.position.y = 2;
@@ -60,7 +62,7 @@ int main()
     mesh->load(scene->mMeshes[0]);
     mesh->commit();
     mesh->rotation = glm::quat(glm::vec3(-M_PI/2, 0, 0));
-    mesh->setDiffuseTexture(texture);
+    mesh->setMaterial(material);
     ship.addChild(mesh);
 
     std::shared_ptr<Camera> camera(new Camera("camera", Camera::Perspective, window.getSize(), 60.f));
@@ -84,11 +86,13 @@ int main()
     movingLight->setRadius(12.0f);
     movingLight->position.y = 3;
 
-    std::shared_ptr<Texture> gui(new Texture());
-    gui->load("data/gui/button.png");
+    std::shared_ptr<Material> gui(new Material());
+    std::shared_ptr<Texture> gui_diffuse(new Texture());
+    gui_diffuse->load("data/gui/button.png");
+    gui->setDiffuseTexture(gui_diffuse);
 
     std::shared_ptr<Button> button_left = std::make_shared<Button>("<");
-    button_left->setTexture(gui);
+    button_left->setMaterial(gui);
     button_left->setSplit9Factor(glm::vec2(152/216.f, 8/56.f));
     button_left->setSubrect(Button::Normal, Rect(0,        0, 216/256.f, 56/256.f));
     button_left->setSubrect(Button::Hover,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
@@ -100,7 +104,7 @@ int main()
     button_left->setFontSize(12);
 
     std::shared_ptr<Button> button_right = std::make_shared<Button>(">");
-    button_right->setTexture(gui);
+    button_right->setMaterial(gui);
     button_right->setSplit9Factor(glm::vec2(152/216.f, 8/56.f));
     button_right->setSubrect(Button::Normal, Rect(0,        0, 216/256.f, 56/256.f));
     button_right->setSubrect(Button::Hover,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
@@ -116,25 +120,28 @@ int main()
     window.addInputForwarding(button_left.get());
     window.addInputForwarding(button_right.get());
 
-    std::shared_ptr<Texture> groundTexture = std::make_shared<Texture>();
-    groundTexture->load("data/textures/pattern_262/diffuse.tga");
-
-    std::shared_ptr<Texture> groundNormals = std::make_shared<Texture>();
-    groundNormals->load("data/textures/pattern_262/normal.tga");
+    std::shared_ptr<Material> groundMaterial = std::make_shared<Material>();
+    std::shared_ptr<Texture> ground_diffuse = std::make_shared<Texture>();
+    ground_diffuse->load("data/textures/pattern_262/diffuse.tga");
+    std::shared_ptr<Texture> ground_normal = std::make_shared<Texture>();
+    ground_normal->load("data/textures/pattern_262/normal.tga");
+    groundMaterial->setDiffuseTexture(ground_diffuse);
+    groundMaterial->setNormalTexture(ground_normal);
 
     std::shared_ptr<Shape2D> ground = std::make_shared<Shape2D>("ground");
-    ground->setTexture(groundTexture);
-    ground->setNormalTexture(groundNormals);
+    ground->setMaterial(groundMaterial);
     ground->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 10, 10));
     ground->position = glm::vec3(-50, 0, -50);
     ground->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
 
+    std::shared_ptr<Material> gridMaterial = std::make_shared<Material>();
     std::shared_ptr<Texture> gridTexture = std::make_shared<Texture>();
     gridTexture->setMipmap(true);
     gridTexture->load("data/gfx/grid.png");
+    gridMaterial->setDiffuseTexture(gridTexture);
 
     std::shared_ptr<Shape2D> grid = std::make_shared<Shape2D>("grid");
-    grid->setTexture(gridTexture);
+    grid->setMaterial(gridMaterial);
     grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 100, 100));
     grid->position = glm::vec3(-50, 0.1, -50);
     grid->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));

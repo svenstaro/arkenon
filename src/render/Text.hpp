@@ -29,7 +29,7 @@ public:
     void setColor(const glm::vec4& color);
     void setAlign(Align vertical, Align horizontal);
 
-    std::shared_ptr<Texture> getDiffuseTexture();
+    std::shared_ptr<Material> getMaterial();
     void draw();
 
 private:
