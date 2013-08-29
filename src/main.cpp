@@ -72,6 +72,11 @@ int main()
     light->setRadius(12.0f);
     ship.addChild(light);
 
+    std::shared_ptr<Light> staticLight(new Light("static_light"));
+    staticLight->setColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    staticLight->setRadius(12.0f);
+    staticLight->position.y = 2;
+
     std::shared_ptr<Texture> gui(new Texture());
     gui->load("data/gui/button.png");
 
@@ -168,6 +173,7 @@ int main()
 
         //Lights
         deferredRenderer.registerLight(light);
+        deferredRenderer.registerLight(staticLight);
 
         //Camera
         deferredRenderer.setCamera(camera);

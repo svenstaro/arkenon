@@ -73,6 +73,8 @@ void DeferredRenderer::_lightPass()
 
     // Disable blending
     glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
 
     // Diffuse pass
     mLightPassShader->use();
