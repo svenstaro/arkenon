@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <algorithm> 
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -69,13 +70,19 @@ int main()
 
     std::shared_ptr<Light> light(new Light("ship_light"));
     light->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    light->setRadius(12.0f);
+    light->setRadius(5.0f);
+    light->position = glm::vec3(0, 3, 0);
     ship.addChild(light);
 
     std::shared_ptr<Light> staticLight(new Light("static_light"));
     staticLight->setColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     staticLight->setRadius(12.0f);
     staticLight->position.y = 2;
+
+     std::shared_ptr<Light> movingLight(new Light("moving_light"));
+    movingLight->setColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    movingLight->setRadius(12.0f);
+    movingLight->position.y = 3;
 
     std::shared_ptr<Texture> gui(new Texture());
     gui->load("data/gui/button.png");
@@ -132,6 +139,8 @@ int main()
     float rotSpeed = 0;
     float angle = 0;
 
+    float _time = 0;
+
     while(window.isOpen()) {
         window.update();
         window.bind();
@@ -163,6 +172,13 @@ int main()
         ship.rotation = glm::quat(glm::vec3(0, angle, 0)) * glm::quat(glm::vec3(0, 0, 1 - pow(0.8, -rotSpeed)));
         ship.position += glm::vec3(sin(angle), 0, cos(angle)) * speed * dt;
 
+        _time += dt;
+
+        movingLight->position.x = 0 + sin(_time)*10;
+        movingLight->position.z = 0 + cos(_time)*10;
+
+        light->setRadius(((sin(_time) + 1.0) * 3.0f) + 6.0f );
+
         window.clear();
 
         deferredRenderer.prepare();
@@ -174,6 +190,7 @@ int main()
         //Lights
         deferredRenderer.registerLight(light);
         deferredRenderer.registerLight(staticLight);
+        deferredRenderer.registerLight(movingLight);
 
         //Camera
         deferredRenderer.setCamera(camera);
