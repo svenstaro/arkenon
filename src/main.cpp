@@ -177,7 +177,7 @@ int main()
         movingLight->position.x = 0 + sin(_time)*10;
         movingLight->position.z = 0 + cos(_time)*10;
 
-        light->setRadius(((sin(_time) + 1.0) * 3.0f) + 6.0f );
+        light->setRadius(((sin(_time*3) + 1.0) * 2.0) + 6.0 );
 
         window.clear();
 
