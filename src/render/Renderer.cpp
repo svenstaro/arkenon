@@ -20,4 +20,5 @@ void Renderer::setCamera(std::shared_ptr<Camera> camera)
 void Renderer::cleanup()
 {
     mRenderables.clear();
+    mLights.clear();
 }
