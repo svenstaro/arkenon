@@ -1,14 +1,19 @@
 #include "DeferredRenderer.hpp"
 
 #include "util/check.hpp"
+#include "render/Shape3D.hpp"
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
-      mGBuffer(size, 3, GL_RGB16F),
+      mGBuffer(size, 3, GL_RGB),
       mLightsBuffer(size),
-      mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl")),
+      mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl", false)),
       mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl"))
 {
+    glBindFragDataLocation(mGeometryPassShader->getHandle(), 0, "color");
+    glBindFragDataLocation(mGeometryPassShader->getHandle(), 1, "position");
+    glBindFragDataLocation(mGeometryPassShader->getHandle(), 2, "normal");
+    mGeometryPassShader->link();
 }
 
 void DeferredRenderer::render()
@@ -20,10 +25,11 @@ void DeferredRenderer::render()
 
     Framebuffer::unbind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _debugOutput(0, Rect(0, 0.5, 0.5, 0.5));
-    _debugOutput(1, Rect(0.5, 0.5, 0.5, 0.5));
-    _debugOutput(2, Rect(0, 0, 0.5, 0.5));
-//    _lightPass();
+    //_debugOutput(0, Rect(0, 0.5, 0.5, 0.5));
+    //_debugOutput(1, Rect(0.5, 0.5, 0.5, 0.5));
+    //_debugOutput(2, Rect(0, 0, 0.5, 0.5));
+
+    _lightPass();
 //    _finalPass();
 
 }
@@ -45,21 +51,52 @@ void DeferredRenderer::_geometryPass()
     // texture slots
     int buffers[] = {0, 1, 2};
     mGBuffer.bindDraw(3, buffers);
+
     mGeometryPassShader->send("color", 0);
     mGeometryPassShader->send("position", 1);
     mGeometryPassShader->send("normal", 2);
+
+    mGeometryPassShader->link();
+
+
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
         mGeometryPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
         mGeometryPassShader->send("M", (*iter)->getModelMatrix());
         mGeometryPassShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
-        mGeometryPassShader->send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
         (*iter)->draw();
     }
 }
 
 void DeferredRenderer::_lightPass()
 {
+    // Enable depth test
+    glDisable(GL_DEPTH_TEST);
 
+    // Disable blending
+    glEnable(GL_BLEND);
+
+    // Diffuse pass
+    mLightPassShader->use();
+
+    // texture slots
+    mGBuffer.bindRead(3);
+    mLightPassShader->send("colorMap", mGBuffer.getTexture(0), 0);
+    mLightPassShader->send("positionMap", mGBuffer.getTexture(1), 1);
+    mLightPassShader->send("normalMap", mGBuffer.getTexture(2), 2);
+
+    mLightPassShader->send("screenSize", mSize);
+    mLightPassShader->send("lightPosition", mPointLight1.position);
+    mLightPassShader->send("lightColor", mPointLight1.color);
+    mLightPassShader->send("lightRadius", mPointLight1.radius);
+
+    Shape3D sphere("light-volume-sphere");
+    sphere.makeUvSphere(16, 16);
+    sphere.position = mPointLight1.position;
+    sphere.scale = glm::vec3(mPointLight1.radius);
+    mLightPassShader->send("MVP", mCamera->getViewProjectionMatrix() * sphere.getModelMatrix());
+    mLightPassShader->send("VP", mCamera->getViewProjectionMatrix());
+    mLightPassShader->send("M", sphere.getModelMatrix());
+    sphere.draw();
 }
 
 void DeferredRenderer::_debugOutput(int n, const Rect& subrect)

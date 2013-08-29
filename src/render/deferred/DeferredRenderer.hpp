@@ -9,7 +9,7 @@
 #include "util/Rect.hpp"
 
 struct PointLight {
-    PointLight(const glm::vec3& p = glm::vec3(4, 3, 2), float r = 6.f, const glm::vec4& c = glm::vec4(1, 1, 1, 1))
+    PointLight(const glm::vec3& p = glm::vec3(4, 4, 0), float r = 12.f, const glm::vec4& c = glm::vec4(1, 1, 1, 1))
         : position(p), radius(r), color(c) {}
 
     glm::vec3 position;

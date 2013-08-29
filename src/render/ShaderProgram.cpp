@@ -11,14 +11,14 @@ ShaderProgram::ShaderProgram()
     GL_CHECK();
 }
 
-ShaderProgram::ShaderProgram(const std::string& vertex_file, const std::string& fragment_file)
+ShaderProgram::ShaderProgram(const std::string& vertex_file, const std::string& fragment_file, bool link_directly)
     : ShaderProgram()
 {
     Shader vertex(Shader::Vertex, vertex_file);
     Shader fragment(Shader::Fragment, fragment_file);
     attach(vertex);
     attach(fragment);
-    link();
+    if(link_directly) link();
 }
 
 void ShaderProgram::attach(const Shader &shader)
@@ -49,8 +49,11 @@ GLuint ShaderProgram::getUniformId(const std::string& uniform)
     auto iter = mUniformCache.find(uniform);
     if(iter == mUniformCache.end())
     {
-        GLuint id = glGetUniformLocation(mHandle, uniform.c_str());
+        GLint id = glGetUniformLocation(mHandle, uniform.c_str());
         GL_CHECK();
+        if(id == -1) {
+            std::cout << "Warning: uniform " << uniform << " not found or unused." << std::endl;
+        }
         mUniformCache[uniform] = id;
         return id;
     }
@@ -69,6 +72,12 @@ void ShaderProgram::send(const std::string& uniform, int integer)
 void ShaderProgram::send(const std::string& uniform, float scalar)
 {
     glUniform1fv(getUniformId(uniform), 1, &scalar);
+    GL_CHECK();
+}
+
+void ShaderProgram::send(const std::string& uniform, glm::vec2 vector)
+{
+    glUniform2fv(getUniformId(uniform), 1, &vector[0]);
     GL_CHECK();
 }
 

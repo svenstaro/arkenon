@@ -36,7 +36,8 @@ int main()
 
     GameWindow window;
     window.setBackgroundColor(glm::vec4(0.2, 0.3, 0.5, 1.f));
-    //window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
+    window.setBackgroundColor(glm::vec4(0.02, 0.02, 0.02, 1.f));
+    //window.setBackgroundColor(glm::vec4(0, 0, 0, 1));
     //window.setSize(1024, 600);
 
     DeferredRenderer renderer(window.getSize());
@@ -101,16 +102,10 @@ int main()
     gridTexture->load("data/gfx/grid.png");
 
     std::shared_ptr<Shape2D> grid = std::make_shared<Shape2D>("grid");
-    grid->setTexture(gridTexture);
+    grid->setTexture(texture);
     grid->makeRectangle(glm::vec2(100, 100), Rect(0, 0, 100, 100));
     grid->position = glm::vec3(-50, 0, -50);
     grid->rotation = glm::quat(glm::vec3(M_PI/2, 0, 0));
-
-    std::shared_ptr<Shape3D> sphere = std::make_shared<Shape3D>("sphere");
-    //grid->setTexture(gridTexture);
-    sphere->makeUvSphere(16, 16);
-    sphere->scale = glm::vec3(3.f);
-    sphere->position = glm::vec3(-5, 0, 0);
 
     float speed = 0;
     float rotSpeed = 0;
@@ -150,7 +145,6 @@ int main()
         renderer.prepare();
         renderer.registerRenderable(mesh);
         renderer.registerRenderable(grid);
-        renderer.registerRenderable(sphere);
         renderer.setCamera(camera);
         renderer.render();
         renderer.cleanup();

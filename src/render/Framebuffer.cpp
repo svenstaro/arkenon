@@ -17,15 +17,7 @@ Framebuffer::Framebuffer(glm::vec2 size, int mrt_count, GLenum texture_mode)
         texture->create(getSize(), texture_mode);
         texture->bind();
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture->getHandle(), 0);
-
-        try
-          {
-            mTextures.push_back(texture);
-          }
-          catch (std::bad_alloc& ba)
-          {
-            std::cerr << "bad_alloc caught: " << ba.what() << '\n';
-          }
+        mTextures.push_back(texture);
     }
 
     // create depth buffer

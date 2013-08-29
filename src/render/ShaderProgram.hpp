@@ -20,7 +20,7 @@ public:
     /**
      * Initializes a ShaderProgram with the fragment and vertex shader provided.
      */
-    ShaderProgram(const std::string& vertex_file, const std::string& fragment_file);
+    ShaderProgram(const std::string& vertex_file, const std::string& fragment_file, bool link_directly = true);
 
     /**
      * Attaches a shader to this program.
@@ -60,6 +60,13 @@ public:
      * @param scalar The value.
      */
     void send(const std::string& uniform, float scalar);
+
+    /**
+     * Sends a uniform vector value to the graphics card.
+     * @param uniform The name of the uniform variable.
+     * @param vector The value.
+     */
+    void send(const std::string& uniform, glm::vec2 vector);
 
     /**
      * Sends a uniform vector value to the graphics card.
