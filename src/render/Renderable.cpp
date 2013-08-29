@@ -14,12 +14,7 @@ glm::mat4 RenderableNode::getModelMatrix() const {
 }
 
 
-std::shared_ptr<Texture> Renderable::getDiffuseTexture()
-{
-    return nullptr;
-}
-
-std::shared_ptr<Texture> Renderable::getNormalTexture()
+std::shared_ptr<Material> Renderable::getMaterial()
 {
     return nullptr;
 }

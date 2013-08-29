@@ -16,7 +16,7 @@ public:
     void setFont(std::shared_ptr<Font> font);
     void setColor(const glm::vec4& color);
 
-    std::shared_ptr<Texture> getDiffuseTexture();
+    std::shared_ptr<Material> getMaterial();
     void draw();
 
 protected:

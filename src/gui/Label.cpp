@@ -26,9 +26,9 @@ void Label::setColor(const glm::vec4& color)
     mText->setColor(color);
 }
 
-std::shared_ptr<Texture> Label::getDiffuseTexture()
+std::shared_ptr<Material> Label::getMaterial()
 {
-    return mText->getDiffuseTexture();
+    return mText->getMaterial();
 }
 
 void Label::draw()

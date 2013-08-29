@@ -15,9 +15,9 @@ Button::Button(const std::string& text)
     setSubrect(Active, Rect(0, 0, 1, 1));
 }
 
-void Button::setTexture(std::shared_ptr<Texture> texture)
+void Button::setMaterial(std::shared_ptr<Material> mat)
 {
-    mShape->setTexture(texture);
+    mShape->setMaterial(mat);
 }
 
 void Button::setSubrect(Button::State state, const Rect& subrect)

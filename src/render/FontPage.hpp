@@ -10,8 +10,9 @@
 
 #include <FreeImagePlus.h>
 
-#include "render/Texture.hpp"
 #include "util/Rect.hpp"
+
+#include "render/Material.hpp"
 
 class FontPage {
 public:
@@ -29,7 +30,7 @@ public:
 
 public:
     FontPage(unsigned int size, FT_Face face);
-    std::shared_ptr<Texture> getTexture();
+    std::shared_ptr<Material> getMaterial();
     void ensureCharactersAvailable(std::string chars);
     void addCharacter(Glyph::CharType character);
     const Glyph& getGlyph(Glyph::CharType unicode);
@@ -45,6 +46,7 @@ private:
     fipImage mImage;
     bool mNeedsTextureUpdate;
     std::shared_ptr<Texture> mTexture;
+    std::shared_ptr<Material> mMaterial;
 
 };
 

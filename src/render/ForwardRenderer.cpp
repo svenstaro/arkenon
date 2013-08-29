@@ -26,7 +26,7 @@ void ForwardRenderer::render()
     mColorPassShader->send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
         mColorPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
-        mColorPassShader->send("diffuse_texture", (*iter)->getDiffuseTexture());
+        mColorPassShader->send("diffuse_texture", (*iter)->getMaterial()->getDiffuseTexture());
         (*iter)->draw();
     }
 

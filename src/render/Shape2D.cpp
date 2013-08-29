@@ -9,9 +9,9 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const gl
     glm::vec2 tex_size = texture_size;
     if(tex_size.x == 0 && tex_size.y == 0)
     {
-        if(mTexture)
+        if(mMaterial)
         {
-            tex_size = mTexture->getSize();
+            tex_size = mMaterial->getDiffuseTexture()->getSize();
         }
         else
         {
@@ -135,24 +135,14 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const gl
 
 }
 
-void Shape2D::setTexture(std::shared_ptr<Texture> texture)
+void Shape2D::setMaterial(std::shared_ptr<Material> mat)
 {
-    mTexture = texture;
+    mMaterial = mat;
 }
 
-void Shape2D::setNormalTexture(std::shared_ptr<Texture> texture)
+std::shared_ptr<Material> Shape2D::getMaterial()
 {
-    mNormalTexture = texture;
-}
-
-std::shared_ptr<Texture> Shape2D::getDiffuseTexture()
-{
-    return mTexture;
-}
-
-std::shared_ptr<Texture> Shape2D::getNormalTexture()
-{
-    return mNormalTexture;
+    return mMaterial;
 }
 
 void Shape2D::draw()

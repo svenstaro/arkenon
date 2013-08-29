@@ -22,7 +22,7 @@ public:
     Button(const std::string& text = "");
 
     // background
-    void setTexture(std::shared_ptr<Texture> texture);
+    void setMaterial(std::shared_ptr<Material> mat);
     void setSubrect(State state, const Rect& subrect);
     void setSplit9Factor(const glm::vec2& split9_factor);
 

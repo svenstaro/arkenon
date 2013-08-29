@@ -44,9 +44,9 @@ void Text::setAlign(Text::Align vertical, Align horizontal)
     recreateBuffer();
 }
 
-std::shared_ptr<Texture> Text::getDiffuseTexture()
+std::shared_ptr<Material> Text::getMaterial()
 {
-    return mFont->getPage(mFontSize)->getTexture();
+    return mFont->getPage(mFontSize)->getMaterial();
 }
 
 void Text::draw()

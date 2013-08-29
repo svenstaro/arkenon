@@ -3,12 +3,14 @@
 #include "util/check.hpp"
 #include "util/Utf8Iterator.hpp"
 
+
 #include <iostream>
 
 FontPage::FontPage(unsigned int size, FT_Face face)
     : mFace(face),
       mSize(size),
-      mTexture(std::make_shared<Texture>())
+      mTexture(std::make_shared<Texture>()),
+      mMaterial(std::make_shared<Material>())
 {
     // get next power of 2
     unsigned int pot = 1;
@@ -16,9 +18,12 @@ FontPage::FontPage(unsigned int size, FT_Face face)
 
     mImage = fipImage(FIT_BITMAP, pot, pot, 32);
     mTexture->create(glm::vec2(pot, pot));
+
+    mMaterial->setDiffuseTexture(mTexture);
+
 }
 
-std::shared_ptr<Texture> FontPage::getTexture()
+std::shared_ptr<Material> FontPage::getMaterial()
 {
     if(mNeedsTextureUpdate)
     {
@@ -26,7 +31,7 @@ std::shared_ptr<Texture> FontPage::getTexture()
         mTexture->setSmooth(false);
         mNeedsTextureUpdate = false;
     }
-    return mTexture;
+    return mMaterial;
 }
 
 void FontPage::ensureCharactersAvailable(std::string chars)
