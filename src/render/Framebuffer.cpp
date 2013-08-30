@@ -29,6 +29,8 @@ Framebuffer::Framebuffer(glm::vec2 size, int mrt_count, GLenum texture_mode)
 
 void Framebuffer::bindDraw(int num, int* buffers)
 {
+    assert(num <= GL_MAX_COLOR_ATTACHMENTS);
+    
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mHandle);
 
     if(buffers == 0) {
