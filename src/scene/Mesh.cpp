@@ -17,7 +17,9 @@ void Mesh::load(const aiMesh* mesh)
 
         for(unsigned int j = 0; j < face.mNumIndices; j++)
         {
-            uv = mesh->mTextureCoords[0][face.mIndices[j]];
+            if(mesh->GetNumUVChannels() > 0)
+                uv = mesh->mTextureCoords[0][face.mIndices[j]];
+
             normal = mesh->mNormals[face.mIndices[j]];
             position = mesh->mVertices[face.mIndices[j]];
             vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1.f, 1.f, 1.f, 1.f, normal.x, normal.y, normal.z));
