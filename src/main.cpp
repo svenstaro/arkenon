@@ -1,6 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <algorithm> 
+#include <sstream>
+#include <math.h>
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -115,6 +117,10 @@ int main()
     button_right->setColor(glm::vec4(1, 1, 1, 1));
     button_right->setFontSize(12);
 
+     std::shared_ptr<Label> fps_label = std::make_shared<Label>("FPS: 0");
+     fps_label->setFontSize(20);
+     fps_label->position = glm::vec3(40, 20, 0);
+
     std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Screen, window.getSize(), 1.f));
 
     window.addInputForwarding(button_left.get());
@@ -152,6 +158,8 @@ int main()
 
     float _time = 0;
 
+    float maxspeed = 30;
+
     while(window.isOpen()) {
         window.update();
         window.bind();
@@ -162,18 +170,22 @@ int main()
         guiCamera->setViewportSize(window.getSize());
         guiCamera->position = glm::vec3(window.getSize().x * 0.5f, window.getSize().y * 0.5f, 2.f);
 
+        std::stringstream fps_string("");
+        fps_string << "FPS: " << round(window.getFPS());
+        fps_label->setText(fps_string.str());
+
         float dt = window.getFrameDuration();
 
-        if(window.isKeyDown(GLFW_KEY_UP))           speed += dt * 6;
-        else if(window.isKeyDown(GLFW_KEY_DOWN))    speed -= dt * 6;
+        if(window.isKeyDown(GLFW_KEY_UP))           speed += dt * 7;
+        else if(window.isKeyDown(GLFW_KEY_DOWN))    speed -= dt * 7;
         else                                        speed *= (1 - dt);
 
         if(window.isKeyDown(GLFW_KEY_RIGHT))        rotSpeed -= dt * 5;
         else if(window.isKeyDown(GLFW_KEY_LEFT))    rotSpeed += dt * 5;
         else                                        rotSpeed *= (1 - dt);
 
-        if(speed > 10) speed = 10;
-        if(speed < -10) speed = -10;
+        if(speed > maxspeed) speed = maxspeed;
+        if(speed < -maxspeed) speed = -maxspeed;
 
         if(rotSpeed > 3) rotSpeed = 3;
         if(rotSpeed < -3) rotSpeed = -3;
@@ -218,6 +230,7 @@ int main()
         guiRenderer.prepare();
         guiRenderer.registerRenderable(button_right);
         guiRenderer.registerRenderable(button_left);
+        guiRenderer.registerRenderable(fps_label);
         guiRenderer.setCamera(guiCamera);
         guiRenderer.render();
         guiRenderer.cleanup();
