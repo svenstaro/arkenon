@@ -16,7 +16,7 @@ public:
     void bind();
     static void unbind(int mode = GL_FRAMEBUFFER);
     void bindDraw(int num = 1, int* buffers = 0);
-    void bindRead(int number = 1);
+    void bindRead(int number = 0);
 
     std::shared_ptr<Texture> getTexture(int target = 0);
     GLuint getHandle(int target = 0);
