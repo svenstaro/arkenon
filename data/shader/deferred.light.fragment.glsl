@@ -13,6 +13,8 @@ uniform vec2 screenSize;
 uniform mat4 VP;
 uniform mat4 M;
 
+out vec4 out_color;
+
 void main()
 {
     vec2 texcoord = gl_FragCoord.xy / screenSize;
@@ -27,8 +29,8 @@ void main()
 //    vec3 eyeDir = normalize(cameraPosition - position);
 //    vec3 vHalfVector = normalize(lightDirection+eyeDir);
 
-//    gl_FragColor = vec4(dot(normal, -lightDirection) * color, 1.f);
-//                   max(dot(normal,lightDirection),0) * color +
+//    gl_FragColor = vec4(dot(normal, -lightDirection) * 1, 1.f);
+//                   max(dot(normal,lightDirection),0) * 1 +
 //                   pow(max(dot(normal,vHalfVector),0.0), 2) * 1.5,
 //                1.f);
 
@@ -48,6 +50,6 @@ void main()
     float damping_factor = 1.0 - pow(alpha, beta);
     float intensity = clamp(1-alpha, 0, 1) * damping_factor;
 
-    vec3 result = light * color * intensity;
-    gl_FragColor = vec4(result, 1);
+    vec3 result = light * 1 * intensity;
+    out_color = vec4(result, 1);
 }

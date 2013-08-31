@@ -7,23 +7,39 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
       mGBuffer(size, 3, GL_RGB16F),
       mLightsBuffer(size),
       mSphere("light-volume-sphere"),
+      mQuad("fullsceen-quad"),
       mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl")),
-      mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl"))
+      mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl")),
+      mFinalPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.final.vertex.glsl", "data/shader/deferred.final.fragment.glsl"))
 {
     mSphere.makeUvSphere(16, 16);
+    mQuad.makeRectangle(glm::vec2(1.0, 1.0), Rect(-1.0, -1.0, 1.0, 1.0));
+
+    mFullQuad.clear();
+    mFullQuad.addQuad(
+        Vertex(-1, -1, 0, 0, 1),
+        Vertex( 1, -1, 0, 1, 1),
+        Vertex( 1,  1, 0, 1, 0), 
+        Vertex(-1,  1, 0, 0, 0) 
+    );
+    mFullQuad.commit();
 }
 
 void DeferredRenderer::render()
 {
     Framebuffer::unbind();
+
     mGBuffer.bindDraw(3);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _geometryPass();
 
-    Framebuffer::unbind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //Framebuffer::unbind(GL_READ_FRAMEBUFFER);
+    mLightsBuffer.bindDraw();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _lightPass();
+
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _finalPass();
 }
 
@@ -51,8 +67,8 @@ void DeferredRenderer::_geometryPass()
     mGeometryPassShader->use();
 
     // texture slots
-    int buffers[] = {0, 1, 2};
-    mGBuffer.bindDraw(3, buffers);
+    //int buffers[] = {0, 1, 2};
+    //mGBuffer.bindDraw(3, buffers);
 
     mGeometryPassShader->send("color", 0);
     mGeometryPassShader->send("position", 1);
@@ -66,6 +82,8 @@ void DeferredRenderer::_geometryPass()
         mGeometryPassShader->send("normalMap", material->getNormalTexture(), 1);
         (*iter)->draw();
     }
+
+   
 }
 
 void DeferredRenderer::_lightPass()
@@ -85,8 +103,7 @@ void DeferredRenderer::_lightPass()
     mLightPassShader->use();
 
     // texture slots
-    mGBuffer.bindRead(3);
-    mLightPassShader->send("colorMap", mGBuffer.getTexture(0), 0);
+    //mLightPassShader->send("colorMap", mGBuffer.getTexture(0), 0);
     mLightPassShader->send("positionMap", mGBuffer.getTexture(1), 1);
     mLightPassShader->send("normalMap", mGBuffer.getTexture(2), 2);
 
@@ -124,12 +141,24 @@ void DeferredRenderer::_debugOutput(int n, const Rect& subrect)
 
 void DeferredRenderer::_finalPass()
 {
-    // Copy the depth buffer
-    mGBuffer.bindRead();
+    glDisable(GL_DEPTH_TEST);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+    mFinalPassShader->use();
+
+    mFinalPassShader->send("diffuseMap", mGBuffer.getTexture(0), 0);
+    mFinalPassShader->send("lightMap", mLightsBuffer.getTexture(), 1);
+
+    //TODO: Move this maybe
+    glm::mat4 projMatrix = glm::ortho<GLfloat>(-1.0, 1.0, 1.0, -1.0, -1.0, 1.0);
+    mFinalPassShader->send("projMatrix", projMatrix);
+    mFullQuad.draw();
+    
+    //Copy Deth Buffer
+    mGBuffer.bindRead();
     glBlitFramebuffer(0, 0, mSize.x, mSize.y,
                       0, 0, mSize.x, mSize.y,
                       GL_DEPTH_BUFFER_BIT,
                       GL_NEAREST);
+    
 }

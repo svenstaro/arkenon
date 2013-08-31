@@ -7,6 +7,7 @@
 #include "render/ShaderProgram.hpp"
 #include "render/Framebuffer.hpp"
 #include "util/Rect.hpp"
+#include "render/Shape2D.hpp"
 #include "render/Shape3D.hpp"
 
 /*
@@ -41,6 +42,9 @@ private:
     void _finalPass();
 
     Shape3D mSphere;
+    Shape2D mQuad;
+
+    VertexBuffer mFullQuad;
 
     //PointLight mPointLight1;
     glm::vec2 mSize;
@@ -50,7 +54,7 @@ private:
 
     std::shared_ptr<ShaderProgram> mGeometryPassShader;
     std::shared_ptr<ShaderProgram> mLightPassShader;
-
+    std::shared_ptr<ShaderProgram> mFinalPassShader;
 };
 
 #endif
