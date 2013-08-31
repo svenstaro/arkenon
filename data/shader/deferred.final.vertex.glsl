@@ -1,5 +1,4 @@
 #version 130
-precision highp float;
 
 in vec3 in_Position;
 in vec2 in_TextureCoords;

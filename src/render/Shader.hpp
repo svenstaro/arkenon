@@ -8,7 +8,8 @@ class Shader {
 public:
     enum Type {
         Fragment,   ///< A fragment shader.
-        Vertex      ///< A vertex shader.
+        Vertex,      ///< A vertex shader.
+        Geometry    ///< A geometry shader.
     };
 
 public:

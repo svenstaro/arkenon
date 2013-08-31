@@ -6,6 +6,8 @@
 #include <string>
 #include <FreeImagePlus.h>
 
+#include "util/Random.hpp"
+
 class Texture {
 public:
     /**
@@ -32,11 +34,18 @@ public:
      */
     void load(const std::string& filename);
 
+
+    /**
+     * Creates a texture with random data.
+     * @param size The size for the random texture.
+     */
+    void random(unsigned int seed, const glm::vec2& size = glm::vec2(32, 32));
+
     /**
      * Creates an empty texture.
      * @param size The size for the empty texture.
      */
-    void create(const glm::vec2& size, GLenum type = GL_RGB);
+    void create(const glm::vec2& size, GLenum type = GL_RGB, GLenum secondtype = GL_RGB);
 
     /**
      * Sets the mipmap mode.

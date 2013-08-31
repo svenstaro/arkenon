@@ -67,6 +67,12 @@ int main()
     mesh->setMaterial(material);
     ship.addChild(mesh);
 
+    std::shared_ptr<Mesh> obj(new Mesh("mesh"));
+    obj->load(scene->mMeshes[0]);
+    obj->commit();
+    obj->rotation = glm::quat(glm::vec3(-M_PI/2, 0, 0));
+    obj->setMaterial(material);
+
     std::shared_ptr<Camera> camera(new Camera("camera", Camera::Perspective, window.getSize(), 60.f));
     ship.addChild(camera);
     camera->position = glm::vec3(0, 5, -10);
@@ -134,7 +140,7 @@ int main()
     std::shared_ptr<Texture> ground_normal = std::make_shared<Texture>();
     ground_normal->load("data/textures/pattern_262/normal.tga");
     groundMaterial->setDiffuseTexture(ground_diffuse);
-    groundMaterial->setNormalTexture(ground_normal);
+    //groundMaterial->setNormalTexture(ground_normal);
 
     std::shared_ptr<Shape2D> ground = std::make_shared<Shape2D>("ground");
     ground->setMaterial(groundMaterial);
@@ -211,6 +217,7 @@ int main()
         //Objects
         deferredRenderer.registerRenderable(mesh);
         deferredRenderer.registerRenderable(ground);
+        deferredRenderer.registerRenderable(obj);
 
         //Lights
         deferredRenderer.registerLight(light);
@@ -233,6 +240,8 @@ int main()
         guiRenderer.registerRenderable(button_right);
         guiRenderer.registerRenderable(button_left);
         guiRenderer.registerRenderable(fps_label);
+        
+
         guiRenderer.setCamera(guiCamera);
         guiRenderer.render();
         guiRenderer.cleanup();

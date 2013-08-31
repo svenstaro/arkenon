@@ -32,6 +32,7 @@ public:
 private:
     void _geometryPass();
     void _lightPass();
+    void _ssaoPass();
 
     /**
      * Blits GBuffer Texture to screen
@@ -46,14 +47,21 @@ private:
 
     VertexBuffer mFullQuad;
 
+    std::shared_ptr<Texture> mRandomTexture;
+    std::shared_ptr<Texture> mLambertTexture;
+
     //PointLight mPointLight1;
     glm::vec2 mSize;
 
     Framebuffer mGBuffer;       //< MRT#3: color, position, normal;         GL_RGB16F
     Framebuffer mLightsBuffer;  //< no MRT, just ADD-blend all the lights   GL_RGB
+    Framebuffer mShadowBuffer;
 
     std::shared_ptr<ShaderProgram> mGeometryPassShader;
     std::shared_ptr<ShaderProgram> mLightPassShader;
+    std::shared_ptr<ShaderProgram> mAOPassShader;
+
+
     std::shared_ptr<ShaderProgram> mFinalPassShader;
 };
 

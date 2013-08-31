@@ -4,10 +4,12 @@
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
-      mGBuffer(size, 3, GL_RGB16F),
+      mGBuffer(size, 3, true, GL_RGB16F),
       mLightsBuffer(size),
+      mShadowBuffer(size, 1, false, GL_R32F , GL_RED),
       mSphere("light-volume-sphere"),
       mQuad("fullsceen-quad"),
+      mAOPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.final.vertex.glsl", "data/shader/deferred.ssao.fragment.glsl")),
       mGeometryPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.geometry.vertex.glsl", "data/shader/deferred.geometry.fragment.glsl")),
       mLightPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.light.vertex.glsl", "data/shader/deferred.light.fragment.glsl")),
       mFinalPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.final.vertex.glsl", "data/shader/deferred.final.fragment.glsl"))
@@ -23,6 +25,15 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
         Vertex(-1,  1, 0, 0, 0) 
     );
     mFullQuad.commit();
+
+    mLambertTexture = std::make_shared<Texture>();
+    mLambertTexture->load("data/gfx/lambertMap.png");
+    mLambertTexture->setSmooth(false);
+
+    mRandomTexture = std::make_shared<Texture>();
+    mRandomTexture->load("data/gfx/AONoise.png");
+    mRandomTexture->setSmooth(false);
+    GL_CHECK();
 }
 
 void DeferredRenderer::render()
@@ -39,7 +50,17 @@ void DeferredRenderer::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _lightPass();
 
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //
+    //
+
+
+    mShadowBuffer.bindDraw();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    _ssaoPass();
+
+
+
+    Framebuffer::unbind();
     _finalPass();
 }
 
@@ -78,7 +99,7 @@ void DeferredRenderer::_geometryPass()
         std::shared_ptr<Material> material = (*iter)->getMaterial();
         mGeometryPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
         mGeometryPassShader->send("M", (*iter)->getModelMatrix());
-        mGeometryPassShader->send("diffuse_texture", material->getDiffuseTexture());
+        mGeometryPassShader->send("diffuse_texture", material->getDiffuseTexture()); //mRandomTexture);
         mGeometryPassShader->send("normalMap", material->getNormalTexture(), 1);
         (*iter)->draw();
     }
@@ -128,6 +149,22 @@ void DeferredRenderer::_lightPass()
     glDisable(GL_CULL_FACE);
 }
 
+void DeferredRenderer::_ssaoPass() {
+    glDisable(GL_DEPTH_TEST);
+    mAOPassShader->use();
+
+
+
+    glm::mat4 projMatrix = glm::ortho<GLfloat>(-1.0, 1.0, 1.0, -1.0, -1.0, 1.0);
+    mAOPassShader->send("projMatrix", projMatrix);
+
+    mAOPassShader->send("depthTexture", mGBuffer.getDepthTexture(), 0);
+    mAOPassShader->send("normalTexture", mGBuffer.getTexture(2), 2);
+    mAOPassShader->send("randomTexture", mRandomTexture, 3);
+
+    mFullQuad.draw();
+}
+
 void DeferredRenderer::_debugOutput(int n, const Rect& subrect)
 {
     Framebuffer::unbind(GL_DRAW_FRAMEBUFFER);   // draw to screen
@@ -148,6 +185,8 @@ void DeferredRenderer::_finalPass()
 
     mFinalPassShader->send("diffuseMap", mGBuffer.getTexture(0), 0);
     mFinalPassShader->send("lightMap", mLightsBuffer.getTexture(), 1);
+    mFinalPassShader->send("shadowMap", mShadowBuffer.getTexture(), 2);
+    mFinalPassShader->send("lambertMap", mLambertTexture, 3);
 
     //TODO: Move this maybe
     glm::mat4 projMatrix = glm::ortho<GLfloat>(-1.0, 1.0, 1.0, -1.0, -1.0, 1.0);

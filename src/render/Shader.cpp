@@ -15,6 +15,9 @@ Shader::Shader(const Type type)
     } else if(mType == Vertex) {
         mHandle = glCreateShader(GL_VERTEX_SHADER);
         GL_CHECK();
+    } else if(mType == Vertex) {
+        mHandle = glCreateShader(GL_GEOMETRY_SHADER);
+        GL_CHECK();
     } else {
         std::cerr << "Unknown shader type: " << mType << std::endl;
     }

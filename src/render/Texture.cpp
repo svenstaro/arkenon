@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 Texture::Texture()
     : mMipmapsGenerated(false),
       mTextureLoaded(false)
@@ -25,6 +26,22 @@ void Texture::unbind()
     glBindTexture(GL_TEXTURE_2D, 0);
     GL_CHECK();
 }
+
+void Texture::random(unsigned int seed, const glm::vec2& size) {
+    bind();
+    mSize = size;
+
+    Random rng(seed);
+
+    std::vector<float> charBuffer;
+    charBuffer.resize(size.x * size.y * 3);
+
+    rng.fillWithRandom(size.x * size.y * 3, charBuffer);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mSize.x, mSize.y, 0, GL_RGB, GL_FLOAT, &charBuffer[0]);
+    GL_CHECK();
+}
+
 
 void Texture::load(const fipImage& image)
 {
@@ -55,11 +72,11 @@ void Texture::load(const std::string& filename)
     load(image);
 }
 
-void Texture::create(const glm::vec2& size, GLenum type)
+void Texture::create(const glm::vec2& size, GLenum type , GLenum secondtype)
 {
     bind();
     mSize = size;
-    glTexImage2D(GL_TEXTURE_2D, 0, type, mSize.x, mSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, type, mSize.x, mSize.y, 0, secondtype, GL_UNSIGNED_INT, 0);
     GL_CHECK();
 
     mTextureLoaded = true;
