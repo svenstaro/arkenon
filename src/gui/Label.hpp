@@ -15,6 +15,7 @@ public:
     void setText(const std::string& text);
     void setFont(std::shared_ptr<Font> font);
     void setColor(const glm::vec4& color);
+    void setAlign(Text::Align vertical, Text::Align horizontal);
 
     std::shared_ptr<Material> getMaterial();
     void draw();

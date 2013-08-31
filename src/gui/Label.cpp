@@ -26,6 +26,11 @@ void Label::setColor(const glm::vec4& color)
     mText->setColor(color);
 }
 
+void Label::setAlign(Text::Align vertical, Text::Align horizontal)
+{
+    mText->setAlign(vertical, horizontal);
+}
+
 std::shared_ptr<Material> Label::getMaterial()
 {
     return mText->getMaterial();

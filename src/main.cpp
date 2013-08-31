@@ -119,7 +119,8 @@ int main()
 
      std::shared_ptr<Label> fps_label = std::make_shared<Label>("FPS: 0");
      fps_label->setFontSize(20);
-     fps_label->position = glm::vec3(40, 20, 0);
+     fps_label->setAlign(Text::Start, Text::Start);
+     fps_label->position = glm::vec3(10, 10, 0);
 
     std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Screen, window.getSize(), 1.f));
 
