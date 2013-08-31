@@ -129,6 +129,8 @@ int main()
     std::shared_ptr<Material> groundMaterial = std::make_shared<Material>();
     std::shared_ptr<Texture> ground_diffuse = std::make_shared<Texture>();
     ground_diffuse->load("data/textures/pattern_262/diffuse.tga");
+    ground_diffuse->setMipmap(true);
+    
     std::shared_ptr<Texture> ground_normal = std::make_shared<Texture>();
     ground_normal->load("data/textures/pattern_262/normal.tga");
     groundMaterial->setDiffuseTexture(ground_diffuse);
@@ -142,8 +144,8 @@ int main()
 
     std::shared_ptr<Material> gridMaterial = std::make_shared<Material>();
     std::shared_ptr<Texture> gridTexture = std::make_shared<Texture>();
-    gridTexture->setMipmap(true);
     gridTexture->load("data/gfx/grid.png");
+    gridTexture->setMipmap(true);
     gridMaterial->setDiffuseTexture(gridTexture);
 
     std::shared_ptr<Shape2D> grid = std::make_shared<Shape2D>("grid");
@@ -234,9 +236,7 @@ int main()
         guiRenderer.setCamera(guiCamera);
         guiRenderer.render();
         guiRenderer.cleanup();
-
-
-
+        
         window.display();
     }
 
