@@ -117,10 +117,10 @@ int main()
     button_right->setColor(glm::vec4(1, 1, 1, 1));
     button_right->setFontSize(12);
 
-     std::shared_ptr<Label> fps_label = std::make_shared<Label>("FPS: 0");
-     fps_label->setFontSize(20);
-     fps_label->setAlign(Text::Start, Text::Start);
-     fps_label->position = glm::vec3(10, 10, 0);
+    std::shared_ptr<Label> fps_label = std::make_shared<Label>("FPS: 0");
+    fps_label->setFontSize(20);
+    fps_label->setAlign(Text::Start, Text::Start);
+    fps_label->position = glm::vec3(10, 10, 0);
 
     std::shared_ptr<Camera> guiCamera(new Camera("gui-camera", Camera::Screen, window.getSize(), 1.f));
 
