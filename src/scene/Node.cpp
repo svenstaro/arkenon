@@ -17,6 +17,7 @@ std::shared_ptr<Node> Node::addChild(std::shared_ptr<Node> node)
 
 std::shared_ptr<Node> Node::getChild(const std::string& name)
 {
+    if(mChildren.count(name) == 0) std::cout << "Warning: Node \"" << name << "\" is no child of node \"" << mName << "\"." << std::endl;
     return mChildren[name];
 }
 

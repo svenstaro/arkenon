@@ -17,10 +17,21 @@ void Mesh::load(const aiMesh* mesh)
 
         for(unsigned int j = 0; j < face.mNumIndices; j++)
         {
-            uv = mesh->mTextureCoords[0][face.mIndices[j]];
-            normal = mesh->mNormals[face.mIndices[j]];
+            // Get position and normal
             position = mesh->mVertices[face.mIndices[j]];
-            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, 1.f, 1.f, 1.f, 1.f, normal.x, normal.y, normal.z));
+            normal = mesh->mNormals[face.mIndices[j]];
+
+            // Get UV coordinates, if present
+            if(mesh->GetNumUVChannels() > 0)
+                uv = mesh->mTextureCoords[0][face.mIndices[j]];
+
+            // Get color value, if present
+            if(mesh->GetNumColorChannels() > 0)
+                color = mesh->mColors[face.mIndices[j]];
+            else
+                color = new aiColor4D(1, 1, 1, 1);
+
+            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, color->r, color->g, color->b, color->a, normal.x, normal.y, normal.z));
         }
 
         addFace(vertices);

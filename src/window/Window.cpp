@@ -8,7 +8,8 @@
 std::vector<Window*> Window::instances;
 
 Window::Window(const std::string& title, const glm::vec2& size)
-    : mBackgroundColor(0.f, 0.f, 0.f, 1.f)
+    : mBackgroundColor(0.f, 0.f, 0.f, 1.f),
+      mCursorMode(Normal)
 {
     glfwInit();
     mWindow = glfwCreateWindow(size.x, size.y, title.c_str(), NULL, NULL);
@@ -57,6 +58,8 @@ void Window::update()
     if(!isOpen()) {
         close();
     }
+
+    handleUpdate(mFrameDuration);
 }
 
 void Window::display()
@@ -109,6 +112,11 @@ double Window::getFrameDuration() const
     return mFrameDuration;
 }
 
+double Window::getTime() const
+{
+    return mPreviousFrameTime;
+}
+
 float Window::getFPS() const
 {
     return 1.0 / mFrameDuration;
@@ -136,6 +144,12 @@ void Window::setCursorMode(Window::CursorMode mode)
     if(mode == Hidden) m = GLFW_CURSOR_HIDDEN;
     else if(mode == Captured) m = GLFW_CURSOR_DISABLED;
     glfwSetInputMode(mWindow, GLFW_CURSOR, m);
+    mCursorMode = mode;
+}
+
+Window::CursorMode Window::getCursorMode() const
+{
+    return mCursorMode;
 }
 
 glm::vec2 Window::getMousePosition() const

@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+std::shared_ptr<Texture> Texture::_empty;
 
 Texture::Texture()
     : mMipmapsGenerated(false),
@@ -13,6 +14,12 @@ Texture::Texture()
 
     setMipmap(false);
     setSmooth(true);
+}
+
+Texture::Texture(const std::string& filename)
+    : Texture()
+{
+    load(filename);
 }
 
 void Texture::bind()
@@ -72,11 +79,11 @@ void Texture::load(const std::string& filename)
     load(image);
 }
 
-void Texture::create(const glm::vec2& size, GLenum type , GLenum secondtype)
+void Texture::create(const glm::vec2& size, GLenum type, GLenum secondtype, void* data)
 {
     bind();
     mSize = size;
-    glTexImage2D(GL_TEXTURE_2D, 0, type, mSize.x, mSize.y, 0, secondtype, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, type, mSize.x, mSize.y, 0, secondtype, GL_UNSIGNED_BYTE, data);
     GL_CHECK();
 
     mTextureLoaded = true;
@@ -127,4 +134,15 @@ GLuint Texture::getHandle() const
 const glm::vec2&Texture::getSize() const
 {
     return mSize;
+}
+
+std::shared_ptr<Texture> Texture::empty()
+{
+    if(!_empty)
+    {
+        _empty = std::make_shared<Texture>();
+        char data[3] = {255, 255, 255};
+        _empty->create(glm::vec2(1, 1), GL_RGB, GL_RGB, (void*)data);
+    }
+    return _empty;
 }
