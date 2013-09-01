@@ -62,6 +62,8 @@ void DeferredRenderer::render()
 
     Framebuffer::unbind();
     _finalPass();
+
+    //_debugOutput(2);
 }
 
 void DeferredRenderer::setSize(glm::vec2 size)
@@ -96,9 +98,20 @@ void DeferredRenderer::_geometryPass()
     mGeometryPassShader->send("normal", 2);
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
+
+        
+        glm::mat4 m = (*iter)->getModelMatrix();
+        glm::mat4 normalMatrix = glm::transpose(mCamera->getViewMatrix() * m);
+        glm::mat4 mvp = mCamera->getViewProjectionMatrix() * m;
+
+
+
+
         std::shared_ptr<Material> material = (*iter)->getMaterial();
-        mGeometryPassShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
-        mGeometryPassShader->send("M", (*iter)->getModelMatrix());
+        mGeometryPassShader->send("MVP", mvp);
+        mGeometryPassShader->send("M", m);
+        mGeometryPassShader->send("normalMatrix", (*iter)->getModelMatrix());
+
         mGeometryPassShader->send("diffuse_texture", material->getDiffuseTexture()); //mRandomTexture);
         mGeometryPassShader->send("normalMap", material->getNormalTexture(), 1);
         (*iter)->draw();
