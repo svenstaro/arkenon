@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <memory>
 #include <FreeImagePlus.h>
 
 class Texture {
@@ -12,6 +13,11 @@ public:
      * Initializes a texture.
      */
     Texture();
+
+    /**
+     * Initializes and loads a texture.
+     */
+    Texture(const std::string& filename);
 
     /**
      * Binds this Texture for OpenGL operations.
@@ -36,7 +42,7 @@ public:
      * Creates an empty texture.
      * @param size The size for the empty texture.
      */
-    void create(const glm::vec2& size, GLenum type = GL_RGB);
+    void create(const glm::vec2& size, GLenum type = GL_RGB, void* data = 0);
 
     /**
      * Sets the mipmap mode.
@@ -62,6 +68,11 @@ public:
      */
     const glm::vec2& getSize() const;
 
+    /**
+     * Returns an empty (white) 1x1 pixel texture as default texture when none is provided.
+     */
+    static std::shared_ptr<Texture> empty();
+
 private:
     void updateTexParameters();
     void generateMipmap();
@@ -73,6 +84,8 @@ private:
 
     bool mMipmapsGenerated;
     bool mTextureLoaded;
+
+    static std::shared_ptr<Texture> _empty;
 };
 
 #endif

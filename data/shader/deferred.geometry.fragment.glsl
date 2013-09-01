@@ -10,13 +10,19 @@ out vec3 color;
 out vec3 position;
 out vec3 normal;
 
-uniform sampler2D diffuse_texture;
-uniform sampler2D normalMap;
+uniform sampler2D diffuseTexture;
+uniform vec4 diffuseColor;
+uniform sampler2D normalTexture;
 
 void main()
 {
-	vec3 textureNormal = texture2D(normalMap, out_TextureCoords).xyz;
-    color = texture(diffuse_texture, out_TextureCoords).rgb; // no blending here
+    // DIFFUSE: multiply blending, diffuse texture with diffuse color
+    color = texture(diffuseTexture, out_TextureCoords).rgb * diffuseColor.rgb;
+
+    // POSITION
     position = out_Position;
+
+    // NORMAL
+    vec3 textureNormal = texture2D(normalTexture, out_TextureCoords).xyz;
     normal = normalize(out_Normal + textureNormal);
 }

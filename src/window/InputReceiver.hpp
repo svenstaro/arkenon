@@ -14,7 +14,9 @@ public:
     virtual ~InputReceiver() = 0;
 
     void addInputForwarding(InputReceiver* receiver);
+    void handleUpdate(double dt);
     void handleEvent(const Event* event);
+    virtual void onUpdate(double dt);
     virtual void onEvent(const Event* event);
 
 protected:

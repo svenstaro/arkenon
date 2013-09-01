@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.67.0 r57141</authoring_tool>
+    </contributor>
+    <created>2013-09-01T01:40:16</created>
+    <modified>2013-09-01T01:40:16</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="brick-round-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.64 0.64 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.02091776 0.02091776 0.02091776 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">114</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+        <extra>
+          <technique profile="GOOGLEEARTH">
+            <double_sided>1</double_sided>
+          </technique>
+        </extra>
+      </profile_COMMON>
+      <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="brick-round-material" name="brick-round">
+      <instance_effect url="#brick-round-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="wall-mesh" name="wall">
+      <mesh>
+        <source id="wall-mesh-positions">
+          <float_array id="wall-mesh-positions-array" count="48">-0.3362575 -3.113184 -1.655706 -0.3866063 -3.062835 -1.655706 -0.3866063 3.062835 -1.655706 -0.3362575 3.113184 -1.655706 0.3362575 3.113184 -1.655706 0.3866063 3.062835 -1.655706 0.3866063 -3.062835 -1.655706 0.3362575 -3.113184 -1.655706 0.3362575 -3.113184 1.509684 0.3866063 -3.062835 1.509684 -0.3866063 -3.062835 1.509684 -0.3362575 -3.113184 1.509684 -0.3362575 3.113184 1.509684 -0.3866063 3.062835 1.509684 0.3866063 3.062835 1.509684 0.3362575 3.113184 1.509684</float_array>
+          <technique_common>
+            <accessor source="#wall-mesh-positions-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="wall-mesh-normals">
+          <float_array id="wall-mesh-normals-array" count="66">-0.2970977 0.7172765 0.6302378 0.2970977 0.7172765 0.6302378 0.3826716 0.9238563 0 0.7172765 0.2970977 0.6302378 0.7172765 -0.2970977 0.6302378 0.9238563 -0.3826716 0 0 0 1 -0.7172765 -0.2970977 0.6302378 -0.7172765 0.2970977 0.6302378 -0.9238563 -0.3826716 0 0.2970977 -0.7172765 0.6302378 0.3826716 -0.9238563 0 -0.3826716 0.9238563 0 -0.3826716 -0.9238563 0 -0.2970977 -0.7172765 0.6302378 0.9238563 0.3826716 0 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 -0.9238563 0.3826716 0</float_array>
+          <technique_common>
+            <accessor source="#wall-mesh-normals-array" count="22" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="wall-mesh-map-0">
+          <float_array id="wall-mesh-map-0-array" count="132">-0.4819642 0.6738262 -0.7573772 0.6738263 -0.7573774 -0.4580093 1.747144 0.6737151 -0.482713 0.6729587 -0.4823222 -0.4588766 -0.3882055 0.8098955 -0.3740495 0.7957394 -0.3882055 0.9989807 1.746988 0.6738259 -0.443342 0.6738262 1.746988 -0.458009 -0.4988201 0.6739092 -0.4984294 -0.4579261 -0.4804263 -0.4579199 -0.4819642 0.6738262 -0.4819642 -0.458009 -0.461345 0.6738262 -0.7388982 -0.4580092 -0.7392884 0.6738262 -0.7569013 -0.4580155 1.747144 0.6737151 1.747535 -0.4581201 1.765863 -0.4581138 -0.4988201 0.6739092 -0.7392884 0.6738262 -0.7388982 -0.4580092 -0.4819642 -0.458009 -0.4819642 0.6738262 -0.7573774 -0.4580093 1.747535 -0.4581201 1.747144 0.6737151 -0.4823222 -0.4588766 -0.3740495 0.7957394 1.348245 0.7957398 -0.3882055 0.9989807 1.348245 0.7957398 1.362401 0.8098959 -0.3882055 0.9989807 1.362401 0.8098959 1.362401 0.9989803 -0.3882055 0.9989807 1.362401 0.9989803 1.348245 1.013136 -0.3740495 1.013137 -0.3882055 0.9989807 1.362401 0.9989803 -0.3740495 1.013137 -0.443342 0.6738262 -0.443342 -0.458009 1.746988 -0.458009 -0.4808171 0.6739153 -0.4988201 0.6739092 -0.4804263 -0.4579199 -0.4819642 -0.458009 -0.461345 -0.458009 -0.461345 0.6738262 -0.7392884 0.6738262 -0.7572915 0.67382 -0.7569013 -0.4580155 1.765472 0.6737214 1.747144 0.6737151 1.765863 -0.4581138 -0.4984294 -0.4579261 -0.4988201 0.6739092 -0.7388982 -0.4580092</float_array>
+          <technique_common>
+            <accessor source="#wall-mesh-map-0-array" count="66" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="wall-mesh-vertices">
+          <input semantic="POSITION" source="#wall-mesh-positions"/>
+        </vertices>
+        <polylist material="brick-round-material" count="22">
+          <input semantic="VERTEX" source="#wall-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#wall-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#wall-mesh-map-0" offset="2" set="0"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>12 0 0 15 1 1 4 2 2 14 3 3 9 4 4 6 5 5 8 6 6 9 6 7 11 6 8 10 7 9 13 8 10 1 9 11 8 10 12 7 11 13 6 5 14 12 0 15 3 12 16 13 8 17 0 13 18 11 14 19 1 9 20 14 3 21 5 15 22 4 2 23 8 10 24 11 14 25 0 13 26 3 12 27 12 0 28 4 2 29 5 15 30 14 3 31 6 5 32 9 16 33 14 16 34 11 16 35 14 17 36 15 17 37 11 17 38 15 18 39 12 18 40 11 18 41 12 19 42 13 19 43 10 19 44 11 20 45 12 20 46 10 20 47 13 8 48 2 21 49 1 9 50 9 4 51 8 10 52 6 5 53 3 12 54 2 21 55 13 8 56 11 14 57 10 7 58 1 9 59 15 1 60 14 3 61 4 2 62 7 11 63 8 10 64 0 13 65</p>
+        </polylist>
+      </mesh>
+      <extra><technique profile="MAYA"><double_sided>1</double_sided></technique></extra>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Cube_003" name="Cube_003" type="NODE">
+        <matrix sid="transform">1 0 0 -2.770936 0 1 0 -2.723313 0 0 1 1.689454 0 0 0 1</matrix>
+        <instance_geometry url="#wall-mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="brick-round-material" target="#brick-round-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

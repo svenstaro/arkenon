@@ -59,12 +59,15 @@ public:
 
     bool isOpen() const;
     double getFrameDuration() const;
+    double getTime() const;
     float getFPS() const;
     float getAspectRatio() const;
 
     void setTitle(const std::string& title);
     void setBackgroundColor(glm::vec4 background_color);
     void setCursorMode(CursorMode mode);
+
+    CursorMode getCursorMode() const;
 
     glm::vec2 getMousePosition() const;
     void setMousePosition(const glm::vec2& mouse_position);
@@ -76,6 +79,7 @@ private:
     double mFrameDuration = 0;
     double mPreviousFrameTime = 0;
     glm::vec4 mBackgroundColor;
+    CursorMode mCursorMode;
 
 public:
     static std::vector<Window*> instances; ///< All existing Windows are stored here.

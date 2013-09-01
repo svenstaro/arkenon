@@ -109,9 +109,14 @@ void ShaderProgram::send(const std::string& uniform, std::shared_ptr<Texture> te
 
     // bind texture to texture image unit
     if(texture)
+    {
         texture->bind();
+    }
     else
-        Texture::unbind();
+    {
+        // use empty (white) texture
+        Texture::empty()->bind();
+    }
 }
 
 GLuint ShaderProgram::getHandle() const
