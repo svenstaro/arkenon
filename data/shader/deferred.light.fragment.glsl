@@ -18,9 +18,10 @@ out vec4 out_color;
 void main()
 {
     vec2 texcoord = gl_FragCoord.xy / screenSize;
-    vec3 position = texture2D(positionMap, texcoord).xyz;
-    vec3 normal = texture2D(normalMap, texcoord).xyz;
-    vec3 color = texture2D(colorMap, texcoord).rgb;
+    vec3 position = texture(positionMap, texcoord).xyz;
+    vec3 normal = texture(normalMap, texcoord).xyz;
+
+    //vec3 color = texture(colorMap, texcoord).rgb;
 
 //    normal = normalize(normal);
 //    vec3 lightDirection = normalize(lightPosition - position);

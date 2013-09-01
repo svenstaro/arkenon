@@ -46,6 +46,9 @@ public:
     void setFieldOfView(float field_of_view);
     void setClipping(float near_clip, float far_clip);
 
+    float getFarClipping();
+    float getNearClipping();
+
     void lookAt(const glm::vec3& target, bool absolute = true, const glm::vec3& up_direction = glm::vec3(0, 1, 0));
 
 private:

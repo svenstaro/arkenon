@@ -12,17 +12,21 @@ out vec3 var_normal;
 out vec3 var_tangent;
 out vec3 var_bitangent;
 
-
 uniform mat4 M;
+uniform mat4 MV;
 uniform mat4 MVP;
 
-uniform mat4 normalMatrix; //transpose(inverse(MV)
+uniform mat4 normalMatrix;
 
 void main()
 {
 	gl_Position = MVP * vec4(in_Position, 1.f);
 
+	vec4 viewPos = (MV * vec4(in_Position, 1.f));
+
+	//var_normal = normalize((normalMatrix * vec4(in_Normal, 0.0)).xyz);
 	var_normal = normalize((normalMatrix * vec4(in_Normal, 0.0)).xyz);
+
     var_position = (M * vec4(in_Position, 1.f)).xyz;
 
     var_tangent = normalize((normalMatrix * vec4(in_Tangent, 0.0)).xyz);

@@ -66,6 +66,16 @@ void Camera::setClipping(float near_clip, float far_clip)
     mFarClip = far_clip;
 }
 
+float Camera::getFarClipping()
+{
+    return mFarClip;
+}
+
+float Camera::getNearClipping()
+{
+    return mNearClip;
+}
+
 void Camera::lookAt(const glm::vec3& target, bool absolute, const glm::vec3& up_direction) {
     glm::vec3 pos = absolute ? getAbsolutePosition() : position;
 
