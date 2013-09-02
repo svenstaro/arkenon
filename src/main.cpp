@@ -70,8 +70,10 @@ int main()
     window.addInputForwarding(button_left.get());
     window.addInputForwarding(button_right.get());
 
-    while(window.isOpen()) {
+    while(true) {
         window.update();
+        if(!window.isOpen()) break;
+
         window.bind();
         window.clear();
         window.render();
