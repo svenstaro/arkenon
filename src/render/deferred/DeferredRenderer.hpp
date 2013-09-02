@@ -61,7 +61,6 @@ private:
     std::shared_ptr<ShaderProgram> mLightPassShader;
     std::shared_ptr<ShaderProgram> mAOPassShader;
 
-
     std::shared_ptr<ShaderProgram> mFinalPassShader;
 };
 

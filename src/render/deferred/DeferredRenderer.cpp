@@ -45,6 +45,7 @@ void DeferredRenderer::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _geometryPass();
 
+    _debugOutput(0);
 
 
     //Framebuffer::unbind(GL_READ_FRAMEBUFFER);
@@ -117,8 +118,6 @@ void DeferredRenderer::_geometryPass()
         }
         (*iter)->draw();
     }
-
-   
 }
 
 void DeferredRenderer::_lightPass()

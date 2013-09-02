@@ -30,5 +30,5 @@ void main()
 	vec3 ws_normal = var_tangent * ts_normal.x + var_bitangent * ts_normal.y + var_normal * ts_normal.z;
 
 	// NORMAL
-    normal = vec3(var_normal * 0.5 + 0.5);
+    normal = vec3(ws_normal * 0.5 + 0.5);
  }
