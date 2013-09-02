@@ -6,7 +6,7 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
       mGBuffer(size, 3, true, GL_RGB16F),
       mLightsBuffer(size),
-      mShadowBuffer(size, 1, false, GL_R32F , GL_RED),
+      //mShadowBuffer(size, 1, false, GL_R32F , GL_RED),
       mSphere("light-volume-sphere"),
       mQuad("fullsceen-quad"),
       //mAOPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.final.vertex.glsl", "data/shader/deferred.ssao.fragment.glsl")),
@@ -40,9 +40,11 @@ void DeferredRenderer::render()
 {
     Framebuffer::unbind();
 
-    mGBuffer.bindDraw(4);
+    mGBuffer.bindDraw(3);
+    GL_CHECK();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _geometryPass();
+
 
 
     //Framebuffer::unbind(GL_READ_FRAMEBUFFER);
@@ -79,6 +81,8 @@ void DeferredRenderer::_geometryPass()
 
     // Disable blending
     glDisable(GL_BLEND);
+
+
 
     // Diffuse pass
     mGeometryPassShader->use();
