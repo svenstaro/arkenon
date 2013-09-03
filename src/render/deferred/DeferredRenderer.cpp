@@ -44,7 +44,8 @@ void DeferredRenderer::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _geometryPass();
 
-    _debugOutput(0);
+    //_debugOutput(2);
+    //return;
 
     //Framebuffer::unbind(GL_READ_FRAMEBUFFER);
     mLightsBuffer.bindDraw();

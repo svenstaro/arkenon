@@ -73,12 +73,17 @@ void VertexBuffer::makeTriangle(unsigned int ai, unsigned int bi, unsigned int c
         glm::vec2 deltaUV1 = mUVs[bi] - mUVs[ai];
         glm::vec2 deltaUV2 = mUVs[ci] - mUVs[ai];
 
-        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-        glm::vec3 tangent = (delta1 * deltaUV2.y   - delta2 * deltaUV1.y)*r;
-        glm::vec3 bitangent = (delta2 * deltaUV1.x   - delta1 * deltaUV2.x)*r;
+        // only continue if we have UV deltas
+        if((delta1.x != 0 || delta1.y != 0) && (delta2.x != 0 || delta2.y != 0)
+            && (deltaUV1.x != 0 || deltaUV1.y != 0) && (deltaUV2.x != 0 || deltaUV2.y != 0))
+        {
+            float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+            glm::vec3 tangent = (delta1 * deltaUV2.y   - delta2 * deltaUV1.y)*r;
+            glm::vec3 bitangent = (delta2 * deltaUV1.x   - delta1 * deltaUV2.x)*r;
 
-        mTangents[ai] = mTangents[bi] = mTangents[ci] = tangent;
-        mBitangents[ai] = mBitangents[bi] = mBitangents[ci] = bitangent;
+            mTangents[ai] = mTangents[bi] = mTangents[ci] = tangent;
+            mBitangents[ai] = mBitangents[bi] = mBitangents[ci] = bitangent;
+        }
     }
 
     mIndices.push_back(ai);

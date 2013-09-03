@@ -36,9 +36,8 @@ void main()
 //                1.f);
 
 
-
     float distance = distance(position, lightPosition);
-    normal = normalize(normal);
+    //normal = normalize(normal);
     vec3 lightDirection = normalize(position - lightPosition);
 
     float diffuse_factor = dot(normal, -lightDirection);

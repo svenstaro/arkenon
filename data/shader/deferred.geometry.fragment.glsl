@@ -18,17 +18,19 @@ uniform sampler2D normalTexture;
 
 void main()
 {
-	// DIFFUSE: multiply blending, diffuse texture with diffuse color
     color = texture(diffuseTexture, var_textureCoords).rgb * diffuseColor.rgb;
-
-	//mat4 tangentToWorld = transpose(mat3(var_tangent, var_bitangent, var_normal));
-
-	// POSITION
 	position = var_position; 
 
-	vec3 ts_normal= texture(normalTexture, var_textureCoords).xyz * 2.0 - 1.0;
-	vec3 ws_normal = var_tangent * ts_normal.x + var_bitangent * ts_normal.y + var_normal * ts_normal.z;
+    vec3 ts_normal = texture(normalTexture, var_textureCoords).xyz * 2.0 - vec3(1.0);
+    //mat3 tangentToWorld = transpose(mat3(var_tangent, var_bitangent, var_normal));
+//    vec3 ws_normal = normalize(tangentToWorld*ts_normal);
+
+    //ts_normal = normalize((M * vec4(ts_normal, 0.0)).xyz);
+    vec3 ws_normal =
+            (var_tangent) * ts_normal.x +
+            (var_bitangent) * ts_normal.y +
+            (var_normal) * ts_normal.z;
 
 	// NORMAL
-    normal = vec3(ws_normal * 0.5 + 0.5);
+    normal = ws_normal;
  }

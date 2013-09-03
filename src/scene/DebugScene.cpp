@@ -50,7 +50,7 @@ void DebugScene::initialize()
     addChild(ground);
 
     // add some lights
-    for(unsigned int i = 0; i < 3; ++i)
+    for(unsigned int i = 1; i < 3; ++i)
     {
         std::shared_ptr<Light> light(new Light("ship_light"));
         light->setColor(glm::vec4(1, 1, 1, 1));
@@ -65,7 +65,7 @@ void DebugScene::onUpdate(double dt)
 {
     if(!mPaused) mTime += dt;
 
-    for(unsigned int i = 1; i < mLights.size(); ++i)
+    for(unsigned int i = 0; i < mLights.size(); ++i)
     {
         std::shared_ptr<Light> light = mLights[i];
         light->position.x = sin(M_PI * i + mTime) * 10;
