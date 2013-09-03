@@ -1,24 +1,36 @@
 #include "Framebuffer.hpp"
 
+#include "util/check.hpp"
 #include <iostream>
 #include <new>
 
-Framebuffer::Framebuffer(glm::vec2 size, int mrt_count, bool depth, GLenum texture_mode, GLenum sectype)
+void checkFramebuffer() {
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    if(status != GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "Framebuffer not complete: " << std::hex << status << std::endl;
+    }
+}
+
+Framebuffer::Framebuffer(glm::vec2 size, int mrt_count, bool depth, GLenum texture_mode, GLenum sectype, GLenum precision)
     : RenderTarget(size),
       mMrtCount(mrt_count)
 {
-    glGenFramebuffers(1, &mHandle);
+    glGenFramebuffersEXT(1, &mHandle);
     bind();
 
     // create the textures
     for(unsigned int i = 0; i < mrt_count; ++i) {
         std::shared_ptr<Texture> texture = std::make_shared<Texture>();
         texture->setSmooth(false);
-        texture->create(getSize(), texture_mode, sectype);
+        texture->create(getSize(), texture_mode, sectype, precision);
         texture->bind();
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture->getHandle(), 0);
         mTextures.push_back(texture);
     }
+    GL_CHECK();
+
+    checkFramebuffer();
 
     if(depth) {
         // create depth buffer
@@ -35,6 +47,8 @@ Framebuffer::Framebuffer(glm::vec2 size, int mrt_count, bool depth, GLenum textu
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthbuffer);
         */
     }
+    
+    GL_CHECK();
 }
 
 void Framebuffer::bindDraw(int num, int* buffers)

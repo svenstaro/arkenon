@@ -11,7 +11,7 @@
 
 class Framebuffer : public RenderTarget {
 public:
-    Framebuffer(glm::vec2 size, int mrt_count = 1, bool depth = false, GLenum texture_mode = GL_RGB, GLenum sectype = GL_RGB);
+    Framebuffer(glm::vec2 size, int mrt_count = 1, bool depth = false, GLenum texture_mode = GL_RGB, GLenum sectype = GL_RGB, GLenum precision = GL_UNSIGNED_INT);
 
     void bind();
     static void unbind(int mode = GL_FRAMEBUFFER);
