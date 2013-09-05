@@ -7,6 +7,9 @@ bake:
 run:
 	bin/arkenon
 
+debug:
+	gdb bin/arkenon
+
 docs:
 	doxygen
 

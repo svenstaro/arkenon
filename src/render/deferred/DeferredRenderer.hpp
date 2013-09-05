@@ -55,7 +55,7 @@ private:
 
     Framebuffer mGBuffer;       //< MRT#3: color, position, normal;         GL_RGB16F
     Framebuffer mLightsBuffer;  //< no MRT, just ADD-blend all the lights   GL_RGB
-    Framebuffer mShadowBuffer;
+    //Framebuffer mShadowBuffer;
 
     std::shared_ptr<ShaderProgram> mGeometryPassShader;
     std::shared_ptr<ShaderProgram> mLightPassShader;

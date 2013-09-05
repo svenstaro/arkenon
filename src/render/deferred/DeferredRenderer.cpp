@@ -4,9 +4,9 @@
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
-      mGBuffer(size, 3, true, GL_RGB16F),
+      mGBuffer(size, 3, true, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT),
       mLightsBuffer(size),
-      mShadowBuffer(size, 1, false, GL_R32F , GL_RED),
+      //mShadowBuffer(size, 1, false, GL_R32F , GL_RED),
       mSphere("light-volume-sphere"),
       mQuad("fullsceen-quad"),
       //mAOPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.final.vertex.glsl", "data/shader/deferred.ssao.fragment.glsl")),
@@ -34,18 +34,20 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
     mRandomTexture->load("data/gfx/AONoise.png");
     mRandomTexture->setSmooth(false);
     GL_CHECK();
+
+
 }
 
 void DeferredRenderer::render()
 {
+
+
     Framebuffer::unbind();
 
-    mGBuffer.bindDraw(4);
+    mGBuffer.bindDraw(3);
+    GL_CHECK();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _geometryPass();
-
-    //_debugOutput(2);
-    //return;
 
     //Framebuffer::unbind(GL_READ_FRAMEBUFFER);
     mLightsBuffer.bindDraw();
@@ -81,6 +83,8 @@ void DeferredRenderer::_geometryPass()
 
     // Disable blending
     glDisable(GL_BLEND);
+
+
 
     // Diffuse pass
     mGeometryPassShader->use();

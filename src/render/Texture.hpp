@@ -51,7 +51,7 @@ public:
      * Creates an empty texture.
      * @param size The size for the empty texture.
      */
-    void create(const glm::vec2& size, GLenum type = GL_RGB, GLenum secondtype = GL_RGB, void* data = 0);
+    void create(const glm::vec2& size, GLenum type = GL_RGB, GLenum secondtype = GL_RGB, GLenum precision = GL_UNSIGNED_INT, void* data = 0);
 
     /**
      * Sets the mipmap mode.
