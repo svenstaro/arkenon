@@ -4,9 +4,9 @@
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
-      mGBuffer(size, 3, true, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT),
-      mLightsBuffer(size),
-      //mShadowBuffer(size, 1, false, GL_R32F , GL_RED),
+      mGBuffer(size, 4, true, GL_RGB16F),
+      mLightsBuffer(size, 2, false, GL_RGB),
+      mShadowBuffer(size, 1, false, GL_R32F, GL_RED),
       mSphere("light-volume-sphere"),
       mQuad("fullsceen-quad"),
       //mAOPassShader(std::make_shared<ShaderProgram>("data/shader/deferred.final.vertex.glsl", "data/shader/deferred.ssao.fragment.glsl")),
@@ -26,13 +26,6 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
     );
     mFullQuad.commit();
 
-    mLambertTexture = std::make_shared<Texture>();
-    mLambertTexture->load("data/gfx/lambertMap.png");
-    mLambertTexture->setSmooth(false);
-
-    mRandomTexture = std::make_shared<Texture>();
-    mRandomTexture->load("data/gfx/AONoise.png");
-    mRandomTexture->setSmooth(false);
     GL_CHECK();
 
 
@@ -40,28 +33,11 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
 
 void DeferredRenderer::render()
 {
-
-
-    Framebuffer::unbind();
-
-    mGBuffer.bindDraw(3);
-    GL_CHECK();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _geometryPass();
-
-    //Framebuffer::unbind(GL_READ_FRAMEBUFFER);
-    mLightsBuffer.bindDraw();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _lightPass();
-
-    //mShadowBuffer.bindDraw();
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //_ssaoPass();
-
-    Framebuffer::unbind();
-    _finalPass();
-
-    //_debugOutput(1);
+    geometryPass();
+    //debugOutput(3); return;
+    lightPass();
+    //ssaoPass();
+    finalPass();
 }
 
 void DeferredRenderer::setSize(glm::vec2 size)
@@ -69,12 +45,17 @@ void DeferredRenderer::setSize(glm::vec2 size)
     if(mSize.x == size.x && mSize.y == size.y) return;
 
     mSize = size;
-    mGBuffer = Framebuffer(size, 3, GL_RGB16F);
-    mLightsBuffer = Framebuffer(size);
+    mGBuffer = Framebuffer(size, 4, GL_RGB16F);
+    mLightsBuffer = Framebuffer(size, 2, false, GL_RGB);
+    mShadowBuffer = Framebuffer(size, 1, false, GL_R32F, GL_RED);
 }
 
-void DeferredRenderer::_geometryPass()
+void DeferredRenderer::geometryPass()
 {
+    // prepare framebuffer
+    mGBuffer.bindDraw(4);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -89,13 +70,10 @@ void DeferredRenderer::_geometryPass()
     // Diffuse pass
     mGeometryPassShader->use();
 
-    // texture slots
-    //int buffers[] = {0, 1, 2};
-    //mGBuffer.bindDraw(3, buffers);
-
     mGeometryPassShader->send("color", 0);
     mGeometryPassShader->send("position", 1);
     mGeometryPassShader->send("normal", 2);
+    mGeometryPassShader->send("specular", 3);
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
 
@@ -116,13 +94,20 @@ void DeferredRenderer::_geometryPass()
             mGeometryPassShader->send("diffuseColor", material->getDiffuseColor());
             mGeometryPassShader->send("diffuseTexture", material->getDiffuseTexture(), 0);
             mGeometryPassShader->send("normalTexture", material->getNormalTexture(), 1);
+            mGeometryPassShader->send("specularTexture", material->getSpecularTexture(), 2);
+            mGeometryPassShader->send("specularShininess", material->getSpecularShininess());
+            mGeometryPassShader->send("specularColorMix", material->getSpecularColorMix());
         }
         (*iter)->draw();
     }
 }
 
-void DeferredRenderer::_lightPass()
+void DeferredRenderer::lightPass()
 {
+    // prepare framebuffer
+    mLightsBuffer.bindDraw(2);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     // Disable depth test
     glDisable(GL_DEPTH_TEST);
 
@@ -136,13 +121,17 @@ void DeferredRenderer::_lightPass()
 
     // Diffuse pass
     mLightPassShader->use();
+    mLightPassShader->send("screenSize", mSize);
+    mLightPassShader->send("VP", mCamera->getViewProjectionMatrix());
+    mLightPassShader->send("cameraPosition", mCamera->getAbsolutePosition());
 
     // texture slots
-    //mLightPassShader->send("colorMap", mGBuffer.getTexture(0), 0);
-    mLightPassShader->send("positionMap", mGBuffer.getTexture(1), 1);
-    mLightPassShader->send("normalMap", mGBuffer.getTexture(2), 2);
+    mLightPassShader->send("positionMap", mGBuffer.getTexture(1), 0);
+    mLightPassShader->send("normalMap", mGBuffer.getTexture(2), 1);
+    mLightPassShader->send("specularMap", mGBuffer.getTexture(3), 2);
 
-    mLightPassShader->send("screenSize", mSize);
+    mGeometryPassShader->send("out_colorMultiply", 0);
+    mGeometryPassShader->send("out_colorAdd", 1);
 
     for(auto iter = mLights.begin(); iter != mLights.end(); iter++) {
         glm::vec3 position = (*iter)->getAbsolutePosition();
@@ -155,7 +144,6 @@ void DeferredRenderer::_lightPass()
         mSphere.position = position;
         mSphere.scale = glm::vec3(radius);
         mLightPassShader->send("MVP", mCamera->getViewProjectionMatrix() * mSphere.getModelMatrix());
-        mLightPassShader->send("VP", mCamera->getViewProjectionMatrix());
         mLightPassShader->send("M", mSphere.getModelMatrix());
         mSphere.draw();
     }
@@ -163,23 +151,28 @@ void DeferredRenderer::_lightPass()
     glDisable(GL_CULL_FACE);
 }
 
-void DeferredRenderer::_ssaoPass() {
+void DeferredRenderer::ssaoPass() {
+    /*
+    // prepare framebuffer
+    mShadowBuffer.bindDraw();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     glDisable(GL_DEPTH_TEST);
+
     mAOPassShader->use();
-
-
 
     glm::mat4 projMatrix = glm::ortho<GLfloat>(-1.0, 1.0, 1.0, -1.0, -1.0, 1.0);
     mAOPassShader->send("projMatrix", projMatrix);
 
     //mAOPassShader->send("depthTexture", mGBuffer.getTexture(3), 0);
     mAOPassShader->send("normalTexture", mGBuffer.getTexture(2), 1);
-    mAOPassShader->send("randomTexture", mRandomTexture, 2);
+    //mAOPassShader->send("randomTexture", mRandomTexture, 2);
 
     mFullQuad.draw();
+    */
 }
 
-void DeferredRenderer::_debugOutput(int n, const Rect& subrect)
+void DeferredRenderer::debugOutput(int n, const Rect& subrect)
 {
     Framebuffer::unbind(GL_DRAW_FRAMEBUFFER);   // draw to screen
     mGBuffer.bindRead(n);                       // read from gbuffer
@@ -190,17 +183,19 @@ void DeferredRenderer::_debugOutput(int n, const Rect& subrect)
                       GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
-void DeferredRenderer::_finalPass()
+void DeferredRenderer::finalPass()
 {
+    Framebuffer::unbind();
+
     glDisable(GL_DEPTH_TEST);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
     mFinalPassShader->use();
 
     mFinalPassShader->send("diffuseMap", mGBuffer.getTexture(0), 0);
-    mFinalPassShader->send("lightMap", mLightsBuffer.getTexture(), 1);
+    mFinalPassShader->send("lightMapMultiply", mLightsBuffer.getTexture(0), 1);
+    mFinalPassShader->send("lightMapAdd", mLightsBuffer.getTexture(1), 2);
     //mFinalPassShader->send("shadowMap", mShadowBuffer.getTexture(), 2);
-    mFinalPassShader->send("lambertMap", mLambertTexture, 3);
+    //mFinalPassShader->send("lambertMap", mLambertTexture, 3);
 
     //TODO: Move this maybe
     glm::mat4 projMatrix = glm::ortho<GLfloat>(-1.0, 1.0, 1.0, -1.0, -1.0, 1.0);
@@ -213,5 +208,4 @@ void DeferredRenderer::_finalPass()
                       0, 0, mSize.x, mSize.y,
                       GL_DEPTH_BUFFER_BIT,
                       GL_NEAREST);
-    
 }

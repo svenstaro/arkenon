@@ -3,7 +3,9 @@
 #include <iostream>
 
 Material::Material()
-    : mDiffuseColor(1, 1, 1, 1)
+    : mDiffuseColor(1, 1, 1, 1),
+      mSpecularShininess(20),
+      mSpecularColorMix(1)
 {}
 
 void Material::setDiffuseColor(const glm::vec4& color)
@@ -23,6 +25,14 @@ void Material::setSpecularTexture(std::shared_ptr<Texture> texture) {
     mSpecularTexture = texture;
 }
 
+void Material::setSpecularShininess(float value) {
+    mSpecularShininess = value;
+}
+
+void Material::setSpecularColorMix(float value) {
+    mSpecularColorMix = value;
+}
+
 const glm::vec4&Material::getDiffuseColor()
 {
     return mDiffuseColor;
@@ -38,4 +48,12 @@ std::shared_ptr<Texture> Material::getDiffuseTexture() {
 
 std::shared_ptr<Texture> Material::getSpecularTexture() {
     return mSpecularTexture;
+}
+
+float Material::getSpecularShininess() const {
+    return mSpecularShininess;
+}
+
+float Material::getSpecularColorMix() const {
+    return mSpecularColorMix;
 }

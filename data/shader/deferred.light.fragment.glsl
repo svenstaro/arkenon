@@ -4,6 +4,7 @@ precision highp float;
 uniform sampler2D colorMap;
 uniform sampler2D positionMap;
 uniform sampler2D normalMap;
+uniform sampler2D specularMap;
 
 uniform vec3 lightPosition;
 uniform vec4 lightColor;
@@ -11,30 +12,18 @@ uniform float lightRadius;
 uniform vec2 screenSize;
 
 uniform mat4 VP;
+uniform vec3 cameraPosition;
 uniform mat4 M;
 
-out vec4 out_color;
+out vec4 out_colorMultiply;
+out vec4 out_colorAdd;
 
 void main()
 {
     vec2 texcoord = gl_FragCoord.xy / screenSize;
     vec3 position = texture(positionMap, texcoord).xyz;
     vec3 normal = texture(normalMap, texcoord).xyz;
-
-    //vec3 color = texture(colorMap, texcoord).rgb;
-
-//    normal = normalize(normal);
-//    vec3 lightDirection = normalize(lightPosition - position);
-
-//    vec3 cameraPosition = (VP * vec4(0, 0, 0, 1)).xyz;
-//    vec3 eyeDir = normalize(cameraPosition - position);
-//    vec3 vHalfVector = normalize(lightDirection+eyeDir);
-
-//    gl_FragColor = vec4(dot(normal, -lightDirection) * 1, 1.f);
-//                   max(dot(normal,lightDirection),0) * 1 +
-//                   pow(max(dot(normal,vHalfVector),0.0), 2) * 1.5,
-//                1.f);
-
+    vec3 specularData = texture(specularMap, texcoord).xyz; // intensity, shininess, colormix
 
     float distance = distance(position, lightPosition);
     //normal = normalize(normal);
@@ -51,5 +40,19 @@ void main()
     float intensity = clamp(1-alpha, 0, 1) * damping_factor;
 
     vec3 result = light * 1 * intensity;
-    out_color = vec4(result, 1);
+    out_colorMultiply = vec4(result, 1);
+
+    // specular
+    vec3 surfaceToCamera = normalize(cameraPosition - position);
+    //vec3 reflectionVector = reflect(lightDirection, normal);
+    //float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
+    vec3 halfway = normalize(-lightDirection + surfaceToCamera);
+    float cosAngle = max(0.0, dot(halfway, normal));
+    float specularCoefficient = pow(cosAngle, specularData.y);
+    vec3 specularColor = mix(lightColor.rgb, vec3(1, 1, 1), specularData.z);
+    vec3 specularComponent = specularCoefficient * specularColor * specularData.x * intensity;
+
+    // attenuation
+    //float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
+    out_colorAdd = vec4(specularComponent.rgb, 1);
 }

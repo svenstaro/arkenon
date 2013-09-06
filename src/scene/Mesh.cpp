@@ -6,7 +6,7 @@ Mesh::Mesh(const std::string& name)
 
 void Mesh::load(const aiMesh* mesh)
 {
-    aiVector3D uv, normal, position;
+    aiVector3D uv, normal, pos;
     aiColor4D* color;
 
     for(unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -18,7 +18,7 @@ void Mesh::load(const aiMesh* mesh)
         for(unsigned int j = 0; j < face.mNumIndices; j++)
         {
             // Get position and normal
-            position = mesh->mVertices[face.mIndices[j]];
+            pos = mesh->mVertices[face.mIndices[j]];
             normal = mesh->mNormals[face.mIndices[j]];
 
             // Get UV coordinates, if present
@@ -31,7 +31,7 @@ void Mesh::load(const aiMesh* mesh)
             else
                 color = new aiColor4D(1, 1, 1, 1);
 
-            vertices.push_back(Vertex(position.x, position.y, position.z, uv.x, uv.y, color->r, color->g, color->b, color->a, normal.x, normal.y, normal.z));
+            vertices.push_back(Vertex(pos.x, pos.y, pos.z, uv.x, uv.y, color->r, color->g, color->b, color->a, normal.x, normal.y, normal.z));
         }
 
         addFace(vertices);

@@ -37,7 +37,7 @@ void DebugScene::initialize()
     // add debug meshes
     _addDebugMesh("wall", glm::vec3(-5, 1.68945, 2), glm::vec4(1, 1, 1, 1), wallMaterial);
     _addDebugMesh("cube", glm::vec3(0, 0, 0), glm::vec4(1, 0, 0, 1));
-    _addDebugMesh("sphere", glm::vec3(2, 4, -4), glm::vec4(1, 1, 0, 1));
+    _addDebugMesh("sphere", glm::vec3(-5, 1, -5), glm::vec4(1, 1, 0, 1));
     _addDebugMesh("columns", glm::vec3(5.5, 0, -2), glm::vec4(.5, 0, .7, 1));
     _addDebugMesh("debug", glm::vec3(4.5, 0, 3), glm::vec4(0.3, 0.5, 1, 1));
 

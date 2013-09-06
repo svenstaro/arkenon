@@ -2,9 +2,8 @@
 precision highp float;
 
 uniform sampler2D diffuseMap;
-uniform sampler2D lightMap;
-uniform sampler2D lambertMap;
-//uniform sampler2D shadowMap;
+uniform sampler2D lightMapMultiply;
+uniform sampler2D lightMapAdd;
 
 uniform float time;
 
@@ -15,15 +14,12 @@ out vec4 out_Color;
 const vec4 ambientGlobal = vec4(0.05, 0.05, 0.05, 1.0);
 
 void main() {
-	float colorFactor = 0.1;
     vec4 albedo = texture(diffuseMap,  out_TextureCoords);
-	vec4 pointLight = texture(lightMap, out_TextureCoords);
-	//float ssao = texture(shadowMap, out_TextureCoords).x;
+    vec4 lightFactor = texture(lightMapMultiply, out_TextureCoords);
+    vec4 lightAddend = texture(lightMapAdd, out_TextureCoords);
 
-	vec4 ambient = ambientGlobal;
-	vec4 lightContribution = vec4(0.0, 0.0, 0.0, 1.0);
-	lightContribution += pointLight;
+    vec4 final_color = ambientGlobal * albedo + lightFactor * albedo + lightAddend;
 
-	vec4 final_color = (ambient + lightContribution) * albedo;
-	out_Color = vec4(final_color.rgb, 1.0);
+    out_Color = vec4(final_color.rgb, 1.0);
+    //out_Color = vec4(lightAddend.rgb, 1.0);
 }
