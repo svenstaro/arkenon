@@ -8,7 +8,7 @@ in vec3 var_normal;
 in vec3 var_tangent;
 in vec3 var_bitangent;
 
-out vec3 color;
+out vec4 color;
 out vec3 position;
 out vec3 normal;
 out vec3 specular;
@@ -27,7 +27,7 @@ float toGrayscale(vec3 color) {
 
 void main()
 {
-    color = texture(diffuseTexture, var_textureCoords).rgb * diffuseColor.rgb;
+    color = vec4(texture(diffuseTexture, var_textureCoords).rgb * diffuseColor.rgb, 0);
 	position = var_position; 
 
 	if(hasNormalTexture) {

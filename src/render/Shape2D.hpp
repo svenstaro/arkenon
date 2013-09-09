@@ -36,7 +36,6 @@ public:
 
     std::shared_ptr<Material> getMaterial();
 
-
     void draw();
 
 private:

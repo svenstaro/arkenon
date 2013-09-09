@@ -7,6 +7,7 @@
 DebugScene::DebugScene(Window& window)
     : Node("debug-scene"),
       mWindow(window),
+      mSkyRenderer(window.getSize()),
       mDeferredRenderer(window.getSize()),
       mPaused(false),
       mTime(0)
@@ -89,6 +90,13 @@ void DebugScene::render()
     // update size
     mCamera->setViewportSize(mWindow.getSize());
     mDeferredRenderer.setSize(mWindow.getSize());
+    mSkyRenderer.setSize(mWindow.getSize());
+
+    // render background
+    mSkyRenderer.prepare();
+    mSkyRenderer.setCamera(mCamera);
+    mSkyRenderer.render();
+    mSkyRenderer.cleanup();
 
     // prepare renderer
     mDeferredRenderer.prepare();

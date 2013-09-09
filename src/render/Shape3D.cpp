@@ -18,8 +18,7 @@ void Shape3D::makeUvSphere(unsigned int rings, unsigned int sectors)
 
             vertices[r*sectors+s] = Vertex(
                 glm::vec3(x, y, z),
-                //glm::vec2(s * S, r * R),
-                glm::vec2(0, 0),
+                glm::vec2(s * S, r * R),
                 glm::vec4(1.f, 1.f, 1.f, 1.f),
                 glm::vec3(x, y, z));
         }

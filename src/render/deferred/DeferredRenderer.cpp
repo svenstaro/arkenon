@@ -3,7 +3,7 @@
 #include "util/check.hpp"
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
-    : mSize(size),
+    : Renderer(size),
       mGBuffer(size, 4, true, GL_RGBA16F),
       mLightsBuffer(size, 2, false, GL_RGB),
       mShadowBuffer(size, 1, false, GL_R32F, GL_RED),
@@ -38,16 +38,11 @@ void DeferredRenderer::render()
     lightPass();
     //ssaoPass();
     finalPass();
-
-
 }
 
-void DeferredRenderer::setSize(glm::vec2 size)
+void DeferredRenderer::onResize(glm::vec2 size)
 {
-    if(mSize.x == size.x && mSize.y == size.y) return;
-
-    mSize = size;
-    mGBuffer = Framebuffer(size, 4, GL_RGB16F);
+    mGBuffer = Framebuffer(size, 4, true, GL_RGBA16F);
     mLightsBuffer = Framebuffer(size, 2, false, GL_RGB);
     mShadowBuffer = Framebuffer(size, 1, false, GL_R32F, GL_RED);
 }
@@ -190,6 +185,8 @@ void DeferredRenderer::finalPass()
     Framebuffer::unbind();
 
     glDisable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     mFinalPassShader->use();
 

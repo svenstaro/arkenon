@@ -20,6 +20,5 @@ void main() {
 
     vec4 final_color = ambientGlobal * albedo + lightFactor * albedo + lightAddend;
 
-    out_Color = vec4(final_color.rgb, 1.0);
-    //out_Color = vec4(lightAddend.rgb, 1.0);
+    out_Color = vec4(final_color.rgb, 1.0-albedo.a);
 }

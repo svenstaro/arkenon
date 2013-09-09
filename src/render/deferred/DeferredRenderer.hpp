@@ -15,7 +15,8 @@ public:
     DeferredRenderer(glm::vec2 size);
     virtual void render();
 
-    void setSize(glm::vec2 size);
+protected:
+    virtual void onResize(glm::vec2 size);
 
 private:
     void geometryPass();
@@ -33,8 +34,6 @@ private:
     Shape2D mQuad;
 
     VertexBuffer mFullQuad;
-
-    glm::vec2 mSize;
 
     Framebuffer mGBuffer;       //< MRT#3: color, position, normal, material;                       GL_RGB16F
                                 //  material: r=specular intensity, g=specular shininess, b=mix(light color, white, ??)
