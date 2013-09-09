@@ -30,7 +30,7 @@ bool Vertex::hasNormal()
 
 bool Vertex::hasTangents()
 {
-    bool hasTangent = tangent.x != 0 || tangent.y != 0 || tangent.z != 0;
-    bool hasBitangent = bitangent.x != 0 || bitangent.y != 0 || bitangent.z != 0;
+    bool hasTangent = tangent.x != 1 || tangent.y != 0 || tangent.z != 0;
+    bool hasBitangent = bitangent.x != 0 || bitangent.y != 1 || bitangent.z != 0;
     return hasTangent && hasBitangent;
 }
