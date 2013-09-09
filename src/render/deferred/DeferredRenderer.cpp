@@ -47,7 +47,7 @@ void DeferredRenderer::setSize(glm::vec2 size)
     if(mSize.x == size.x && mSize.y == size.y) return;
 
     mSize = size;
-    mGBuffer = Framebuffer(size, 4, GL_RGB16F);
+    mGBuffer = Framebuffer(size, 4, true, GL_RGBA16F);
     mLightsBuffer = Framebuffer(size, 2, false, GL_RGB);
     mShadowBuffer = Framebuffer(size, 1, false, GL_R32F, GL_RED);
 }
