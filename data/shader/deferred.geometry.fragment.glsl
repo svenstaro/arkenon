@@ -19,25 +19,31 @@ uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
 uniform float specularShininess;
 uniform float specularColorMix;
+uniform bool hasNormalTexture;
 
 float toGrayscale(vec3 color) {
     return (color.r + color.g + color.b) / 3.f;
 }
-
 
 void main()
 {
     color = texture(diffuseTexture, var_textureCoords).rgb * diffuseColor.rgb;
 	position = var_position; 
 
-    vec3 ts_normal = texture(normalTexture, var_textureCoords).xyz * 2.0 - vec3(1.0);
-    vec3 ws_normal =
+	if(hasNormalTexture) {
+
+    	vec3 ts_normal = texture(normalTexture, var_textureCoords).xyz * 2.0 - vec3(1.0);
+    	vec3 ws_normal =
             (var_tangent) * ts_normal.x +
             (var_bitangent) * ts_normal.y +
             (var_normal) * ts_normal.z;
 
-    normal = ws_normal;
+    	normal = ws_normal;
+    } else {
+    	normal = var_normal;
+    }
 
     float specularIntensity = toGrayscale(texture(specularTexture, var_textureCoords).rgb);
     specular = vec3(specularIntensity, specularShininess, specularColorMix);
+
  }

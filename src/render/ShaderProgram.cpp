@@ -99,6 +99,13 @@ void ShaderProgram::send(const std::string& uniform, glm::mat4 matrix)
     GL_CHECK();
 }
 
+void ShaderProgram::send(const std::string& uniform, glm::mat3 matrix)
+{
+    glUniformMatrix3fv(getUniformId(uniform), 1, GL_FALSE, &matrix[0][0]);
+    GL_CHECK();
+}
+
+
 void ShaderProgram::send(const std::string& uniform, std::shared_ptr<Texture> texture, int location)
 {
     send(uniform, location); //(int)texture->getHandle());

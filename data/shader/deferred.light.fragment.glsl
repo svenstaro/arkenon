@@ -11,9 +11,7 @@ uniform vec4 lightColor;
 uniform float lightRadius;
 uniform vec2 screenSize;
 
-uniform mat4 VP;
 uniform vec3 cameraPosition;
-uniform mat4 M;
 
 out vec4 out_colorMultiply;
 out vec4 out_colorAdd;

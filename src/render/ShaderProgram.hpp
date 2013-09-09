@@ -87,6 +87,13 @@ public:
      * @param uniform The name of the uniform variable.
      * @param matrix The value.
      */
+    void send(const std::string& uniform, glm::mat3 matrix);
+
+    /**
+     * Sends a uniform matrix value to the graphics card.
+     * @param uniform The name of the uniform variable.
+     * @param matrix The value.
+     */
     void send(const std::string& uniform, glm::mat4 matrix);
 
     /**

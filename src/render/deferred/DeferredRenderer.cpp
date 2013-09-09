@@ -4,7 +4,7 @@
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
     : mSize(size),
-      mGBuffer(size, 4, true, GL_RGB16F),
+      mGBuffer(size, 4, true, GL_RGBA16F),
       mLightsBuffer(size, 2, false, GL_RGB),
       mShadowBuffer(size, 1, false, GL_R32F, GL_RED),
       mSphere("light-volume-sphere"),
@@ -34,10 +34,12 @@ DeferredRenderer::DeferredRenderer(glm::vec2 size)
 void DeferredRenderer::render()
 {
     geometryPass();
-    //debugOutput(3); return;
+    //debugOutput(2); return;
     lightPass();
     //ssaoPass();
     finalPass();
+
+
 }
 
 void DeferredRenderer::setSize(glm::vec2 size)
@@ -80,12 +82,12 @@ void DeferredRenderer::geometryPass()
         glm::mat4 m = (*iter)->getModelMatrix();
         glm::mat4 mv = mCamera->getViewMatrix() * (*iter)->getModelMatrix();
         glm::mat4 mvp = mCamera->getViewProjectionMatrix() * m;
-        glm::mat4 normalMatrix = glm::transpose(glm::inverse(mv));
+        glm::mat3 normalMatrix = glm::mat3(m);
 
         mGeometryPassShader->send("MVP", mvp);
         mGeometryPassShader->send("MV", mv);
         mGeometryPassShader->send("M", m);
-        mGeometryPassShader->send("normalMatrix", normalMatrix);
+        mGeometryPassShader->send("M3x3", normalMatrix);
 
         std::shared_ptr<Material> material = (*iter)->getMaterial();
 
@@ -94,6 +96,7 @@ void DeferredRenderer::geometryPass()
             mGeometryPassShader->send("diffuseColor", material->getDiffuseColor());
             mGeometryPassShader->send("diffuseTexture", material->getDiffuseTexture(), 0);
             mGeometryPassShader->send("normalTexture", material->getNormalTexture(), 1);
+            mGeometryPassShader->send("hasNormalTexture", material->getNormalTexture() ? 1 : 0);
             mGeometryPassShader->send("specularTexture", material->getSpecularTexture(), 2);
             mGeometryPassShader->send("specularShininess", material->getSpecularShininess());
             mGeometryPassShader->send("specularColorMix", material->getSpecularColorMix());
@@ -144,7 +147,6 @@ void DeferredRenderer::lightPass()
         mSphere.position = position;
         mSphere.scale = glm::vec3(radius);
         mLightPassShader->send("MVP", mCamera->getViewProjectionMatrix() * mSphere.getModelMatrix());
-        mLightPassShader->send("M", mSphere.getModelMatrix());
         mSphere.draw();
     }
 
