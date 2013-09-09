@@ -27,6 +27,8 @@ Window::Window(const std::string& title, const glm::vec2& size)
     glfwSetCursorPosCallback(mWindow, window_glfw_mouse_move);
     glfwSetCursorEnterCallback(mWindow, window_glfw_mouse_enter);
     glfwSetScrollCallback(mWindow, window_glfw_scroll);
+    glfwSetWindowSizeCallback(mWindow, window_glfw_window_resize);
+
 
     instances.push_back(this);
 }
@@ -281,6 +283,18 @@ void window_glfw_character(GLFWwindow* glfw_window, unsigned int unicode)
         CharacterEvent e;
         e.window = window;
         e.unicode = unicode;
+        window->handleEvent(&e);
+    }
+}
+
+void window_glfw_window_resize(GLFWwindow* glfw_window, int width, int height) {
+    Window* window = Window::getInstance(glfw_window);
+    if(window)
+    {
+        WindowResizeEvent e;
+        e.window = window;
+        e.width = width;
+        e.height = height;
         window->handleEvent(&e);
     }
 }

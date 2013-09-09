@@ -99,5 +99,6 @@ void window_glfw_mouse_enter(GLFWwindow* glfw_window, int entered);
 void window_glfw_scroll(GLFWwindow* glfw_window, double dx, double dy);
 void window_glfw_key(GLFWwindow* glfw_window, int key, int scancode, int action, int mods);
 void window_glfw_character(GLFWwindow* glfw_window, unsigned int unicode);
+void window_glfw_window_resize(GLFWwindow* glfw_window, int width, int height);
 
 #endif

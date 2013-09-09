@@ -59,6 +59,23 @@ void DebugScene::initialize()
         addChild(light);
         mLights.push_back(light);
     }
+
+
+    Assimp::Importer importer;
+    const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
+
+    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>("fighter");
+    mesh->load(scene->mMeshes[0]);
+    mesh->commit();
+    mesh->rotation = glm::quat(glm::vec3(-M_PI/2, 0, 0));
+    mesh->position = glm::vec3(0, 0, 10);
+    std::shared_ptr<Material> material = std::make_shared<Material>();
+    material->setDiffuseTexture(std::make_shared<Texture>("data/textures/fighter.png"));
+    material->setSpecularShininess(10);
+
+    material->setDiffuseColor(glm::vec4(0.5, 0.5, 0.5, 1.0));
+    mesh->setMaterial(material);
+    addChild(mesh);
 }
 
 void DebugScene::onUpdate(double dt)
@@ -82,13 +99,21 @@ void DebugScene::onEvent(const Event* event)
             mPaused = !mPaused;
         }
     }
+
+    if(event->type == Event::WindowResize) {
+        WindowResizeEvent* e = (WindowResizeEvent*) event;
+        mDeferredRenderer.setSize(glm::vec2(e->width, e->height));
+        mCamera->setViewportSize(glm::vec2(e->width, e->height));
+
+        //std::cout << e->width << ", " << e->height << std::endl;
+    }
 }
 
 void DebugScene::render()
 {
     // update size
-    mCamera->setViewportSize(mWindow.getSize());
-    mDeferredRenderer.setSize(mWindow.getSize());
+    //mCamera->setViewportSize(mWindow.getSize());
+    //mDeferredRenderer.setSize(mWindow.getSize());
 
     // prepare renderer
     mDeferredRenderer.prepare();
@@ -99,6 +124,7 @@ void DebugScene::render()
     mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("cube")));
     mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("columns")));
     mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("ground")));
+    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("fighter")));
 
     for(unsigned int i = 0; i < mLights.size(); ++i)
         mDeferredRenderer.registerLight(mLights[i]);
