@@ -82,6 +82,12 @@ public:
 
     const Node* getParent() const;
 
+    const std::map<std::string, std::shared_ptr<Node>>& getChildren() const;
+
+    virtual bool isRenderable() const;
+    virtual bool isVisible() const;
+    virtual void onPrepareRender();
+
 private:
     std::map<std::string, std::shared_ptr<Node>> mChildren;
     Node* mParent = nullptr;

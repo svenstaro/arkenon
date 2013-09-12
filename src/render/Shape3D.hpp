@@ -6,7 +6,7 @@
 #include "render/VertexBuffer.hpp"
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
-#include "render/Renderable.hpp"
+#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
 

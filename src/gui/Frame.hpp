@@ -4,7 +4,8 @@
 #include "gui/Widget.hpp"
 
 class Frame : public Widget {
-    void draw();
+public:
+    Frame(const std::string& name);
 };
 
 #endif

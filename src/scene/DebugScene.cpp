@@ -53,7 +53,7 @@ void DebugScene::initialize()
     // add some lights
     for(unsigned int i = 1; i < 3; ++i)
     {
-        std::shared_ptr<Light> light(new Light("ship_light"));
+        std::shared_ptr<Light> light(new Light("light-" + std::to_string(i)));
         light->setColor(glm::vec4(1, 1, 1, 1));
         light->setRadius(i==0 ? 30 : 10.0f);
         light->position = glm::vec3(0, 20, 0);
@@ -95,18 +95,13 @@ void DebugScene::render()
     // render background
     mSkyRenderer.prepare();
     mSkyRenderer.setCamera(mCamera);
-    mSkyRenderer.render();
+    //mSkyRenderer.render();
     mSkyRenderer.cleanup();
 
     // prepare renderer
     mDeferredRenderer.prepare();
+    mDeferredRenderer.prepareScene(this);
     mDeferredRenderer.setCamera(mCamera);
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("wall")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("debug")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("sphere")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("cube")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("columns")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("ground")));
 
     for(unsigned int i = 0; i < mLights.size(); ++i)
         mDeferredRenderer.registerLight(mLights[i]);

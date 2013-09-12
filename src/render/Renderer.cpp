@@ -10,12 +10,33 @@ Renderer::Renderer(glm::vec2 size)
 void Renderer::prepare()
 {}
 
-void Renderer::registerRenderable(std::shared_ptr<Renderable> renderable)
+void Renderer::prepareScene(Node* node)
+{
+    if(node->isRenderable()) {
+        registerRenderable(dynamic_cast<Renderable*>(node));
+    }
+    node->onPrepareRender();
+
+    for(auto& iter : node->getChildren()) {
+        prepareScene(iter.second.get());
+    }
+}
+
+void Renderer::registerRenderable(std::shared_ptr<Node> renderable)
+{
+    registerRenderable(dynamic_cast<Renderable*>(renderable.get()));
+}
+
+void Renderer::registerRenderable(Renderable* renderable)
 {
     mRenderables.push_back(renderable);
 }
 
-void Renderer::registerLight(std::shared_ptr<Light> light) {
+void Renderer::registerLight(std::shared_ptr<Node> light) {
+    registerLight(dynamic_cast<Light*>(light.get()));
+}
+
+void Renderer::registerLight(Light* light) {
     mLights.push_back(light);
 }
 

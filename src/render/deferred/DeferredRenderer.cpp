@@ -73,7 +73,6 @@ void DeferredRenderer::geometryPass()
     mGeometryPassShader->send("specular", 3);
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
-
         glm::mat4 m = (*iter)->getModelMatrix();
         glm::mat4 mv = mCamera->getViewMatrix() * (*iter)->getModelMatrix();
         glm::mat4 mvp = mCamera->getViewProjectionMatrix() * m;

@@ -9,6 +9,7 @@ Node::Node(const std::string& name)
 
 std::shared_ptr<Node> Node::addChild(std::shared_ptr<Node> node)
 {
+    std::cout << "Appending node: " << getName() << " > " << node->getName() << std::endl;
     mChildren[node->getName()] = node;
     addInputForwarding(node.get());
     node->mParent = this;
@@ -85,4 +86,22 @@ const Node* Node::getParent() const
 {
     return mParent;
 }
+
+const std::map<std::string, std::shared_ptr<Node>>& Node::getChildren() const
+{
+    return mChildren;
+}
+
+bool Node::isRenderable() const
+{
+    return false;
+}
+
+bool Node::isVisible() const
+{
+    return true;
+}
+
+void Node::onPrepareRender()
+{}
 

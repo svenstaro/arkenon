@@ -1,4 +1,5 @@
 #include "Frame.hpp"
 
-void Frame::draw()
+Frame::Frame(const std::string& name)
+    : Widget(name)
 {}
