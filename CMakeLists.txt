@@ -30,7 +30,7 @@ include_directories(
     ${FREEIMAGEPLUS_INCLUDE_PATH}
     ${FREETYPE_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIR}
-    ${ALURE_INCLUDE_DIRS}
+    ${ALURE_INCLUDE_DIR}
 )
 
 file(GLOB_RECURSE sources src/*.cpp)
@@ -41,7 +41,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     ${OPENAL_LIBRARY}
-    ${ALURE_LIBRARIES}
+    ${ALURE_LIBRARY}
     ${BULLET_LIBRARIES}
     ${GLFW_LIBRARY}
     ${OPENGL_LIBRARIES}
