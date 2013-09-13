@@ -11,6 +11,8 @@ find_package(GLEW)
 find_package(assimp)
 find_package(FreeImagePlus)
 find_package(Freetype)
+find_package(OpenAL)
+find_package(Alure)
 
 add_definitions(-Wall -Wextra -Wshadow -g -pedantic -fPIC -std=c++11)
 set(CMAKE_BUILD_TYPE "Debug")
@@ -27,6 +29,8 @@ include_directories(
     ${ASSIMP_INCLUDE_DIRS}
     ${FREEIMAGEPLUS_INCLUDE_PATH}
     ${FREETYPE_INCLUDE_DIRS}
+    ${OPENAL_INCLUDE_DIR}
+    ${ALURE_INCLUDE_DIRS}
 )
 
 file(GLOB_RECURSE sources src/*.cpp)
@@ -36,6 +40,8 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
+    ${OPENAL_LIBRARY}
+    ${ALURE_LIBRARIES}
     ${BULLET_LIBRARIES}
     ${GLFW_LIBRARY}
     ${OPENGL_LIBRARIES}

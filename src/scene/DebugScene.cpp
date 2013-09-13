@@ -4,6 +4,16 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <AL/alure.h>
+
+#include <sstream>
+
+#include "audio/Buffer.hpp"
+#include "audio/Sound.hpp"
+#include "audio/Listener.hpp"
+
+#include "util/check.hpp"
+
 DebugScene::DebugScene(Window& window)
     : Node("debug-scene"),
       mWindow(window),
@@ -11,10 +21,12 @@ DebugScene::DebugScene(Window& window)
       mDeferredRenderer(window.getSize()),
       mPaused(false),
       mTime(0)
-{}
+{
+}
 
 void DebugScene::initialize()
 {
+
     // create camera mover
     std::shared_ptr<FreeCamera> freeCamera = std::make_shared<FreeCamera>("free-camera", mWindow);
     freeCamera->position = glm::vec3(-12, 5, -1);
@@ -24,6 +36,27 @@ void DebugScene::initialize()
     // create camera
     mCamera = std::make_shared<Camera>("camera", Camera::Perspective, mWindow.getSize(), 60.f);
     freeCamera->addChild(mCamera);
+
+    //AL_CHECK();
+
+    std::shared_ptr<Listener> listener = std::make_shared<Listener>("listener");
+    freeCamera->addChild(listener);
+    
+    AL_CHECK();
+
+    std::shared_ptr<Buffer> soundBuffer = std::make_shared<Buffer>();
+    soundBuffer->loadFromFile("data/sounds/test.ogg");
+
+    std::shared_ptr<Sound> soundEmitter = std::make_shared<Sound>("testsound", soundBuffer);
+    soundEmitter.get()->setRelativeToListener(false);
+    soundEmitter.get()->setLoop(true);
+    soundEmitter.get()->setVolume(150.0);
+
+
+    
+
+    soundEmitter->play();
+
 
     // create materials
     std::shared_ptr<Material> wallMaterial = std::make_shared<Material>();
@@ -60,6 +93,24 @@ void DebugScene::initialize()
         addChild(light);
         mLights.push_back(light);
     }
+
+    getChild("light-1")->addChild(soundEmitter);
+
+    Assimp::Importer importer;
+    const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
+
+    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>("fighter");
+    mesh->load(scene->mMeshes[0]);
+    mesh->commit();
+    mesh->rotation = glm::quat(glm::vec3(-M_PI/2, 0, 0));
+    mesh->position = glm::vec3(0, 0, 10);
+    std::shared_ptr<Material> material = std::make_shared<Material>();
+    material->setDiffuseTexture(std::make_shared<Texture>("data/textures/fighter.png"));
+    material->setSpecularShininess(10);
+
+    material->setDiffuseColor(glm::vec4(0.5, 0.5, 0.5, 1.0));
+    mesh->setMaterial(material);
+    addChild(mesh);
 }
 
 void DebugScene::onUpdate(double dt)
@@ -82,6 +133,14 @@ void DebugScene::onEvent(const Event* event)
         if(e->key == GLFW_KEY_SPACE) {
             mPaused = !mPaused;
         }
+    }
+
+    if(event->type == Event::WindowResize) {
+        WindowResizeEvent* e = (WindowResizeEvent*) event;
+        mDeferredRenderer.setSize(glm::vec2(e->width, e->height));
+        mCamera->setViewportSize(glm::vec2(e->width, e->height));
+
+        //std::cout << e->width << ", " << e->height << std::endl;
     }
 }
 
