@@ -9,7 +9,7 @@
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/Texture.hpp"
-#include "render/Renderable.hpp"
+#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
 #include "util/Rect.hpp"
@@ -35,7 +35,6 @@ public:
     void setMaterial(std::shared_ptr<Material> mat);
 
     std::shared_ptr<Material> getMaterial();
-
 
     void draw();
 

@@ -3,7 +3,7 @@
 #include "util/check.hpp"
 
 DeferredRenderer::DeferredRenderer(glm::vec2 size)
-    : mSize(size),
+    : Renderer(size),
       mGBuffer(size, 4, true, GL_RGBA16F),
       mLightsBuffer(size, 2, false, GL_RGB),
       mShadowBuffer(size, 1, false, GL_R32F, GL_RED),
@@ -38,15 +38,10 @@ void DeferredRenderer::render()
     lightPass();
     //ssaoPass();
     finalPass();
-
-
 }
 
-void DeferredRenderer::setSize(glm::vec2 size)
+void DeferredRenderer::onResize(glm::vec2 size)
 {
-    if(mSize.x == size.x && mSize.y == size.y) return;
-
-    mSize = size;
     mGBuffer = Framebuffer(size, 4, true, GL_RGBA16F);
     mLightsBuffer = Framebuffer(size, 2, false, GL_RGB);
     mShadowBuffer = Framebuffer(size, 1, false, GL_R32F, GL_RED);
@@ -78,7 +73,6 @@ void DeferredRenderer::geometryPass()
     mGeometryPassShader->send("specular", 3);
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
-
         glm::mat4 m = (*iter)->getModelMatrix();
         glm::mat4 mv = mCamera->getViewMatrix() * (*iter)->getModelMatrix();
         glm::mat4 mvp = mCamera->getViewProjectionMatrix() * m;
@@ -190,6 +184,8 @@ void DeferredRenderer::finalPass()
     Framebuffer::unbind();
 
     glDisable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     mFinalPassShader->use();
 

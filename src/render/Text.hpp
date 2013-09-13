@@ -5,7 +5,7 @@
 
 #include "render/Font.hpp"
 #include "render/VertexBuffer.hpp"
-#include "render/Renderable.hpp"
+#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 
 class Text : public RenderableNode {

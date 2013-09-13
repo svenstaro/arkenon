@@ -10,6 +10,7 @@
 #include "render/Material.hpp"
 #include "scene/Mesh.hpp"
 #include "render/Shape2D.hpp"
+#include "render/SkyRenderer.hpp"
 #include "scene/FreeCamera.hpp"
 
 #include "audio/AudioDevice.hpp"
@@ -33,6 +34,7 @@ private:
 
     void _addDebugMesh(const std::string& name, const glm::vec3 pos, const glm::vec4& color, std::shared_ptr<Material> material = nullptr);
 
+    SkyRenderer mSkyRenderer;
     DeferredRenderer mDeferredRenderer;
     ForwardRenderer mForwardRenderer;
 

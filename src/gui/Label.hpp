@@ -6,7 +6,8 @@
 
 class Label : public Widget {
 public:
-    Label(const std::string& text = "",
+    Label(const std::string& name,
+          const std::string& text = "",
           std::shared_ptr<Font> font = Font::defaultFont,
           int font_size = Font::defaultSize,
           const glm::vec4& color = glm::vec4(1, 1, 1, 1));
@@ -16,9 +17,6 @@ public:
     void setFont(std::shared_ptr<Font> font);
     void setColor(const glm::vec4& color);
     void setAlign(Text::Align vertical, Text::Align horizontal);
-
-    std::shared_ptr<Material> getMaterial();
-    void draw();
 
 protected:
     std::shared_ptr<Text> mText;

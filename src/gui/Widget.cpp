@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-Widget::Widget()
-    : RenderableNode("widget")
+Widget::Widget(const std::string& name)
+    : Node(name)
 {}
 
 Widget::~Widget()
@@ -19,4 +19,14 @@ const glm::vec2& Widget::getSize() const
 {
     return mSize;
     //return glm::vec2(scale.x, scale.y);
+}
+
+void Widget::setSkin(std::shared_ptr<WidgetSkin> skin)
+{
+    mSkin = skin;
+}
+
+std::shared_ptr<WidgetSkin> Widget::getSkin()
+{
+    return mSkin;
 }

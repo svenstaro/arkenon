@@ -28,7 +28,8 @@ void FlatRenderer::render()
 
     for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
         mShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
-        mShader->send("diffuse_texture", (*iter)->getMaterial()->getDiffuseTexture());
+        std::shared_ptr<Material> m = (*iter)->getMaterial();
+        mShader->send("diffuse_texture", m ? m->getDiffuseTexture() : nullptr);
         (*iter)->draw();
     }
 }

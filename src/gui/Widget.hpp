@@ -7,18 +7,25 @@
 #include <vector>
 
 #include "scene/Node.hpp"
-#include "render/Renderable.hpp"
+#include "scene/RenderableNode.hpp"
 
-class Widget : public RenderableNode {
+#include "gui/WidgetSkin.hpp"
+
+class Widget : public Node {
 public:
-    Widget();
+    Widget(const std::string& name);
     virtual ~Widget() = 0;
 
     void setSize(const glm::vec2& size);
     const glm::vec2& getSize() const;
 
+    void setSkin(std::shared_ptr<WidgetSkin> skin);
+    std::shared_ptr<WidgetSkin> getSkin();
+
 protected:
     glm::vec2 mSize;
+
+    std::shared_ptr<WidgetSkin> mSkin;
 
 };
 

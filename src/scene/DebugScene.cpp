@@ -17,6 +17,7 @@
 DebugScene::DebugScene(Window& window)
     : Node("debug-scene"),
       mWindow(window),
+      mSkyRenderer(window.getSize()),
       mDeferredRenderer(window.getSize()),
       mPaused(false),
       mTime(0)
@@ -85,10 +86,7 @@ void DebugScene::initialize()
     // add some lights
     for(unsigned int i = 1; i < 3; ++i)
     {
-
-        std::stringstream name;
-        name << "light_" << i;
-        std::shared_ptr<Light> light(new Light(name.str()));
+        std::shared_ptr<Light> light(new Light("light-" + std::to_string(i)));
         light->setColor(glm::vec4(1, 1, 1, 1));
         light->setRadius(i==0 ? 30 : 10.0f);
         light->position = glm::vec3(0, 20, 0);
@@ -96,7 +94,7 @@ void DebugScene::initialize()
         mLights.push_back(light);
     }
 
-    getChild("light_1")->addChild(soundEmitter);
+    getChild("light-1")->addChild(soundEmitter);
 
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
@@ -149,19 +147,20 @@ void DebugScene::onEvent(const Event* event)
 void DebugScene::render()
 {
     // update size
-    //mCamera->setViewportSize(mWindow.getSize());
-    //mDeferredRenderer.setSize(mWindow.getSize());
+    mCamera->setViewportSize(mWindow.getSize());
+    mDeferredRenderer.setSize(mWindow.getSize());
+    mSkyRenderer.setSize(mWindow.getSize());
+
+    // render background
+    mSkyRenderer.prepare();
+    mSkyRenderer.setCamera(mCamera);
+    //mSkyRenderer.render();
+    mSkyRenderer.cleanup();
 
     // prepare renderer
     mDeferredRenderer.prepare();
+    mDeferredRenderer.prepareScene(this);
     mDeferredRenderer.setCamera(mCamera);
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("wall")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("debug")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("sphere")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("cube")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("columns")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("ground")));
-    mDeferredRenderer.registerRenderable(std::static_pointer_cast<Mesh>(getChild("fighter")));
 
     for(unsigned int i = 0; i < mLights.size(); ++i)
         mDeferredRenderer.registerLight(mLights[i]);

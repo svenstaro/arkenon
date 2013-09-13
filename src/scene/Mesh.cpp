@@ -6,8 +6,12 @@ Mesh::Mesh(const std::string& name)
 
 void Mesh::load(const aiMesh* mesh)
 {
-    aiVector3D uv, normal, pos;
-    aiColor4D* color;
+    aiVector3D uv, normal, pos, tangent, bitangent;
+    uv = normal = pos = aiVector3D(0, 0, 0);
+    tangent = aiVector3D(1, 0, 0);
+    bitangent = aiVector3D(0, 1, 0);
+
+    aiColor4D* color = new aiColor4D(1, 1, 1, 1);
 
     for(unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
@@ -17,21 +21,32 @@ void Mesh::load(const aiMesh* mesh)
 
         for(unsigned int j = 0; j < face.mNumIndices; j++)
         {
-            // Get position and normal
-            pos = mesh->mVertices[face.mIndices[j]];
-            normal = mesh->mNormals[face.mIndices[j]];
+            if(mesh->HasPositions())
+                pos = mesh->mVertices[face.mIndices[j]];
 
-            // Get UV coordinates, if present
-            if(mesh->GetNumUVChannels() > 0)
+            if(mesh->HasNormals())
+                normal = mesh->mNormals[face.mIndices[j]];
+
+            // These are still buggy
+            //if(mesh->HasTangentsAndBitangents())
+            //{
+            //    tangent = mesh->mTangents[face.mIndices[j]];
+            //    bitangent = mesh->mBitangents[face.mIndices[j]];
+            //}
+
+            if(mesh->HasTextureCoords(0))
                 uv = mesh->mTextureCoords[0][face.mIndices[j]];
 
-            // Get color value, if present
-            if(mesh->GetNumColorChannels() > 0)
+            if(mesh->HasVertexColors(0))
                 color = mesh->mColors[face.mIndices[j]];
-            else
-                color = new aiColor4D(1, 1, 1, 1);
 
-            vertices.push_back(Vertex(pos.x, pos.y, pos.z, uv.x, uv.y, color->r, color->g, color->b, color->a, normal.x, normal.y, normal.z));
+            vertices.push_back(Vertex(
+                                   pos.x, pos.y, pos.z,
+                                   uv.x, uv.y,
+                                   color->r, color->g, color->b, color->a,
+                                   normal.x, normal.y, normal.z,
+                                   tangent.x, tangent.y, tangent.z,
+                                   bitangent.x, bitangent.y, bitangent.z));
         }
 
         addFace(vertices);

@@ -52,5 +52,5 @@ void main()
 
     // attenuation
     //float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
-    out_colorAdd = vec4(specularComponent.rgb, 1);
+    out_colorAdd = vec4(specularComponent.rgb, 0);
 }

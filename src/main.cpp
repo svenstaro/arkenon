@@ -27,6 +27,7 @@
 #include "scene/Camera.hpp"
 #include "gui/Frame.hpp"
 #include "gui/Button.hpp"
+#include "gui/WidgetSkin.hpp"
 
 int main()
 {
@@ -34,41 +35,40 @@ int main()
     GameWindow window;
     FlatRenderer guiRenderer;
 
-    std::shared_ptr<Material> gui = std::make_shared<Material>();
-    gui->setDiffuseTexture(std::make_shared<Texture>("data/gui/button.png"));
+    std::shared_ptr<Texture> gui = std::make_shared<Texture>("data/gfx/gui.png");
 
-    std::shared_ptr<Button> button_left = std::make_shared<Button>("<");
-    button_left->setMaterial(gui);
-    button_left->setSplit9Factor(glm::vec2(152/216.f, 8/56.f));
-    button_left->setSubrect(Button::Normal, Rect(0,        0, 216/256.f, 56/256.f));
-    button_left->setSubrect(Button::Hover,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
-    button_left->setSubrect(Button::Focus,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
-    button_left->setSubrect(Button::Active, Rect(0,112/256.f, 216/256.f, 56/256.f));
-    button_left->setSize(glm::vec2(216, 56));
-    button_left->position = glm::vec3(window.getSize().x / 2 - 216 - 10, 20, 0);
-    button_left->setColor(glm::vec4(1, 1, 1, 1));
-    button_left->setFontSize(12);
+    float p = 1/256.f; // pixel size
+    std::shared_ptr<WidgetSkin> buttonSkin = std::make_shared<WidgetSkin>();
+    buttonSkin->setTextColor(glm::vec4(1, 1, 1, 1));
+    buttonSkin->setTextureSubrect(WidgetSkin::Normal, TextureSubrect(gui, Rect(  0*p,   0*p,  16*p,  16*p)));
+    buttonSkin->setTextureSubrect(WidgetSkin::Hover,  TextureSubrect(gui, Rect( 16*p,   0*p,  16*p,  16*p)));
+    buttonSkin->setTextureSubrect(WidgetSkin::Active, TextureSubrect(gui, Rect( 32*p,   0*p,  16*p,  16*p)));
+    buttonSkin->setTextureSubrect(WidgetSkin::Focus,  TextureSubrect(gui, Rect( 48*p,   0*p,  16*p,  16*p)));
 
-    std::shared_ptr<Button> button_right = std::make_shared<Button>(">");
-    button_right->setMaterial(gui);
-    button_right->setSplit9Factor(glm::vec2(152/216.f, 8/56.f));
-    button_right->setSubrect(Button::Normal, Rect(0,        0, 216/256.f, 56/256.f));
-    button_right->setSubrect(Button::Hover,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
-    button_right->setSubrect(Button::Focus,  Rect(0, 56/256.f, 216/256.f, 56/256.f));
-    button_right->setSubrect(Button::Active, Rect(0,112/256.f, 216/256.f, 56/256.f));
-    button_right->setSize(glm::vec2(216, 56));
+    std::shared_ptr<Frame> frame = std::make_shared<Frame>("frame");
+    window.addInputForwarding(frame.get());
+
+    std::shared_ptr<Button> button_left = std::make_shared<Button>("button_left", "<");
+    button_left->setSkin(buttonSkin);
+    button_left->setSplit9Factor(glm::vec2(0.5, 0.5));
+    button_left->setSize(glm::vec2(100, 30));
+    button_left->position = glm::vec3(window.getSize().x / 2 - 100 - 10, 20, 0);
+    frame->addChild(button_left);
+
+    std::shared_ptr<Button> button_right = std::make_shared<Button>("button_right", ">");
+    button_right->setSkin(buttonSkin);
+    button_right->setSplit9Factor(glm::vec2(0.5, 0.5));
+    button_right->setSize(glm::vec2(100, 30));
     button_right->position = glm::vec3(window.getSize().x / 2 + 10, 20, 0);
-    button_right->setColor(glm::vec4(1, 1, 1, 1));
-    button_right->setFontSize(12);
+    frame->addChild(button_right);
 
-    std::shared_ptr<Label> fps_label = std::make_shared<Label>("FPS: 0");
+    std::shared_ptr<Label> fps_label = std::make_shared<Label>("fps_label", "FPS: 0");
     fps_label->setFontSize(20);
     fps_label->setAlign(Text::Start, Text::Start);
     fps_label->position = glm::vec3(10, 10, 0);
+    frame->addChild(fps_label);
 
     std::shared_ptr<Camera> guiCamera = std::make_shared<Camera>("gui-camera", Camera::Screen, window.getSize(), 1.f);
-    window.addInputForwarding(button_left.get());
-    window.addInputForwarding(button_right.get());
 
     while(true) {
         window.update();
@@ -86,9 +86,7 @@ int main()
         fps_label->setText(fps_string.str());
 
         guiRenderer.prepare();
-        guiRenderer.registerRenderable(button_right);
-        guiRenderer.registerRenderable(button_left);
-        guiRenderer.registerRenderable(fps_label);
+        guiRenderer.prepareScene(frame.get());
         guiRenderer.setCamera(guiCamera);
         guiRenderer.render();
         guiRenderer.cleanup();

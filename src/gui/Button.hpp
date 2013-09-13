@@ -9,21 +9,11 @@
 #include "scene/Mesh.hpp"
 #include "util/Rect.hpp"
 
-class Button : public Label {
+class Button : public Widget {
 public:
-    enum State {
-        Normal,
-        Hover,
-        Focus,
-        Active
-    };
-
-public:
-    Button(const std::string& text = "");
+    Button(const std::string& name, const std::string& text = "");
 
     // background
-    void setMaterial(std::shared_ptr<Material> mat);
-    void setSubrect(State state, const Rect& subrect);
     void setSplit9Factor(const glm::vec2& split9_factor);
 
     // label
@@ -32,8 +22,7 @@ public:
     void setFont(std::shared_ptr<Font> font);
     void setColor(const glm::vec4& color);
 
-    // broken
-    //void render(std::shared_ptr<Camera> camera, std::shared_ptr<ShaderProgram> shader_program);
+    void onPrepareRender();
 
     void onEvent(const Event* event);
     void onMouseMoved(double x, double y);
@@ -41,14 +30,13 @@ public:
     void onMouseButtonReleased(int button, int mods);
     bool isHover(const glm::vec2& pos);
 
-    State getState() const;
+    WidgetSkin::State getState() const;
 
 private:
     std::shared_ptr<Shape2D> mShape;
     std::shared_ptr<Text> mText;
-    Rect mSubrect;
-    State mState;
-    std::map<State, Rect> mSubrects;
+
+    WidgetSkin::State mState;
     glm::vec2 mSplit9Factor;
 
 };
