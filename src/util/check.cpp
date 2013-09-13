@@ -1,7 +1,40 @@
 #include "check.hpp"
 
 #include <GL/glew.h>
+#include <AL/alure.h>
 #include <iostream>
+
+bool _alCheck(const char* file, int line) {
+    ALenum error = alGetError();
+    if(error == AL_NO_ERROR) return true;
+
+    std::cerr << "[[ " << file << ":" << line << " ]] " << std::endl;
+
+    switch (error) {
+        case AL_INVALID_ENUM:
+            std::cerr << "AL_INVALID_ENUM: an unacceptable value has been specified for an enumerated argument" << std::endl;
+            break;
+        case AL_INVALID_VALUE:
+            std::cerr << "AL_INVALID_VALUE: a numeric argument is out of range" << std::endl;
+            break;
+        case AL_INVALID_OPERATION:
+            std::cerr << "AL_INVALID_OPERATION: the specified operation is not allowed in the current state" << std::endl;
+            break;
+        case AL_OUT_OF_MEMORY:
+            std::cerr << "AL_OUT_OF_MEMORY: there is not enough memory left to execute the command" << std::endl;
+            break;
+        case AL_INVALID_NAME:
+            std::cerr << "AL_INVALID_NAME: invalid name argument" << std::endl;
+            break;
+        default:
+            std::cerr << "Error not listed. Value: " << error << std::endl;
+            break;
+    }
+
+    int* a = nullptr;
+    *a = 1;
+    return false;
+}
 
 bool _glCheck(const char* file, int line) {
     int error = glGetError();
@@ -36,7 +69,6 @@ bool _glCheck(const char* file, int line) {
     *a = 1;
     return false;
 }
-
 
 bool _ftCheck(int error, const char* file, int line) {
     if(error) {

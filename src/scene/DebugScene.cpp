@@ -4,16 +4,28 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <AL/alure.h>
+
+#include <sstream>
+
+#include "audio/Buffer.hpp"
+#include "audio/Sound.hpp"
+#include "audio/Listener.hpp"
+
+#include "util/check.hpp"
+
 DebugScene::DebugScene(Window& window)
     : Node("debug-scene"),
       mWindow(window),
       mDeferredRenderer(window.getSize()),
       mPaused(false),
       mTime(0)
-{}
+{
+}
 
 void DebugScene::initialize()
 {
+
     // create camera mover
     std::shared_ptr<FreeCamera> freeCamera = std::make_shared<FreeCamera>("free-camera", mWindow);
     freeCamera->position = glm::vec3(-12, 5, -1);
@@ -23,6 +35,27 @@ void DebugScene::initialize()
     // create camera
     mCamera = std::make_shared<Camera>("camera", Camera::Perspective, mWindow.getSize(), 60.f);
     freeCamera->addChild(mCamera);
+
+    //AL_CHECK();
+
+    std::shared_ptr<Listener> listener = std::make_shared<Listener>("listener");
+    freeCamera->addChild(listener);
+    
+    AL_CHECK();
+
+    std::shared_ptr<Buffer> soundBuffer = std::make_shared<Buffer>();
+    soundBuffer->loadFromFile("data/sounds/test.ogg");
+
+    std::shared_ptr<Sound> soundEmitter = std::make_shared<Sound>("testsound", soundBuffer);
+    soundEmitter.get()->setRelativeToListener(false);
+    soundEmitter.get()->setLoop(true);
+    soundEmitter.get()->setVolume(150.0);
+
+
+    
+
+    soundEmitter->play();
+
 
     // create materials
     std::shared_ptr<Material> wallMaterial = std::make_shared<Material>();
@@ -52,7 +85,10 @@ void DebugScene::initialize()
     // add some lights
     for(unsigned int i = 1; i < 3; ++i)
     {
-        std::shared_ptr<Light> light(new Light("ship_light"));
+
+        std::stringstream name;
+        name << "light_" << i;
+        std::shared_ptr<Light> light(new Light(name.str()));
         light->setColor(glm::vec4(1, 1, 1, 1));
         light->setRadius(i==0 ? 30 : 10.0f);
         light->position = glm::vec3(0, 20, 0);
@@ -60,6 +96,7 @@ void DebugScene::initialize()
         mLights.push_back(light);
     }
 
+    getChild("light_1")->addChild(soundEmitter);
 
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);

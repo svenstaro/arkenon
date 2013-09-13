@@ -12,6 +12,8 @@
 #include "render/Shape2D.hpp"
 #include "scene/FreeCamera.hpp"
 
+#include "audio/AudioDevice.hpp"
+
 class DebugScene : public Node {
 public:
     DebugScene(Window& window);
@@ -24,6 +26,7 @@ public:
 
 private:
     Window& mWindow;
+    AudioDevice mAudioDevice;
 
     std::shared_ptr<Camera> mCamera;
     std::vector<std::shared_ptr<Light>> mLights;
