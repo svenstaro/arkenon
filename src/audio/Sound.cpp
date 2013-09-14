@@ -1,4 +1,3 @@
-
 #include "Sound.hpp"
 #include <iostream>
 

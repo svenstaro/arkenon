@@ -8,7 +8,11 @@
 
 #include <sstream>
 
+
+#include "audio/StreamedSound.hpp"
+#include "audio/Stream.hpp"
 #include "audio/Buffer.hpp"
+#include "audio/Playlist.hpp"
 #include "audio/Sound.hpp"
 #include "audio/Listener.hpp"
 
@@ -37,26 +41,21 @@ void DebugScene::initialize()
     mCamera = std::make_shared<Camera>("camera", Camera::Perspective, mWindow.getSize(), 60.f);
     freeCamera->addChild(mCamera);
 
-    //AL_CHECK();
-
     std::shared_ptr<Listener> listener = std::make_shared<Listener>("listener");
     freeCamera->addChild(listener);
-    
-    AL_CHECK();
 
-    std::shared_ptr<Buffer> soundBuffer = std::make_shared<Buffer>();
-    soundBuffer->loadFromFile("data/sounds/test.ogg");
+    //Playlist music
+    std::vector<std::string> playlist;
+    playlist.push_back("data/sounds/dark_intro.ogg");
+    playlist.push_back("data/sounds/IswearIsawit.ogg");
+    playlist.push_back("data/sounds/spacecrusher.ogg");
 
-    std::shared_ptr<Sound> soundEmitter = std::make_shared<Sound>("testsound", soundBuffer);
-    soundEmitter.get()->setRelativeToListener(false);
-    soundEmitter.get()->setLoop(true);
-    soundEmitter.get()->setVolume(150.0);
-
-
-    
-
-    soundEmitter->play();
-
+    std::shared_ptr<Playlist> backgroundMusic = std::make_shared<Playlist>("music_playlist", playlist);
+    backgroundMusic->setRelativeToListener(true);
+    backgroundMusic->setLoop(true);
+    backgroundMusic->setVolume(100.0);
+    backgroundMusic->play();
+    addChild(backgroundMusic);
 
     // create materials
     std::shared_ptr<Material> wallMaterial = std::make_shared<Material>();
@@ -94,7 +93,7 @@ void DebugScene::initialize()
         mLights.push_back(light);
     }
 
-    getChild("light-1")->addChild(soundEmitter);
+    //getChild("light-1")->addChild(soundEmitter);
 
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile("data/models/fighter.dae", aiProcessPreset_TargetRealtime_Fast);
