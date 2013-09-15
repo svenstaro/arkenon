@@ -25,6 +25,7 @@ void GameWindow::onEvent(const Event* event)
         if(e->key == GLFW_KEY_ESCAPE)
             close();
     } else if(event->type == Event::MousePress) {
+        if(((MousePressEvent*)event)->button != GLFW_MOUSE_BUTTON_RIGHT) return;
         if(getCursorMode() == Window::Normal)
             setCursorMode(Window::Captured);
         else

@@ -13,9 +13,6 @@ class Button : public Widget {
 public:
     Button(const std::string& name, const std::string& text = "");
 
-    // background
-    void setSplit9Factor(const glm::vec2& split9_factor);
-
     // label
     void setFontSize(int font_size);
     void setText(const std::string& text);
@@ -24,20 +21,11 @@ public:
 
     void onPrepareRender();
 
-    void onEvent(const Event* event);
-    void onMouseMoved(double x, double y);
-    void onMouseButtonPressed(int button, int mods);
-    void onMouseButtonReleased(int button, int mods);
-    bool isHover(const glm::vec2& pos);
-
-    WidgetSkin::State getState() const;
+    bool isFocusable() const;
 
 private:
     std::shared_ptr<Shape2D> mShape;
     std::shared_ptr<Text> mText;
-
-    WidgetSkin::State mState;
-    glm::vec2 mSplit9Factor;
 
 };
 

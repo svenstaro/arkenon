@@ -29,7 +29,7 @@ public:
      */
     void makeRectangle(const glm::vec2& size,
                        const Rect& subrect,
-                       const glm::vec2& split9_factor = glm::vec2(1.f, 1.f),
+                       const Rect& splitMiddle = Rect(0, 0, 1, 1),
                        const glm::vec2& texture_size = glm::vec2(0, 0));
 
     void setMaterial(std::shared_ptr<Material> mat);

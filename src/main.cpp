@@ -28,6 +28,7 @@
 #include "gui/Frame.hpp"
 #include "gui/Button.hpp"
 #include "gui/WidgetSkin.hpp"
+#include "gui/Input.hpp"
 
 int main()
 {
@@ -38,29 +39,42 @@ int main()
     std::shared_ptr<Texture> gui = std::make_shared<Texture>("data/gfx/gui.png");
 
     float p = 1/256.f; // pixel size
+    Rect middle(0.25, 0.25, 0.5, 0.5);
+
     std::shared_ptr<WidgetSkin> buttonSkin = std::make_shared<WidgetSkin>();
     buttonSkin->setTextColor(glm::vec4(1, 1, 1, 1));
-    buttonSkin->setTextureSubrect(WidgetSkin::Normal, TextureSubrect(gui, Rect(  0*p,   0*p,  16*p,  16*p)));
-    buttonSkin->setTextureSubrect(WidgetSkin::Hover,  TextureSubrect(gui, Rect( 16*p,   0*p,  16*p,  16*p)));
-    buttonSkin->setTextureSubrect(WidgetSkin::Active, TextureSubrect(gui, Rect( 32*p,   0*p,  16*p,  16*p)));
-    buttonSkin->setTextureSubrect(WidgetSkin::Focus,  TextureSubrect(gui, Rect( 48*p,   0*p,  16*p,  16*p)));
+    buttonSkin->setTextureSubrect(WidgetSkin::Normal,   TextureSubrect(gui, Rect(  0*p,   0*p,  16*p,  16*p), middle));
+    buttonSkin->setTextureSubrect(WidgetSkin::Focus,    TextureSubrect(gui, Rect( 16*p,   0*p,  16*p,  16*p), middle));
+    buttonSkin->setTextureSubrect(WidgetSkin::Active,   TextureSubrect(gui, Rect( 32*p,   0*p,  16*p,  16*p), middle));
+    buttonSkin->setTextureSubrect(WidgetSkin::Disabled, TextureSubrect(gui, Rect( 48*p,   0*p,  16*p,  16*p), middle));
+
+    std::shared_ptr<WidgetSkin> inputSkin = std::make_shared<WidgetSkin>();
+    inputSkin->setTextColor(glm::vec4(1, 1, 1, 1));
+    inputSkin->setTextureSubrect(WidgetSkin::Normal,   TextureSubrect(gui, Rect(  0*p,   0*p,  16*p,  16*p), middle));
+    inputSkin->setTextureSubrect(WidgetSkin::Focus,    TextureSubrect(gui, Rect( 16*p,   0*p,  16*p,  16*p), middle));
+    inputSkin->setTextureSubrect(WidgetSkin::Active,   TextureSubrect(gui, Rect( 16*p,   0*p,  16*p,  16*p), middle));
+    inputSkin->setTextureSubrect(WidgetSkin::Disabled, TextureSubrect(gui, Rect( 48*p,   0*p,  16*p,  16*p), middle));
 
     std::shared_ptr<Frame> frame = std::make_shared<Frame>("frame");
     window.addInputForwarding(frame.get());
 
     std::shared_ptr<Button> button_left = std::make_shared<Button>("button_left", "<");
     button_left->setSkin(buttonSkin);
-    button_left->setSplit9Factor(glm::vec2(0.5, 0.5));
     button_left->setSize(glm::vec2(100, 30));
     button_left->position = glm::vec3(window.getSize().x / 2 - 100 - 10, 20, 0);
     frame->addChild(button_left);
 
     std::shared_ptr<Button> button_right = std::make_shared<Button>("button_right", ">");
     button_right->setSkin(buttonSkin);
-    button_right->setSplit9Factor(glm::vec2(0.5, 0.5));
     button_right->setSize(glm::vec2(100, 30));
     button_right->position = glm::vec3(window.getSize().x / 2 + 10, 20, 0);
     frame->addChild(button_right);
+
+    std::shared_ptr<Input> input = std::make_shared<Input>("input", "Enter something");
+    input->setSkin(inputSkin);
+    input->setSize(glm::vec2(200, 20));
+    input->position = glm::vec3(10, 50, 0);
+    frame->addChild(input);
 
     std::shared_ptr<Label> fps_label = std::make_shared<Label>("fps_label", "FPS: 0");
     fps_label->setFontSize(20);

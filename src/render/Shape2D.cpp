@@ -4,7 +4,7 @@ Shape2D::Shape2D(const std::string& name)
     : RenderableNode(name)
 {}
 
-void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const glm::vec2& split9_factor, const glm::vec2& texture_size)
+void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const Rect& splitMiddle, const glm::vec2& texture_size)
 {
     glm::vec2 tex_size = texture_size;
     if(tex_size.x == 0 && tex_size.y == 0)
@@ -20,7 +20,7 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const gl
         }
     }
 
-    if(split9_factor.x >= 1.f && split9_factor.y >= 1.f)
+    if(splitMiddle.position.x == 0 && splitMiddle.position.y == 0 && splitMiddle.size.x == 1 && splitMiddle.size.y == 1)
     {
         // Texture: Start/End
         glm::vec2 ts = subrect.position;
@@ -42,20 +42,20 @@ void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const gl
     else
     {
         //glm::vec2 inner_size = subrect.size * split9_factor;
-        glm::vec2 inner_offset = subrect.size * (glm::vec2(1.f, 1.f) - split9_factor) * 0.5f;
-        glm::vec2 pixel_offset = inner_offset * tex_size;
+        glm::vec2 offset_tl = subrect.size * splitMiddle.position;
+        glm::vec2 offset_br = subrect.size * (glm::vec2(1, 1) - splitMiddle.position - splitMiddle.size);
 
         // Texture: Start/End Outer/Inner
         glm::vec2 tso = subrect.position;
         glm::vec2 teo = (subrect.position + subrect.size);
-        glm::vec2 tsi = tso + inner_offset;
-        glm::vec2 tei = teo - inner_offset;
+        glm::vec2 tsi = tso + offset_tl;
+        glm::vec2 tei = teo - offset_br;
 
         // Vertex: Start/End Outer/Inner
         glm::vec2 vso(0, 0);
         glm::vec2 veo = size;
-        glm::vec2 vsi = vso + pixel_offset;
-        glm::vec2 vei = veo - pixel_offset;
+        glm::vec2 vsi = vso + offset_tl * tex_size;
+        glm::vec2 vei = veo - offset_br * tex_size;
 
         mVertexBuffer.clear();
 

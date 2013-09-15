@@ -8,7 +8,7 @@ void WidgetSkin::setTextureSubrect(const TextureSubrect& texture_subrect)
     setTextureSubrect(WidgetSkin::Normal, texture_subrect);
     setTextureSubrect(WidgetSkin::Active, texture_subrect);
     setTextureSubrect(WidgetSkin::Focus, texture_subrect);
-    setTextureSubrect(WidgetSkin::Hover, texture_subrect);
+    setTextureSubrect(WidgetSkin::Disabled, texture_subrect);
 }
 
 void WidgetSkin::setTextureSubrect(State state, const TextureSubrect& texture_subrect)
@@ -26,7 +26,7 @@ void WidgetSkin::setTextColor(const glm::vec4& color)
     setTextColor(WidgetSkin::Normal, color);
     setTextColor(WidgetSkin::Active, color);
     setTextColor(WidgetSkin::Focus, color);
-    setTextColor(WidgetSkin::Hover, color);
+    setTextColor(WidgetSkin::Disabled, color);
 }
 
 void WidgetSkin::setTextColor(State state, const glm::vec4& color)

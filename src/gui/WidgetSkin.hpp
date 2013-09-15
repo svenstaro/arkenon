@@ -9,9 +9,9 @@ struct WidgetSkin {
 public:
     enum State {
         Normal,
-        Hover,
         Focus,
-        Active
+        Active,
+        Disabled
     };
 
 public:
