@@ -158,11 +158,11 @@ void DebugScene::render()
 
     // prepare renderer
     mDeferredRenderer.prepare();
-    mDeferredRenderer.prepareScene(this);
+    mDeferredRenderer.prepareScene(this, Node::Deferred);
     mDeferredRenderer.setCamera(mCamera);
 
     for(unsigned int i = 0; i < mLights.size(); ++i)
-        mDeferredRenderer.registerLight(mLights[i]);
+        mDeferredRenderer.registerLight(mLights[i].get());
 
     // render and cleanup
     mDeferredRenderer.render();

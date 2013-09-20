@@ -5,6 +5,8 @@ Button::Button(const std::string& name, const std::string& text)
       mShape(new Shape2D("button:shape")),
       mText(new Text("button:text", text))
 {
+    mShape->setRenderTechnique(GUI);
+    mText->setRenderTechnique(GUI);
     addChild(mShape);
     addChild(mText);
 }

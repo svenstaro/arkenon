@@ -1,8 +1,9 @@
 #include "Node.hpp"
 
-Node::Node(const std::string& name)
+Node::Node(const std::string& name, Node::RenderTechnique render_technique)
     : position(0.f, 0.f, 0.f),
-      scale(1.f, 1.f, 1.f)
+      scale(1.f, 1.f, 1.f),
+      mRenderTechnique(render_technique)
 {
     mName = name;
 }
@@ -87,14 +88,9 @@ const Node* Node::getParent() const
     return mParent;
 }
 
-const std::map<std::string, std::shared_ptr<Node>>& Node::getChildren() const
+const std::map<std::string, std::shared_ptr<Node> >& Node::getChildren() const
 {
     return mChildren;
-}
-
-bool Node::isRenderable() const
-{
-    return false;
 }
 
 bool Node::isVisible() const
@@ -102,6 +98,33 @@ bool Node::isVisible() const
     return true;
 }
 
-void Node::onPrepareRender()
-{}
+void Node::onPrepareRender() {}
 
+std::shared_ptr<Material> Node::getMaterial()
+{
+    return nullptr;
+}
+
+glm::mat4 Node::getModelMatrix() const
+{
+    return getAbsoluteTransformationMatrix();
+}
+
+void Node::draw()
+{
+    if(mRenderTechnique != None)
+    {
+        std::cerr << "Renderable node should implement the draw() method." << std::endl;
+        std::cout << getName() << std::endl;
+    }
+}
+
+void Node::setRenderTechnique(Node::RenderTechnique render_technique)
+{
+    mRenderTechnique = render_technique;
+}
+
+Node::RenderTechnique Node::getRenderTechnique() const
+{
+    return mRenderTechnique;
+}

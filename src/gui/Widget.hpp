@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "scene/Node.hpp"
-#include "scene/RenderableNode.hpp"
 
 #include "gui/WidgetSkin.hpp"
 

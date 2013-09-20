@@ -1,7 +1,7 @@
 #include "Shape2D.hpp"
 
 Shape2D::Shape2D(const std::string& name)
-    : RenderableNode(name)
+    : Node(name, Default)
 {}
 
 void Shape2D::makeRectangle(const glm::vec2& size, const Rect& subrect, const Rect& splitMiddle, const glm::vec2& texture_size)

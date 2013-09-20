@@ -10,30 +10,22 @@ Renderer::Renderer(glm::vec2 size)
 void Renderer::prepare()
 {}
 
-void Renderer::prepareScene(Node* node)
+void Renderer::prepareScene(Node* node, Node::RenderTechnique render_technique)
 {
-    if(node->isRenderable()) {
-        registerRenderable(dynamic_cast<Renderable*>(node));
+    if(!node->isVisible()) return;
+
+    if(node->getRenderTechnique() == render_technique) {
+        registerRenderNode(node);
     }
     node->onPrepareRender();
 
     for(auto& iter : node->getChildren()) {
-        prepareScene(iter.second.get());
+        prepareScene(iter.second.get(), render_technique);
     }
 }
 
-void Renderer::registerRenderable(std::shared_ptr<Node> renderable)
-{
-    registerRenderable(dynamic_cast<Renderable*>(renderable.get()));
-}
-
-void Renderer::registerRenderable(Renderable* renderable)
-{
-    mRenderables.push_back(renderable);
-}
-
-void Renderer::registerLight(std::shared_ptr<Node> light) {
-    registerLight(dynamic_cast<Light*>(light.get()));
+void Renderer::registerRenderNode(Node* node) {
+    mRenderNodes.push_back(node);
 }
 
 void Renderer::registerLight(Light* light) {
@@ -55,7 +47,7 @@ void Renderer::setCamera(std::shared_ptr<Camera> camera)
 
 void Renderer::cleanup()
 {
-    mRenderables.clear();
+    mRenderNodes.clear();
     mLights.clear();
 }
 

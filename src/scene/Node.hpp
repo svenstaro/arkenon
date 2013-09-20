@@ -9,14 +9,26 @@
 #include <glm/ext.hpp>
 
 #include "window/InputReceiver.hpp"
+#include "render/Material.hpp"
 
 class Node : public InputReceiver {
+public:
+    enum RenderTechnique {
+        None,
+        Deferred,
+        Forward,
+        Flat,
+        LightBillboard,
+        Default = Deferred,
+        GUI = Flat
+    };
+
 public:
     /**
      * Initializes a node.
      * @param name The name of the node.
      */
-    Node(const std::string& name);
+    Node(const std::string& name, RenderTechnique render_technique = None);
 
     /**
      * Adds a new child node. The child is being moved into the node.
@@ -84,14 +96,23 @@ public:
 
     const std::map<std::string, std::shared_ptr<Node>>& getChildren() const;
 
-    virtual bool isRenderable() const;
+    // render stuff
     virtual bool isVisible() const;
     virtual void onPrepareRender();
+    virtual std::shared_ptr<Material> getMaterial();
+    virtual glm::mat4 getModelMatrix() const;
+    virtual void draw();
+
+    void setRenderTechnique(RenderTechnique render_technique);
+    RenderTechnique getRenderTechnique() const;
 
 private:
     std::map<std::string, std::shared_ptr<Node>> mChildren;
     Node* mParent = nullptr;
     std::string mName;
+
+protected:
+    RenderTechnique mRenderTechnique;
 
 public:
     glm::vec3 position;

@@ -1,7 +1,7 @@
 #include "Shape3D.hpp"
 
 Shape3D::Shape3D(const std::string& name)
-    : RenderableNode(name)
+    : Node(name, Default)
 {}
 
 void Shape3D::makeUvSphere(unsigned int rings, unsigned int sectors)

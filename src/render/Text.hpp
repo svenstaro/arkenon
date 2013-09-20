@@ -5,10 +5,9 @@
 
 #include "render/Font.hpp"
 #include "render/VertexBuffer.hpp"
-#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 
-class Text : public RenderableNode {
+class Text : public Node {
 public:
     enum Align {
         Start,

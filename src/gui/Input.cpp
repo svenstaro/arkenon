@@ -6,6 +6,8 @@ Input::Input(const std::string& name, const std::string& text)
       mText(new Text("input:text", text))
 {
     setText(text);
+    mShape->setRenderTechnique(GUI);
+    mText->setRenderTechnique(GUI);
     addChild(mShape);
     addChild(mText);
 }

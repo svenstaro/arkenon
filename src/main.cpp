@@ -100,7 +100,7 @@ int main()
         fps_label->setText(fps_string.str());
 
         guiRenderer.prepare();
-        guiRenderer.prepareScene(frame.get());
+        guiRenderer.prepareScene(frame.get(), Node::GUI);
         guiRenderer.setCamera(guiCamera);
         guiRenderer.render();
         guiRenderer.cleanup();

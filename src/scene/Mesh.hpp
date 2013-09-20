@@ -5,7 +5,6 @@
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/Texture.hpp"
-#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
 
@@ -13,7 +12,7 @@
 
 #include <assimp/mesh.h>
 
-class Mesh : public RenderableNode {
+class Mesh : public Node {
 public:
     Mesh(const std::string& name);
 

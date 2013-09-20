@@ -5,7 +5,8 @@
 Widget::Widget(const std::string& name)
     : Node(name),
       mState(WidgetSkin::Normal)
-{}
+{
+}
 
 Widget::~Widget()
 {}

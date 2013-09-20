@@ -3,7 +3,7 @@
 #include "util/Utf8Iterator.hpp"
 
 Text::Text(const std::string& name, const std::string& text, std::shared_ptr<Font> font, int font_size, const glm::vec4& color)
-    : RenderableNode(name),
+    : Node(name, Forward),
       mFont(font),
       mText(text),
       mFontSize(font_size),

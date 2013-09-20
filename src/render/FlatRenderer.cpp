@@ -26,7 +26,7 @@ void FlatRenderer::render()
     mShader->use();
     mShader->send("ambient_light", glm::vec4(1.f, 1.f, 1.f, 1.f));
 
-    for(auto iter = mRenderables.begin(); iter != mRenderables.end(); iter++) {
+    for(auto iter = mRenderNodes.begin(); iter != mRenderNodes.end(); iter++) {
         mShader->send("MVP", mCamera->getViewProjectionMatrix() * (*iter)->getModelMatrix());
         std::shared_ptr<Material> m = (*iter)->getMaterial();
         mShader->send("diffuse_texture", m ? m->getDiffuseTexture() : nullptr);

@@ -6,11 +6,10 @@
 #include "render/VertexBuffer.hpp"
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
-#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
 
-class Shape3D : public RenderableNode {
+class Shape3D : public Node {
 public:
     Shape3D(const std::string& name);
 

@@ -1,7 +1,7 @@
 #include "Mesh.hpp"
 
 Mesh::Mesh(const std::string& name)
-    : RenderableNode(name)
+    : Node(name, Default)
 {}
 
 void Mesh::load(const aiMesh* mesh)

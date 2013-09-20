@@ -9,12 +9,11 @@
 #include "render/Vertex.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/Texture.hpp"
-#include "scene/RenderableNode.hpp"
 #include "scene/Node.hpp"
 #include "scene/Camera.hpp"
 #include "util/Rect.hpp"
 
-class Shape2D : public RenderableNode {
+class Shape2D : public Node {
 public:
     Shape2D(const std::string& name);
 
