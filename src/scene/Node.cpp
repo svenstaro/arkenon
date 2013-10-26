@@ -83,7 +83,7 @@ void Node::setAbsoluteRotation(const glm::quat& absolute_rotation)
         rotation = absolute_rotation;
 }
 
-const Node* Node::getParent() const
+Node* Node::getParent() const
 {
     return mParent;
 }

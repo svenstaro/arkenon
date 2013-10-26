@@ -59,6 +59,10 @@ void DebugScene::initialize()
     addChild(backgroundMusic);
     */
 
+    mSpacecraft = std::make_shared<Spacecraft>("spacecraft");
+    mSpacecraft->initialize();
+    addChild(mSpacecraft);
+
     // create materials
     std::shared_ptr<Material> wallMaterial = std::make_shared<Material>();
     wallMaterial->setDiffuseTexture(std::make_shared<Texture>("data/textures/brick-round/brick-round-diffuse.jpg"));

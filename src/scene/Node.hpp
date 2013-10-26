@@ -92,7 +92,7 @@ public:
      */
     void setAbsoluteRotation(const glm::quat& absolute_rotation);
 
-    const Node* getParent() const;
+    Node* getParent() const;
 
     const std::map<std::string, std::shared_ptr<Node>>& getChildren() const;
 

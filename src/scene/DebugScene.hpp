@@ -12,6 +12,7 @@
 #include "render/Shape2D.hpp"
 #include "render/SkyRenderer.hpp"
 #include "scene/FreeCamera.hpp"
+#include "objects/Spacecraft.hpp"
 
 #include "audio/AudioDevice.hpp"
 
@@ -31,6 +32,7 @@ private:
 
     std::shared_ptr<Camera> mCamera;
     std::vector<std::shared_ptr<Light>> mLights;
+    std::shared_ptr<Spacecraft> mSpacecraft;
 
     void _addDebugMesh(const std::string& name, const glm::vec3 pos, const glm::vec4& color, std::shared_ptr<Material> material = nullptr);
 
