@@ -11,7 +11,10 @@ Window::Window(const std::string& title, const glm::vec2& size)
     : mBackgroundColor(0.f, 0.f, 0.f, 1.f),
       mCursorMode(Normal)
 {
-    glfwInit();
+    if(!glfwInit()) {
+        std::cout << "GLFW Error on initialization" << std::endl;
+    }
+    GL_CHECK();
     mWindow = glfwCreateWindow(size.x, size.y, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(mWindow);
 

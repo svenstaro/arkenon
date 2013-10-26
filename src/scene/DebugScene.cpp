@@ -45,6 +45,7 @@ void DebugScene::initialize()
     freeCamera->addChild(listener);
 
     //Playlist music
+    /*
     std::vector<std::string> playlist;
     playlist.push_back("data/sounds/dark_intro.ogg");
     playlist.push_back("data/sounds/IswearIsawit.ogg");
@@ -56,6 +57,7 @@ void DebugScene::initialize()
     backgroundMusic->setVolume(100.0);
     backgroundMusic->play();
     addChild(backgroundMusic);
+    */
 
     // create materials
     std::shared_ptr<Material> wallMaterial = std::make_shared<Material>();
